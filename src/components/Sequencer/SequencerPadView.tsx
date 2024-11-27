@@ -20,11 +20,13 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
   const selectedPadId = useSelector((state: RootState) => state.sequencer.selectedPadId);
   const selectedSequencerId = useSelector((state: RootState) => state.sequencer.selectedSequencerId);
 
+  const numPads = 32;
+
 
   // Change selected pad with keyboard (if one is selected)
   // e.preventDefault() prevents scrolling when arrow keys are pressed
   const rowLength = 8;
-  const height = 2;
+  const height = 4;
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (selectedSequencerId !== sequencerId || selectedPadId === null) return;
@@ -61,7 +63,7 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedPadId, selectedSequencerId, sequencerId, onPadSelect]);
 
-  const pads = Array(16).fill(null).map((_, index) => ({
+  const pads = Array(numPads).fill(null).map((_, index) => ({
     id: index,
     value: padCommands[index],
     isActive: currentStep === index,

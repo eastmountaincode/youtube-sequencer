@@ -1,7 +1,7 @@
 import { AppDispatch } from "../store/store";
 import { PadCommand } from "../types";
 
-// Functions for our controller, the hook, useVideoModule
+// Functions for our controller -> the hook -> useVideoModule
 export const sendPlayCommand = (player: YT.Player) => {
     player.playVideo();
 };
@@ -10,9 +10,10 @@ export const sendPauseCommand = (player: YT.Player) => {
     player.pauseVideo();
 };
 
-export const sendSeekForwardCommand = (player: YT.Player) => {
+export const sendSeekForwardCommand = (player: YT.Player, videoModuleId: string) => {
     const currentTime = player.getCurrentTime();
-    player.seekTo(currentTime + 5, true);
+    const duration = player.getDuration();
+    player.seekTo(Math.min(currentTime + 5, duration), true); 
 };
 
 export const sendSeekBackwardCommand = (player: YT.Player) => {
@@ -62,7 +63,7 @@ export const executeCommand = (
             sendSeekBackwardCommand(player);
             break;
         case PadCommand.ARROW_RIGHT:
-            sendSeekForwardCommand(player);
+            sendSeekForwardCommand(player, videoModuleId);
             break;
         case PadCommand.ONE:
             sendJumpToTimeCommand(player, 10);

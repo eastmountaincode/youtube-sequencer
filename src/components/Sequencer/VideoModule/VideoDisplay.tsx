@@ -1,13 +1,13 @@
-import React, { RefObject, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { executeCommand } from '../../../utils/videoModuleCommands';
 import { PadCommand } from '../../../types';
 import { useVideoModule } from '../../../hooks/useVideoModule';
 import { useDispatch } from 'react-redux';
+import { playerRefs } from '../../../store/videoModuleSlice';
 
 interface VideoDisplayProps {
     videoId: string | null;
     videoModuleId: string;
-    isLoading: boolean;
     onPlayerReady: (player: YT.Player) => void;
     onClear: () => void;
 }
@@ -15,15 +15,17 @@ interface VideoDisplayProps {
 const VideoDisplay: React.FC<VideoDisplayProps> = ({
     videoId,
     videoModuleId,
-    isLoading,
     onPlayerReady,
     onClear
 }) => {
     const dispatch = useDispatch();
-    const [player, setPlayer] = useState<YT.Player | null>(null);
     const [volume, setVolume] = useState(100);
-    const { isMuted, handleMuteToggle } = useVideoModule(videoModuleId);
+    const [player, setPlayer] = useState<YT.Player | null>(null);
 
+    // Even though THIS component generates the player readiness signal,
+    // we get playerIsReady from the hook to maintain a single source of truth.
+    // playerIsReady controls the loading spinner display
+    const { isMuted, handleMuteToggle, playerIsReady } = useVideoModule(videoModuleId);
 
     useEffect(() => {
         if (videoId) {
@@ -38,18 +40,19 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                 }
             });
         }
-    }, [videoId]);
+    }, [videoId, onPlayerReady, videoModuleId]);
 
     const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newVolume = parseInt(event.target.value);
         setVolume(newVolume);
+        const player = playerRefs[videoModuleId];
         if (player) {
             executeCommand(PadCommand.VOLUME, player, videoModuleId, dispatch, newVolume);
-
         }
     };
 
     const handleMuteButtonClick = () => {
+        const player = playerRefs[videoModuleId]; // Get current player reference
         if (player) {
             handleMuteToggle(player);
         }
@@ -68,7 +71,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                     {videoId ? (
                         <div className="position-relative">
                             <div className="ratio ratio-16x9">
-                                {isLoading && (
+                                {!playerIsReady && (
                                     <div className="position-absolute top-50 start-50 translate-middle w-100 h-100 d-flex justify-content-center align-items-center">
                                         <div className="spinner-border text-primary" role="status">
                                             <span className="visually-hidden">Loading...</span>

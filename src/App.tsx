@@ -11,13 +11,13 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 function App() {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <div className="App">
-          <AudioWorkspace />
-        </div>
-      </PersistGate>
-    </Provider >
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <div className="App">
+            <AudioWorkspace />
+          </div>
+        </PersistGate>
+      </Provider >
   );
 }
 

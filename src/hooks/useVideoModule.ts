@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { setModuleReady, playerRefs, setModuleVideoUrl, setModuleVideoId } from '../store/videoModuleSlice';
+import { setModuleVideoUrl, setModuleVideoId, setModuleReady } from '../store/videoModuleSlice';
 import { RootState } from "../store/store";
 import { executeCommand } from "../utils/videoModuleCommands";
 import { PadCommand } from "../types";
+import { playerRefs } from "../store/videoModuleSlice";
 
 export const useVideoModule = (videoModuleId: string) => {
     const dispatch = useDispatch();
@@ -16,9 +17,11 @@ export const useVideoModule = (videoModuleId: string) => {
         state.videoModule.modules[videoModuleId]?.videoId
     );
 
-    // these are more temporary states that we don't need to persist across sessions
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [playerIsReady, setPlayerIsReady] = useState(false);
+
+    // temporary states that we don't need to persist across sessions
     const [isMuted, setIsMuted] = useState<boolean>(false);
+
 
     useEffect(() => {
         return () => {
@@ -55,20 +58,22 @@ export const useVideoModule = (videoModuleId: string) => {
         setVideoUrl("");
         setVideoId("");
         delete playerRefs[videoModuleId];
+        setPlayerIsReady(false);
         dispatch(setModuleReady({ videoModuleId, isReady: false }));
     };
 
     const handleLoadInVideo = () => {
         const id = extractVideoId(videoUrl);
         if (id) {
-            setIsLoading(true);
             setVideoId(id);
         }
     };
 
     const handlePlayerReady = (player: YT.Player) => {
-        setIsLoading(false);
+        // register player with the refs list stored in slice
         playerRefs[videoModuleId] = player;
+        // set local playerIsReady state stored here in the hook because VideoDisplay needs it
+        setPlayerIsReady(true);
         dispatch(setModuleReady({ videoModuleId, isReady: true }));
 
     };
@@ -77,11 +82,12 @@ export const useVideoModule = (videoModuleId: string) => {
         videoUrl,
         setVideoUrl,
         videoId,
-        isLoading,
         handleLoadInVideo,
         handleClear,
         handlePlayerReady,
         isMuted,
         handleMuteToggle,
+        playerIsReady,
+        setPlayerIsReady
     };
 };

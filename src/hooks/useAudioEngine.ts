@@ -4,8 +4,8 @@ import { RootState } from '../store/store';
 import { audioEngine } from '../services/audioEngine';
 import { setCurrentStep, setCurrentTick } from '../store/audioEngineSlice';
 import { PadCommand } from '../types';
-import { playerRefs } from '../store/videoModuleSlice';
 import { executeCommand } from '../utils/videoModuleCommands';
+import { playerRefs } from '../store/videoModuleSlice';
 
 
 interface UseAudioEngineProps {
@@ -23,6 +23,8 @@ export const useAudioEngine = ({ sequencerIds }: UseAudioEngineProps) => {
   const sequencers = useSelector((state: RootState) => state.sequencer.sequencers);
   const sequencersRef = useRef(sequencers);
 
+  const numPads = 32;
+
   useEffect(() => {
     sequencersRef.current = sequencers;
   }, [sequencers]);
@@ -38,25 +40,27 @@ export const useAudioEngine = ({ sequencerIds }: UseAudioEngineProps) => {
         // Dispatch and set up BEFORE incrementing tick
         dispatch(setCurrentTick(globalTick));
         if (globalTick % 6 === 0) {
-          const step = Math.floor(globalTick / 6) % 16;
+          const step = Math.floor(globalTick / 6) % numPads;
           dispatch(setCurrentStep(step));
-          console.log(`Step: ${step}, Tick: ${globalTick}`);
+          //console.log(`Step: ${step}, Tick: ${globalTick}`);
 
           sequencerIds.forEach(sequencerId => {
             const player = playerRefs[sequencerId];
             if (player) {
               const currentStepCommand = sequencersRef.current[sequencerId as keyof typeof sequencersRef.current].padCommands[step];
 
-              console.log(`Current step command for sequencer ${sequencerId}: ${currentStepCommand}`);
+              //console.log(`Current step command for sequencer ${sequencerId}: ${currentStepCommand}`);
               if (currentStepCommand !== PadCommand.EMPTY) {
+                console.log('player current time is', player.getCurrentTime());
+
                 executeCommand(currentStepCommand, player, sequencerId, dispatch);
-                console.log(`Executing command ${currentStepCommand} for sequencer ${sequencerId} at step ${step}`);
+                //console.log(`Executing command ${currentStepCommand} for sequencer ${sequencerId} at step ${step}`);
               }
             }
           });
         }
         globalTick++;
-        if (globalTick >= 96) globalTick = 0;
+        if (globalTick >= (6 * numPads)) globalTick = 0;
       });
     } else {
       audioEngine.stop();

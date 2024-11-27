@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PadCommand } from '../types';
 
+const numPads = 32;
+
 // Types
 interface Sequencer {
   padCommands: PadCommand[];
@@ -20,7 +22,7 @@ interface UpdatePadCommandPayload {
 
 // Helpers
 const createEmptySequencer = (): Sequencer => ({
-  padCommands: Array(16).fill(PadCommand.EMPTY)
+  padCommands: Array(numPads).fill(PadCommand.EMPTY)
 });
 
 // Initial State
@@ -28,10 +30,10 @@ const initialState = {
   selectedSequencerId: null,
   selectedPadId: null,
   sequencers: {
-    'seq1': { padCommands: Array(16).fill(PadCommand.EMPTY) },
-    'seq2': { padCommands: Array(16).fill(PadCommand.EMPTY) },
-    'seq3': { padCommands: Array(16).fill(PadCommand.EMPTY) },
-    'seq4': { padCommands: Array(16).fill(PadCommand.EMPTY) }
+    'seq1': { padCommands: Array(numPads).fill(PadCommand.EMPTY) },
+    'seq2': { padCommands: Array(numPads).fill(PadCommand.EMPTY) },
+    'seq3': { padCommands: Array(numPads).fill(PadCommand.EMPTY) },
+    'seq4': { padCommands: Array(numPads).fill(PadCommand.EMPTY) }
   }
 };
 
@@ -47,9 +49,6 @@ export const sequencerSlice = createSlice({
     clearAllPads: (state, { payload: { sequencerId } }) => {
       state.sequencers[sequencerId as keyof typeof state.sequencers] = createEmptySequencer();
     },
-    createSequencer: (state, { payload: { sequencerId } }) => {
-      state.sequencers[sequencerId as keyof typeof state.sequencers] = createEmptySequencer();
-    },
     setSelectedPad: (state, { payload }) => {
       state.selectedSequencerId = payload.sequencerId;
       state.selectedPadId = payload.padId;
@@ -63,7 +62,6 @@ export const sequencerSlice = createSlice({
 export const {
   updatePadCommand,
   clearAllPads,
-  createSequencer,
   setSelectedPad,
   clearSelectedPad
 } = sequencerSlice.actions;

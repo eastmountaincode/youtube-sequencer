@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import GlobalControls from "./GlobalControls";
+import GlobalControls from "./GlobalControls/GlobalControls";
 import Sequencer from "./Sequencer/Sequencer";
 import KeyInputArea from "./KeyInputArea";
 import { PadCommand } from "../types";

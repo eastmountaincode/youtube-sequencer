@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import VideoLoader from "./VideoLoader";
 import VideoDisplay from "./VideoDisplay";
 import { useVideoModule } from "../../../hooks/useVideoModule"; // We'll create this hook for logic
@@ -8,7 +8,6 @@ const VideoModule: React.FC<{ videoModuleId: string }> = ({ videoModuleId }) => 
         videoUrl,
         setVideoUrl,
         videoId,
-        isLoading,
         handleLoadInVideo,
         handleClear,
         handlePlayerReady
@@ -16,9 +15,7 @@ const VideoModule: React.FC<{ videoModuleId: string }> = ({ videoModuleId }) => 
 
     return (
         <div className="video-module border border-danger border-3 p-3">
-            <h3>Video Module</h3>
-            {/* <p>ID: {videoModuleId}</p> */}
-            
+            <h3>Video Module</h3>            
             <VideoLoader 
                 videoUrl={videoUrl}
                 onUrlChange={setVideoUrl}
@@ -28,7 +25,6 @@ const VideoModule: React.FC<{ videoModuleId: string }> = ({ videoModuleId }) => 
             <VideoDisplay 
                 videoId={videoId}
                 videoModuleId={videoModuleId}
-                isLoading={isLoading}
                 onPlayerReady={handlePlayerReady}
                 onClear={handleClear}
             />

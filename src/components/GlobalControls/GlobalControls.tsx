@@ -1,23 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store/store';
-import { setBpm, setPlaying } from "../store/audioEngineSlice";
-import { playerRefs } from "../store/videoModuleSlice";
-import { sendPlayCommand, sendPauseCommand } from '../utils/videoModuleCommands';
-import { selectReadyModules } from '../store/videoModuleSelectors';
-
+import { RootState } from '../../store/store';
+import { setPlaying } from "../../store/audioEngineSlice";
+import { sendPlayCommand, sendPauseCommand } from '../../utils/videoModuleCommands';
+import { playerRefs } from "../../store/videoModuleSlice";
+import BpmControl from "./BpmControl";
 
 const GlobalControls: React.FC = () => {
     const dispatch = useDispatch();
-    const { bpm, isPlaying, currentStep } = useSelector((state: RootState) => state.audioEngine);
+
+    const { isPlaying, currentStep } = useSelector((state: RootState) => state.audioEngine);
     const videoModules = useSelector((state: RootState) => state.videoModule.modules);
-    const readyModuleIds = useSelector(selectReadyModules);
+    const readyModuleIds = Object.entries(videoModules)
+        .filter(([_, module]) => module.isReady)
+        .map(([id]) => id);
 
     const handlePlayPause = () => {
         const newPlayingState = !isPlaying;
         dispatch(setPlaying(newPlayingState));
 
-        console.log("Ready Modules:", readyModuleIds);
         readyModuleIds.forEach(moduleId => {
             const player = playerRefs[moduleId];
             if (player) {
@@ -31,7 +32,7 @@ const GlobalControls: React.FC = () => {
     };
 
     const renderStepNumber = (step: number) => {
-        // Convert to 1-based index and handle numbers 1-16
+        // Convert to 1-based index and handle numbers 1-numPads
         const displayStep = step + 1;
         if (displayStep < 10) {
             return <i className={`bi bi-${displayStep}-square`}></i>;
@@ -53,21 +54,7 @@ const GlobalControls: React.FC = () => {
             <div className="d-flex flex-column align-items-center w-100">
                 <div className="d-flex align-items-center mb-2 w-100" style={{ maxWidth: '600px' }}>
                     {/* BPM CONTROL */}
-                    <div className="bpm-control flex-grow-1 mx-3 me-4">
-                        <div className="d-flex align-items-center">
-                            <label htmlFor="bpm" className="me-2 text-nowrap">BPM: {bpm}</label>
-                            <input
-                                type="range"
-                                id="bpm"
-                                className="form-range"
-                                value={bpm}
-                                onChange={(e) => dispatch(setBpm(Number(e.target.value)))}
-                                min={30}
-                                max={300}
-                                step={1}
-                            />
-                        </div>
-                    </div>
+                    <BpmControl />
                     {/* PLAY PAUSE CONTROL */}
                     <div className="transport-controls">
                         <button
@@ -84,7 +71,7 @@ const GlobalControls: React.FC = () => {
                             V Modules: {Object.keys(videoModules).length}
                         </span>
                         <span className="badge bg-success">
-                            Ready: {Object.values(videoModules).filter(m => m.isReady).length}
+                            Ready: {readyModuleIds.length}
                         </span>
                     </div>
 
@@ -94,18 +81,12 @@ const GlobalControls: React.FC = () => {
                         <span className="fs-4">Step: {renderStepNumber(currentStep)}</span>
                     </div>
                 </div>
-                {/* <div className="d-flex align-items-center justify-content-center mt-3">
-                    <div className="debug-info">
-                        <h5>IFrame References:</h5>
-                        <ul>
-                            {Object.entries(playerRefs).map(([id, ref]) => (
-                                <li key={id}>
-                                    Module {id}: {ref ? '✅ Ready' : '❌ Not Ready'}
-                                </li>
-                            ))}
-                        </ul>
+
+                <div className="d-flex align-items-center justify-content-center mt-3">
+                    <div className="player-refs-display">
+                    Player Refs: {Object.keys(playerRefs).join(', ')}
                     </div>
-                </div> */}
+                </div>
             </div>
         </div>
     );
