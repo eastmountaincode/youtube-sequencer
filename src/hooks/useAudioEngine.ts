@@ -42,19 +42,13 @@ export const useAudioEngine = ({ sequencerIds }: UseAudioEngineProps) => {
         if (globalTick % 6 === 0) {
           const step = Math.floor(globalTick / 6) % numPads;
           dispatch(setCurrentStep(step));
-          //console.log(`Step: ${step}, Tick: ${globalTick}`);
 
           sequencerIds.forEach(sequencerId => {
             const player = playerRefs[sequencerId];
             if (player) {
               const currentStepCommand = sequencersRef.current[sequencerId as keyof typeof sequencersRef.current].padCommands[step];
-
-              //console.log(`Current step command for sequencer ${sequencerId}: ${currentStepCommand}`);
               if (currentStepCommand !== PadCommand.EMPTY) {
-                console.log('player current time is', player.getCurrentTime());
-
                 executeCommand(currentStepCommand, player, sequencerId, dispatch);
-                //console.log(`Executing command ${currentStepCommand} for sequencer ${sequencerId} at step ${step}`);
               }
             }
           });

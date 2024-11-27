@@ -20,7 +20,6 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
 }) => {
     const dispatch = useDispatch();
     const [volume, setVolume] = useState(100);
-    const [player, setPlayer] = useState<YT.Player | null>(null);
 
     // Even though THIS component generates the player readiness signal,
     // we get playerIsReady from the hook to maintain a single source of truth.
@@ -28,19 +27,18 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
     const { isMuted, handleMuteToggle, playerIsReady } = useVideoModule(videoModuleId);
 
     useEffect(() => {
-        if (videoId) {
-            const player = new window.YT.Player(`youtube-player-${videoModuleId}`, {
+        if (videoId && playerIsReady) {
+            new window.YT.Player(`youtube-player-${videoModuleId}`, {
                 videoId: videoId,
                 events: {
                     onReady: (event: YT.PlayerEvent) => {
                         console.log('YT.Player onReady fired!');
-                        setPlayer(event.target);
                         onPlayerReady(event.target);
                     }
                 }
             });
         }
-    }, [videoId, onPlayerReady, videoModuleId]);
+    }, [videoId]);
 
     const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newVolume = parseInt(event.target.value);
@@ -71,7 +69,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                     {videoId ? (
                         <div className="position-relative">
                             <div className="ratio ratio-16x9">
-                                {!playerIsReady && (
+                                {videoId && !playerIsReady && (
                                     <div className="position-absolute top-50 start-50 translate-middle w-100 h-100 d-flex justify-content-center align-items-center">
                                         <div className="spinner-border text-primary" role="status">
                                             <span className="visually-hidden">Loading...</span>

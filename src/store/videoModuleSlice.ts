@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAction } from '@reduxjs/toolkit';
 
 export const playerRefs: Record<string, YT.Player> = {};
 
@@ -39,6 +39,8 @@ const initialState: VideoModuleState = {
   }
 };
 
+export const resetModuleReadyStates = createAction('videoModule/resetModuleReadyStates');
+
 // Slice
 export const videoModuleSlice = createSlice({
   name: 'videoModule',
@@ -53,7 +55,17 @@ export const videoModuleSlice = createSlice({
     setModuleReady: (state, action: PayloadAction<{ videoModuleId: string, isReady: boolean }>) => {
       state.modules[action.payload.videoModuleId].isReady = action.payload.isReady;
     }
-  }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(resetModuleReadyStates, (state) => {
+        Object.keys(state.modules).forEach(moduleId => {
+            state.modules[moduleId].isReady = false;
+            state.modules[moduleId].videoId = "";
+
+
+        });
+    });
+}
 });
 
 export const {

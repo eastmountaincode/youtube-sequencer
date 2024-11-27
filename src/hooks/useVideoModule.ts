@@ -55,7 +55,7 @@ export const useVideoModule = (videoModuleId: string) => {
     };
 
     const handleClear = () => {
-        setVideoUrl("");
+        //setVideoUrl("");
         setVideoId("");
         delete playerRefs[videoModuleId];
         setPlayerIsReady(false);
@@ -65,16 +65,22 @@ export const useVideoModule = (videoModuleId: string) => {
     const handleLoadInVideo = () => {
         const id = extractVideoId(videoUrl);
         if (id) {
+            handleClear();  // Clear existing video first
             setVideoId(id);
+            setPlayerIsReady(true);  // Set local state
+            dispatch(setModuleReady({ videoModuleId, isReady: true }));
         }
     };
 
     const handlePlayerReady = (player: YT.Player) => {
+        console.log('handlePlayerReady called,', videoModuleId)
+        console.log('player refs before', playerRefs)
         // register player with the refs list stored in slice
         playerRefs[videoModuleId] = player;
         // set local playerIsReady state stored here in the hook because VideoDisplay needs it
         setPlayerIsReady(true);
         dispatch(setModuleReady({ videoModuleId, isReady: true }));
+        console.log('player refs after', playerRefs)
 
     };
 

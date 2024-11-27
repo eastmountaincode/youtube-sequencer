@@ -84,8 +84,13 @@ const GlobalControls: React.FC = () => {
 
                 <div className="d-flex align-items-center justify-content-center mt-3">
                     <div className="player-refs-display">
-                    Player Refs: {Object.keys(playerRefs).join(', ')}
+                        Player Refs: {Object.keys(playerRefs).join(', ')}
                     </div>
+                </div>
+                <div className="d-flex align-items-center justify-content-center mt-3">
+                    <pre>
+                        {JSON.stringify(videoModules, null, 2)}
+                    </pre>
                 </div>
             </div>
         </div>

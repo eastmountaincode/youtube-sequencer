@@ -20,6 +20,15 @@ const VideoLoader: React.FC<VideoLoaderProps> = ({
                 value={videoUrl}
                 onChange={(e) => onUrlChange(e.target.value)}
             />
+            {videoUrl && (
+                <button
+                    className="btn btn-outline-secondary"
+                    type="button"
+                    onClick={() => onUrlChange("")}
+                >
+                    <i className="bi bi-x-lg"></i>
+                </button>
+            )}
             <button
                 className="btn btn-primary"
                 type="button"
