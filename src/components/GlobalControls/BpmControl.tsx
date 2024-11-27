@@ -1,26 +1,22 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import { setBpm } from "../../store/audioEngineSlice";
+import { setBpm } from "../../store/persistentAudioSettingsSlice"
 
 const BpmControl: React.FC = () => {
-    //console.log('BpmControl render');
 
     const dispatch = useDispatch();
-    const bpm = useSelector((state: RootState) => state.audioEngine.bpm);
-    const [inputValue, setInputValue] = useState(bpm.toString());
+    const bpm = useSelector((state: RootState) => state.persistentAudioSettings.bpm);
     const [tapTimes, setTapTimes] = useState<number[]>([]);
     const [lastTapTime, setLastTapTime] = useState(0);
 
     const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newBpm = Number(e.target.value);
         dispatch(setBpm(newBpm));
-        setInputValue(newBpm.toString());
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setInputValue(value);
         const newBpm = Number(value);
         if (newBpm >= 30 && newBpm <= 300) {
             dispatch(setBpm(newBpm));
@@ -30,7 +26,6 @@ const BpmControl: React.FC = () => {
     const adjustBpm = (amount: number) => {
         const newBpm = Math.min(Math.max(bpm + amount, 30), 300);
         dispatch(setBpm(newBpm));
-        setInputValue(newBpm.toString());
     };
 
     // Add this function to handle taps
@@ -63,7 +58,6 @@ const BpmControl: React.FC = () => {
 
             if (newBpm >= 30 && newBpm <= 300) {
                 dispatch(setBpm(newBpm));
-                setInputValue(newBpm.toString());
             }
         }
     }, [tapTimes, lastTapTime]);
@@ -85,7 +79,7 @@ const BpmControl: React.FC = () => {
                         <input
                             type="number"
                             className="form-control text-center"
-                            value={inputValue}
+                            value={bpm}
                             onChange={handleInputChange}
                             min={30}
                             max={300}

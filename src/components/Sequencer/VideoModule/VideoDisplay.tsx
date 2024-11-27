@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { executeCommand } from '../../../utils/videoModuleCommands';
 import { PadCommand } from '../../../types';
 import { useVideoModule } from '../../../hooks/useVideoModule';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { playerRefs } from '../../../store/videoModuleSlice';
+import { RootState } from '../../../store/store';
+import { setVolume } from '../../../store/persistentAudioSettingsSlice';
 
 interface VideoDisplayProps {
     videoId: string | null;
@@ -19,15 +21,20 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
     onClear
 }) => {
     const dispatch = useDispatch();
-    const [volume, setVolume] = useState(100);
+    const volume = useSelector((state: RootState) => 
+        state.persistentAudioSettings?.volumes?.[videoModuleId] ?? 100
+    );
 
-    // Even though THIS component generates the player readiness signal,
-    // we get playerIsReady from the hook to maintain a single source of truth.
-    // playerIsReady controls the loading spinner display
-    const { isMuted, handleMuteToggle, playerIsReady } = useVideoModule(videoModuleId);
+    const { isMuted, handleMuteToggle } = useVideoModule(videoModuleId);
+
+    // Get readiness states from Redux
+    const { isPlayerReady, isLoadButtonPressed } = useSelector((state: RootState) =>
+        state.videoModuleReadiness.modules[videoModuleId]
+    );
+
 
     useEffect(() => {
-        if (videoId && playerIsReady) {
+        if (videoId) {
             new window.YT.Player(`youtube-player-${videoModuleId}`, {
                 videoId: videoId,
                 events: {
@@ -42,7 +49,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
 
     const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newVolume = parseInt(event.target.value);
-        setVolume(newVolume);
+        dispatch(setVolume({ sequencerId: videoModuleId, volume: newVolume }));
         const player = playerRefs[videoModuleId];
         if (player) {
             executeCommand(PadCommand.VOLUME, player, videoModuleId, dispatch, newVolume);
@@ -56,7 +63,9 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
         }
     };
 
+
     return (
+        
 
         <div className="video-preview mt-3 d-flex flex-column justify-content-center align-items-center"
             style={{ border: '3px solid blue', height: '350px' }}>
@@ -65,41 +74,43 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
             <div className="d-flex justify-content-center align-items-center">
 
                 {/* VIDEO */}
-                <div style={{ width: '350px', border: '3px solid red' }}>
-                    {videoId ? (
+                <div style={{ width: '350px' }}>
+                    {videoId && isLoadButtonPressed ? (
                         <div className="position-relative">
                             <div className="ratio ratio-16x9">
-                                {videoId && !playerIsReady && (
+                                {!isPlayerReady && (
                                     <div className="position-absolute top-50 start-50 translate-middle w-100 h-100 d-flex justify-content-center align-items-center">
                                         <div className="spinner-border text-primary" role="status">
                                             <span className="visually-hidden">Loading...</span>
                                         </div>
                                     </div>
                                 )}
+                                {isPlayerReady && <div id={`youtube-player-${videoModuleId}`}
+                                ></div>}
 
-                                <div id={`youtube-player-${videoModuleId}`}
-                                ></div>
 
                             </div>
-                            <button
-                                className="btn btn-danger position-absolute top-0 end-0 m-2"
-                                type="button"
-                                onClick={onClear}
-                                style={{ zIndex: 10 }}
-                            >
-                                Clear
-                                <i className="bi bi-x-lg ms-1"></i>
-                            </button>
+                            {isPlayerReady &&
+                                <button
+                                    className="btn btn-danger position-absolute top-0 end-0 m-2"
+                                    type="button"
+                                    onClick={onClear}
+                                    style={{ zIndex: 10 }}
+                                >
+                                    Clear
+                                    <i className="bi bi-x-lg ms-1"></i>
+                                </button>
+                            }
 
                         </div>
                     ) : (
                         <div className="d-flex justify-content-center align-items-center h-100">
-                            <h4 className="text-muted">YouTube video will appear here</h4>
+                            <i className="bi bi-youtube fs-1 text-muted"></i>
                         </div>
                     )}
                 </div>
                 {/* VOLUME SLIDER */}
-                {videoId && (
+                {videoId && isPlayerReady && (
                     <div className="volume-control d-flex flex-column justify-content-between align-items-center me-3 ms-3"
                         style={{ height: '260px', width: '30px' }}>
                         <i className="bi bi-volume-up fs-4"></i>
@@ -107,7 +118,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                             type="range"
                             min="0"
                             max="100"
-                            defaultValue="100"
+                            value={volume}
                             onChange={handleVolumeChange}
                             style={{
                                 width: '160px',
@@ -124,7 +135,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
             {/* SECOND ROW */}
             <div className='mb-2'>
                 {/* MUTE BUTTON */}
-                {videoId &&
+                {videoId && isPlayerReady &&
                     <button
                         className="btn btn-outline-primary d-flex align-items-center gap-2 px-2 py-1"
                         onClick={handleMuteButtonClick}

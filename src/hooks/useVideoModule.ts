@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { setModuleVideoUrl, setModuleVideoId, setModuleReady } from '../store/videoModuleSlice';
+import { setModuleVideoUrl, setModuleVideoId } from '../store/videoModuleSlice';
 import { RootState } from "../store/store";
 import { executeCommand } from "../utils/videoModuleCommands";
 import { PadCommand } from "../types";
 import { playerRefs } from "../store/videoModuleSlice";
+import { setModulePlayerReady, setModuleLoadButtonPressed } from "../store/videoModuleReadinessSlice";
 
 export const useVideoModule = (videoModuleId: string) => {
     const dispatch = useDispatch();
@@ -17,11 +18,8 @@ export const useVideoModule = (videoModuleId: string) => {
         state.videoModule.modules[videoModuleId]?.videoId
     );
 
-    const [playerIsReady, setPlayerIsReady] = useState(false);
-
     // temporary states that we don't need to persist across sessions
     const [isMuted, setIsMuted] = useState<boolean>(false);
-
 
     useEffect(() => {
         return () => {
@@ -54,33 +52,30 @@ export const useVideoModule = (videoModuleId: string) => {
         return match && match[2].length === 11 ? match[2] : null;
     };
 
-    const handleClear = () => {
-        //setVideoUrl("");
+    const handleClear = async () => {
+        console.log('handleClear called');
+        //setLoadButtonPressed(false);
         setVideoId("");
         delete playerRefs[videoModuleId];
-        setPlayerIsReady(false);
-        dispatch(setModuleReady({ videoModuleId, isReady: false }));
+        dispatch(setModulePlayerReady({ videoModuleId, isReady: false }));
+        dispatch(setModuleLoadButtonPressed({ videoModuleId, isPressed: false }));
+        return Promise.resolve();
     };
 
-    const handleLoadInVideo = () => {
+    const handleLoadInVideo = async () => {
         const id = extractVideoId(videoUrl);
         if (id) {
-            handleClear();  // Clear existing video first
+            await handleClear();  // Wait for clear to complete
             setVideoId(id);
-            setPlayerIsReady(true);  // Set local state
-            dispatch(setModuleReady({ videoModuleId, isReady: true }));
+            dispatch(setModulePlayerReady({ videoModuleId, isReady: true }));
+            dispatch(setModuleLoadButtonPressed({ videoModuleId, isPressed: true }));
         }
     };
 
     const handlePlayerReady = (player: YT.Player) => {
-        console.log('handlePlayerReady called,', videoModuleId)
-        console.log('player refs before', playerRefs)
         // register player with the refs list stored in slice
         playerRefs[videoModuleId] = player;
-        // set local playerIsReady state stored here in the hook because VideoDisplay needs it
-        setPlayerIsReady(true);
-        dispatch(setModuleReady({ videoModuleId, isReady: true }));
-        console.log('player refs after', playerRefs)
+        dispatch(setModulePlayerReady({ videoModuleId, isReady: true }));
 
     };
 
@@ -93,7 +88,5 @@ export const useVideoModule = (videoModuleId: string) => {
         handlePlayerReady,
         isMuted,
         handleMuteToggle,
-        playerIsReady,
-        setPlayerIsReady
     };
 };

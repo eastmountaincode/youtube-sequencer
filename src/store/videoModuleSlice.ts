@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, createAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export const playerRefs: Record<string, YT.Player> = {};
 
@@ -6,7 +6,6 @@ export const playerRefs: Record<string, YT.Player> = {};
 interface VideoModule {
   videoUrl: string;
   videoId: string;
-  isReady: boolean;
 }
 
 interface VideoModuleState {
@@ -16,62 +15,45 @@ interface VideoModuleState {
 // Initial State
 const initialState: VideoModuleState = {
   modules: {
-    'video1': {
+    'seq1': {
       videoUrl: "",
       videoId: "",
-      isReady: false
     },
-    'video2': {
+    'seq2': {
       videoUrl: "",
       videoId: "",
-      isReady: false
     },
-    'video3': {
+    'seq3': {
       videoUrl: "",
       videoId: "",
-      isReady: false
     },
-    'video4': {
+    'seq4': {
       videoUrl: "",
       videoId: "",
-      isReady: false
     }
   }
 };
-
-export const resetModuleReadyStates = createAction('videoModule/resetModuleReadyStates');
 
 // Slice
 export const videoModuleSlice = createSlice({
   name: 'videoModule',
   initialState,
   reducers: {
+    setState: (state, action: PayloadAction<VideoModuleState>) => {
+      return action.payload;
+    },
     setModuleVideoUrl: (state, action: PayloadAction<{ videoUrl: string, videoModuleId: string }>) => {
       state.modules[action.payload.videoModuleId].videoUrl = action.payload.videoUrl;
     },
     setModuleVideoId: (state, action: PayloadAction<{ videoId: string, videoModuleId: string }>) => {
       state.modules[action.payload.videoModuleId].videoId = action.payload.videoId;
-    },
-    setModuleReady: (state, action: PayloadAction<{ videoModuleId: string, isReady: boolean }>) => {
-      state.modules[action.payload.videoModuleId].isReady = action.payload.isReady;
     }
   },
-  extraReducers: (builder) => {
-    builder.addCase(resetModuleReadyStates, (state) => {
-        Object.keys(state.modules).forEach(moduleId => {
-            state.modules[moduleId].isReady = false;
-            state.modules[moduleId].videoId = "";
-
-
-        });
-    });
-}
 });
 
 export const {
   setModuleVideoUrl,
   setModuleVideoId,
-  setModuleReady
 } = videoModuleSlice.actions;
 
 export default videoModuleSlice.reducer;

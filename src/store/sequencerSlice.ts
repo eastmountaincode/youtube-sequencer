@@ -26,7 +26,7 @@ const createEmptySequencer = (): Sequencer => ({
 });
 
 // Initial State
-const initialState = {
+const initialState: SequencerState = {
   selectedSequencerId: null,
   selectedPadId: null,
   sequencers: {
@@ -42,6 +42,9 @@ export const sequencerSlice = createSlice({
   name: 'sequencer',
   initialState,
   reducers: {
+    setState: (state, action: PayloadAction<SequencerState>) => {
+      return action.payload;
+    },
     updatePadCommand: (state, action: PayloadAction<UpdatePadCommandPayload>) => {
       const { sequencerId, padId, command } = action.payload;
       state.sequencers[sequencerId as keyof typeof state.sequencers].padCommands[padId] = command;

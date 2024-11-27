@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { setPlaying } from "../../store/audioEngineSlice";
 import { sendPlayCommand, sendPauseCommand } from '../../utils/videoModuleCommands';
 import { playerRefs } from "../../store/videoModuleSlice";
 import BpmControl from "./BpmControl";
+import SaveLoad from "./SaveLoad";
 
 const GlobalControls: React.FC = () => {
     const dispatch = useDispatch();
 
     const { isPlaying, currentStep } = useSelector((state: RootState) => state.audioEngine);
     const videoModules = useSelector((state: RootState) => state.videoModule.modules);
-    const readyModuleIds = Object.entries(videoModules)
-        .filter(([_, module]) => module.isReady)
+    const readyStates = useSelector((state: RootState) => state.videoModuleReadiness.modules);
+    const readyModuleIds = Object.entries(readyStates)
+        .filter(([_, state]) => state.isPlayerReady)
         .map(([id]) => id);
 
     const handlePlayPause = () => {
@@ -64,6 +66,8 @@ const GlobalControls: React.FC = () => {
                             <i className={`bi ${isPlaying ? 'bi-pause-fill' : 'bi-play-fill'}`}></i>
                         </button>
                     </div>
+                    <SaveLoad />
+
                 </div>
                 <div className="d-flex align-items-center justify-content-center">
                     <div className="video-modules-status me-3">
@@ -80,17 +84,6 @@ const GlobalControls: React.FC = () => {
                     <div className="current-step">
                         <span className="fs-4">Step: {renderStepNumber(currentStep)}</span>
                     </div>
-                </div>
-
-                <div className="d-flex align-items-center justify-content-center mt-3">
-                    <div className="player-refs-display">
-                        Player Refs: {Object.keys(playerRefs).join(', ')}
-                    </div>
-                </div>
-                <div className="d-flex align-items-center justify-content-center mt-3">
-                    <pre>
-                        {JSON.stringify(videoModules, null, 2)}
-                    </pre>
                 </div>
             </div>
         </div>

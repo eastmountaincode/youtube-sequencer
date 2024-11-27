@@ -19,7 +19,8 @@ let globalTick = 0;
 export const useAudioEngine = ({ sequencerIds }: UseAudioEngineProps) => {
   const dispatch = useDispatch();
 
-  const { bpm, isPlaying } = useSelector((state: RootState) => state.audioEngine);
+  const { isPlaying } = useSelector((state: RootState) => state.audioEngine);
+  const { bpm } = useSelector((state: RootState) => state.persistentAudioSettings);
   const sequencers = useSelector((state: RootState) => state.sequencer.sequencers);
   const sequencersRef = useRef(sequencers);
 
