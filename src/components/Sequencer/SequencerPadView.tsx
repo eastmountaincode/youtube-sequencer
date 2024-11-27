@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import Pad from './Pad';
+import { clearAllPads } from '../../store/sequencerSlice';
 
 interface SequencerPadViewProps {
   sequencerId: string;
@@ -22,6 +23,12 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
 
   const numPads = 32;
 
+  const dispatch = useDispatch();
+
+
+  const handleClearAll = () => {
+    dispatch(clearAllPads({ sequencerId }));
+  };
 
   // Change selected pad with keyboard (if one is selected)
   // e.preventDefault() prevents scrolling when arrow keys are pressed
@@ -88,8 +95,19 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
           />
         ))}
       </div>
+      <div className="d-flex justify-content-end mt-3">
+    <button
+        className="btn btn-outline-secondary btn-sm"
+        onClick={handleClearAll}
+    >
+        <i className="bi bi-trash me-1"></i>
+        Clear All Pads
+    </button>
+</div>
     </div>
   );
 };
 
 export default SequencerPadView;
+
+

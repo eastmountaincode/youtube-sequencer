@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { setBpm } from "../../store/persistentAudioSettingsSlice"
@@ -9,6 +9,7 @@ const BpmControl: React.FC = () => {
     const bpm = useSelector((state: RootState) => state.persistentAudioSettings.bpm);
     const [tapTimes, setTapTimes] = useState<number[]>([]);
     const [lastTapTime, setLastTapTime] = useState(0);
+    const [bpmInput, setBpmInput] = useState(bpm);
 
     const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newBpm = Number(e.target.value);
@@ -18,6 +19,7 @@ const BpmControl: React.FC = () => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const newBpm = Number(value);
+        setBpmInput(newBpm);
         if (newBpm >= 30 && newBpm <= 300) {
             dispatch(setBpm(newBpm));
         }
@@ -27,6 +29,11 @@ const BpmControl: React.FC = () => {
         const newBpm = Math.min(Math.max(bpm + amount, 30), 300);
         dispatch(setBpm(newBpm));
     };
+
+    // Update input value when bpm changes in store
+    useEffect(() => {
+        setBpmInput(bpm);
+    }, [bpm]);
 
     // Add this function to handle taps
     const handleTapTempo = useCallback(() => {
@@ -65,10 +72,12 @@ const BpmControl: React.FC = () => {
     return (
         <div className="bpm-control flex-grow-1 mx-3 me-4 border border-dark border-1 p-3">
             <div className="d-flex flex-column gap-2">
-                <div className="d-flex align-items-center gap-2">
-                    <i className="bi bi-heart-pulse-fill fs-4 me-2"><span className='ms-1'>BPM</span></i>
+                <div className="d-flex align-items-center gap-3">
+                    <div className='d-flex align-items-center' style={{ width: '100px' }}>
+                        <i className="bi bi-heart-pulse-fill fs-4 me-2"><span className='ms-1'>BPM</span></i>
+                    </div>
 
-                    <div className="input-group" style={{ width: '160px' }}>
+                    <div className="input-group" style={{ width: '180px' }}>
 
                         <button
                             className="btn btn-outline-secondary"
@@ -79,8 +88,10 @@ const BpmControl: React.FC = () => {
                         <input
                             type="number"
                             className="form-control text-center"
-                            value={bpm}
+                            value={bpmInput}
                             onChange={handleInputChange}
+                            onFocus={(e) => e.target.select()}
+                            onClick={(e) => (e.target as HTMLInputElement).select()}
                             min={30}
                             max={300}
                         />
@@ -90,14 +101,14 @@ const BpmControl: React.FC = () => {
                         >
                             <i className="bi bi-plus-circle"></i>
                         </button>
-                        
+
                     </div>
                     <button
-                            className="btn btn-outline-secondary ms-2"
-                            onClick={handleTapTempo}
-                        >
-                            <i className="bi bi-hand-index-thumb"></i> Tap
-                        </button>
+                        className="btn btn-outline-secondary ms-2"
+                        onClick={handleTapTempo}
+                    >
+                        <i className="bi bi-hand-index-thumb"></i> Tap
+                    </button>
                 </div>
                 <input
                     type="range"

@@ -21,7 +21,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
     onClear
 }) => {
     const dispatch = useDispatch();
-    const volume = useSelector((state: RootState) => 
+    const volume = useSelector((state: RootState) =>
         state.persistentAudioSettings?.volumes?.[videoModuleId] ?? 100
     );
 
@@ -37,6 +37,9 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
         if (videoId) {
             new window.YT.Player(`youtube-player-${videoModuleId}`, {
                 videoId: videoId,
+                playerVars: {
+                    fs: 0 // prevent fullscreen
+                },
                 events: {
                     onReady: (event: YT.PlayerEvent) => {
                         console.log('YT.Player onReady fired!');
@@ -63,9 +66,8 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
         }
     };
 
-
     return (
-        
+
 
         <div className="video-preview mt-3 d-flex flex-column justify-content-center align-items-center"
             style={{ border: '3px solid blue', height: '350px' }}>
@@ -85,8 +87,11 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                                         </div>
                                     </div>
                                 )}
-                                {isPlayerReady && <div id={`youtube-player-${videoModuleId}`}
-                                ></div>}
+                                {isPlayerReady &&
+                                    <div id={`youtube-player-${videoModuleId}`} tabIndex={0}
+
+                                    ></div>
+                                }
 
 
                             </div>
@@ -136,14 +141,18 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
             <div className='mb-2'>
                 {/* MUTE BUTTON */}
                 {videoId && isPlayerReady &&
-                    <button
-                        className="btn btn-outline-primary d-flex align-items-center gap-2 px-2 py-1"
-                        onClick={handleMuteButtonClick}
-                    >
-                        <i className={`bi ${isMuted ? 'bi-volume-mute' : 'bi-volume-up'} fs-4`}></i>
-                        <span>{isMuted ? 'Unmute' : 'Mute'}</span>
-                    </button>
+                    <div className='d-flex justify-content-center align-items-center gap-2'>
+                        <button
+                            className="btn btn-outline-primary d-flex align-items-center gap-2 px-2 py-1"
+                            onClick={handleMuteButtonClick}
+                        >
+                            <i className={`bi ${isMuted ? 'bi-volume-mute' : 'bi-volume-up'} fs-4`}></i>
+                            <span>{isMuted ? 'Unmute' : 'Mute'}</span>
+                        </button>
+                    </div>
                 }
+
+
             </div>
         </div>
     );
