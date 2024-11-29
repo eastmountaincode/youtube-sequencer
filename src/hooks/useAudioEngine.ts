@@ -48,8 +48,10 @@ export const useAudioEngine = ({ sequencerIds }: UseAudioEngineProps) => {
             const player = playerRefs[sequencerId];
             if (player) {
               const currentStepCommand = sequencersRef.current[sequencerId as keyof typeof sequencersRef.current].padCommands[step];
+              const nudgeValue = sequencersRef.current[sequencerId].nudgeValues[step];
+
               if (currentStepCommand !== PadCommand.EMPTY) {
-                executeCommand(currentStepCommand, player, sequencerId, dispatch);
+                executeCommand(currentStepCommand, player, dispatch, nudgeValue);
               }
             }
           });

@@ -37,10 +37,10 @@ export const useVideoModule = (videoModuleId: string) => {
 
     const handleMuteToggle = (player: YT.Player) => {
         if (isMuted) {
-            executeCommand(PadCommand.PLAYER_UNMUTE, player, videoModuleId, dispatch);
+            executeCommand(PadCommand.PLAYER_UNMUTE, player, dispatch);
 
         } else {
-            executeCommand(PadCommand.PLAYER_MUTE, player, videoModuleId, dispatch);
+            executeCommand(PadCommand.PLAYER_MUTE, player, dispatch);
 
         }
         setIsMuted(!isMuted);

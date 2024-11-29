@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import Pad from './Pad';
-import { clearAllPads } from '../../store/sequencerSlice';
+import { RootState } from '../../../store/store';
+import Pad from '../Pad';
+import { clearAllPads, updateNudgeValue } from '../../../store/sequencerSlice';
+import SequencerControls from './SequencerControls';
 
 interface SequencerPadViewProps {
   sequencerId: string;
@@ -16,6 +17,9 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
   const currentStep = useSelector((state: RootState) => state.audioEngine.currentStep);
   const padCommands = useSelector((state: RootState) =>
     state.sequencer.sequencers[sequencerId as keyof typeof state.sequencer.sequencers].padCommands
+  );
+  const padNudgeValues = useSelector((state: RootState) =>
+    state.sequencer.sequencers[sequencerId as keyof typeof state.sequencer.sequencers].nudgeValues
   );
   // get selected pad id from redux store
   const selectedPadId = useSelector((state: RootState) => state.sequencer.selectedPadId);
@@ -74,7 +78,8 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
     id: index,
     value: padCommands[index],
     isActive: currentStep === index,
-    isSelected: selectedPadId === index && selectedSequencerId === sequencerId
+    isSelected: selectedPadId === index && selectedSequencerId === sequencerId,
+    nudgeValue: padNudgeValues[index]
   }));
 
   return (
@@ -91,19 +96,16 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
             value={pad.value}
             isActive={pad.isActive}
             isSelected={pad.isSelected}
+            nudgeValue={pad.nudgeValue}
             onClick={() => onPadSelect(pad.id)}
           />
         ))}
       </div>
-      <div className="d-flex justify-content-end mt-3">
-    <button
-        className="btn btn-outline-secondary btn-sm"
-        onClick={handleClearAll}
-    >
-        <i className="bi bi-trash me-1"></i>
-        Clear All Pads
-    </button>
-</div>
+      <SequencerControls
+        sequencerId={sequencerId}
+        padNudgeValues={padNudgeValues}
+      />
+
     </div>
   );
 };

@@ -10,7 +10,7 @@ export const sendPauseCommand = (player: YT.Player) => {
     player.pauseVideo();
 };
 
-export const sendSeekForwardCommand = (player: YT.Player, videoModuleId: string) => {
+export const sendSeekForwardCommand = (player: YT.Player) => {
     const currentTime = player.getCurrentTime();
     const duration = player.getDuration();
     player.seekTo(Math.min(currentTime + 5, duration), true); 
@@ -21,10 +21,10 @@ export const sendSeekBackwardCommand = (player: YT.Player) => {
     player.seekTo(Math.max(0, currentTime - 5), true);
 };
 
-export const sendJumpToTimeCommand = (player: YT.Player, percentage: number) => {
+export const sendJumpToTimeCommand = (player: YT.Player, percentage: number, nudgeValue: number = 0) => {
     const duration = player.getDuration();
     const targetTime = duration * (percentage / 100);
-    player.seekTo(targetTime, true);
+    player.seekTo(targetTime + nudgeValue, true);
 };
 
 export const sendVolumeChangeCommand = (player: YT.Player, volume: number) => {
@@ -46,8 +46,8 @@ export const sendPlayerUnmuteCommand = (player: YT.Player) => {
 export const executeCommand = (
     command: PadCommand, 
     player: YT.Player, 
-    videoModuleId: string,
     dispatch: AppDispatch,
+    nudgeValue: number = 0,
     value?: number,
     setIsMuted?: (isMuted: boolean) => void,
 
@@ -63,34 +63,34 @@ export const executeCommand = (
             sendSeekBackwardCommand(player);
             break;
         case PadCommand.ARROW_RIGHT:
-            sendSeekForwardCommand(player, videoModuleId);
+            sendSeekForwardCommand(player);
             break;
         case PadCommand.ONE:
-            sendJumpToTimeCommand(player, 10);
+            sendJumpToTimeCommand(player, 10, nudgeValue);
             break;
         case PadCommand.TWO:
-            sendJumpToTimeCommand(player, 20);
+            sendJumpToTimeCommand(player, 20, nudgeValue);
             break;
         case PadCommand.THREE:
-            sendJumpToTimeCommand(player, 30);
+            sendJumpToTimeCommand(player, 30, nudgeValue);
             break;
         case PadCommand.FOUR:
-            sendJumpToTimeCommand(player, 40);
+            sendJumpToTimeCommand(player, 40, nudgeValue);
             break;
         case PadCommand.FIVE:
-            sendJumpToTimeCommand(player, 50);
+            sendJumpToTimeCommand(player, 50, nudgeValue);
             break;
         case PadCommand.SIX:
-            sendJumpToTimeCommand(player, 60);
+            sendJumpToTimeCommand(player, 60, nudgeValue);
             break;
         case PadCommand.SEVEN:
-            sendJumpToTimeCommand(player, 70);
+            sendJumpToTimeCommand(player, 70, nudgeValue);
             break;
         case PadCommand.EIGHT:
-            sendJumpToTimeCommand(player, 80);
+            sendJumpToTimeCommand(player, 80, nudgeValue);
             break;
         case PadCommand.NINE:
-            sendJumpToTimeCommand(player, 90);
+            sendJumpToTimeCommand(player, 90, nudgeValue);
             break;
         case PadCommand.VOLUME:
             if (typeof value === 'number') {

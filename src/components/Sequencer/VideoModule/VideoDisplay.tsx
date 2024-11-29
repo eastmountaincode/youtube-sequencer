@@ -55,7 +55,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
         dispatch(setVolume({ sequencerId: videoModuleId, volume: newVolume }));
         const player = playerRefs[videoModuleId];
         if (player) {
-            executeCommand(PadCommand.VOLUME, player, videoModuleId, dispatch, newVolume);
+            executeCommand(PadCommand.VOLUME, player, dispatch, newVolume);
         }
     };
 

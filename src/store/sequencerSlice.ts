@@ -6,6 +6,7 @@ const numPads = 32;
 // Types
 interface Sequencer {
   padCommands: PadCommand[];
+  nudgeValues: number[];
 }
 
 interface SequencerState {
@@ -20,9 +21,16 @@ interface UpdatePadCommandPayload {
   command: PadCommand;
 }
 
+interface UpdateNudgeValuePayload {
+  sequencerId: string;
+  padId: number;
+  nudgeValue: number;
+}
+
 // Helpers
 const createEmptySequencer = (): Sequencer => ({
-  padCommands: Array(numPads).fill(PadCommand.EMPTY)
+  padCommands: Array(numPads).fill(PadCommand.EMPTY),
+  nudgeValues: Array(numPads).fill(0)
 });
 
 // Initial State
@@ -30,10 +38,22 @@ const initialState: SequencerState = {
   selectedSequencerId: null,
   selectedPadId: null,
   sequencers: {
-    'seq1': { padCommands: Array(numPads).fill(PadCommand.EMPTY) },
-    'seq2': { padCommands: Array(numPads).fill(PadCommand.EMPTY) },
-    'seq3': { padCommands: Array(numPads).fill(PadCommand.EMPTY) },
-    'seq4': { padCommands: Array(numPads).fill(PadCommand.EMPTY) }
+    'seq1': { 
+      padCommands: Array(numPads).fill(PadCommand.EMPTY),
+      nudgeValues: Array(numPads).fill(0)
+     },
+     'seq2': { 
+      padCommands: Array(numPads).fill(PadCommand.EMPTY),
+      nudgeValues: Array(numPads).fill(0)
+     },
+     'seq3': { 
+      padCommands: Array(numPads).fill(PadCommand.EMPTY),
+      nudgeValues: Array(numPads).fill(0)
+     },
+     'seq4': { 
+      padCommands: Array(numPads).fill(PadCommand.EMPTY),
+      nudgeValues: Array(numPads).fill(0)
+     },
   }
 };
 
@@ -59,6 +79,11 @@ export const sequencerSlice = createSlice({
     clearSelectedPad: (state) => {
       state.selectedSequencerId = null;
       state.selectedPadId = null;
+    },
+    updateNudgeValue: (state, action: PayloadAction<UpdateNudgeValuePayload>) => {
+      const { sequencerId, padId, nudgeValue } = action.payload;
+      const clampedNudge = Math.max(-3, Math.min(3, nudgeValue));
+      state.sequencers[sequencerId].nudgeValues[padId] = clampedNudge;
     }
   }
 });
@@ -66,7 +91,8 @@ export const {
   updatePadCommand,
   clearAllPads,
   setSelectedPad,
-  clearSelectedPad
+  clearSelectedPad,
+  updateNudgeValue
 } = sequencerSlice.actions;
 
 export default sequencerSlice.reducer;

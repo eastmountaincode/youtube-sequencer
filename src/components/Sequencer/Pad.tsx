@@ -1,52 +1,17 @@
 import React from 'react';
 import { PadCommand } from '../../types';
+import { getIcon } from '../../utils/misc';
 
 interface PadProps {
   id: number;
   value: PadCommand;
   isActive: boolean;
   isSelected: boolean;
+  nudgeValue: number;
   onClick: () => void;
 }
 
-const getIcon = (command: PadCommand) => {
-  switch (command) {
-    case PadCommand.PLAY:
-      return <i className="bi bi-play-circle-fill"></i>;
-    case PadCommand.PAUSE:
-      return <i className="bi bi-pause-circle-fill"></i>;
-    case PadCommand.ARROW_LEFT:
-      return <i className="bi bi-arrow-left-square-fill"></i>;
-    case PadCommand.ARROW_RIGHT:
-      return <i className="bi bi-arrow-right-square-fill"></i>;
-    case PadCommand.ONE:
-      return <i className="bi bi-1-square-fill"></i>;
-    case PadCommand.TWO:
-      return <i className="bi bi-2-square-fill"></i>;
-    case PadCommand.THREE:
-      return <i className="bi bi-3-square-fill"></i>;
-    case PadCommand.FOUR:
-      return <i className="bi bi-4-square-fill"></i>;
-    case PadCommand.FIVE:
-      return <i className="bi bi-5-square-fill"></i>;
-    case PadCommand.SIX:
-      return <i className="bi bi-6-square-fill"></i>;
-    case PadCommand.SEVEN:
-      return <i className="bi bi-7-square-fill"></i>;
-    case PadCommand.EIGHT:
-      return <i className="bi bi-8-square-fill"></i>;
-    case PadCommand.NINE:
-      return <i className="bi bi-9-square-fill"></i>;
-    case PadCommand.PLAYER_MUTE:
-      return <i className="bi bi-volume-mute-fill"></i>;
-    case PadCommand.PLAYER_UNMUTE:
-      return <i className="bi bi-volume-up-fill"></i>;
-    default:
-      return null;
-  }
-};
-
-const Pad: React.FC<PadProps> = ({ id, value, isActive, isSelected, onClick }) => {
+const Pad: React.FC<PadProps> = ({ id, value, isActive, isSelected, nudgeValue, onClick }) => {
 
   return (
     <div
@@ -56,6 +21,8 @@ const Pad: React.FC<PadProps> = ({ id, value, isActive, isSelected, onClick }) =
         aspectRatio: '1',
         backgroundColor: isActive ? '#007bff' : '#e9ecef',
         borderRadius: '4px',
+        borderBottomLeftRadius: '0px',
+        borderBottomRightRadius: '0px',
         cursor: 'pointer',
         display: 'flex',
         justifyContent: 'center',
@@ -64,7 +31,9 @@ const Pad: React.FC<PadProps> = ({ id, value, isActive, isSelected, onClick }) =
         fontWeight: 'bold',
         // transition: 'all 0.1s ease-in-out',
         position: 'relative',
-        border: isSelected ? '4px solid #ff9800' : 'none'
+        border: 'none',
+        outline: isSelected ? '4px solid #ff9800' : 'none'
+
       }}
     >
       {value !== PadCommand.EMPTY && getIcon(value)}
@@ -78,10 +47,32 @@ const Pad: React.FC<PadProps> = ({ id, value, isActive, isSelected, onClick }) =
       }}>
         {id + 1}
       </span>
+      {/* Background track */}
+      <div style={{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        height: '5px',
+        backgroundColor: 'lightgrey',
+
+      }} />
+
+      {/* Nudge value bar */}
+      {nudgeValue !== 0 && (
+        <div style={{
+          position: 'absolute',
+          bottom: 0,
+          left: '50%',
+          transform: `translateX(${nudgeValue < 0 ? '-100%' : '0%'})`,
+          width: `${Math.min(Math.abs(nudgeValue * 20), 50)}%`,
+          height: '5px',
+          backgroundColor: '#007bff',
+          transition: 'width 0.1s ease-out'
+        }} />
+      )}
     </div>
   );
 };
-
-
 
 export default Pad;

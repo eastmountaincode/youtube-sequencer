@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import VideoModule from './VideoModule/VideoModule';
-import SequencerPadView from './SequencerPadView';
+import SequencerPadView from './SequencerPadView/SequencerPadView';
 import { setSelectedPad } from '../../store/sequencerSlice';
 
 const Sequencer: React.FC<{ sequencerId: string }> = ({ sequencerId }) => {
