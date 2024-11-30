@@ -69,14 +69,14 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
     return (
 
 
-        <div className="video-preview mt-3 d-flex flex-column justify-content-center align-items-center"
-            style={{ border: '3px solid blue', height: '350px' }}>
+        <div className="video-preview d-flex flex-column justify-content-center align-items-center border border-3"
+            style={{ height: '370px' }}>
 
             {/* FIRST ROW */}
-            <div className="d-flex justify-content-center align-items-center">
+            <div className="d-flex justify-content-center align-items-center mt-2">
 
                 {/* VIDEO */}
-                <div style={{ width: '350px' }}>
+                <div style={{ width: '300px' }}>
                     {videoId && isLoadButtonPressed ? (
                         <div className="position-relative">
                             <div className="ratio ratio-16x9">
@@ -116,7 +116,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                 </div>
                 {/* VOLUME SLIDER */}
                 {videoId && isPlayerReady && (
-                    <div className="volume-control d-flex flex-column justify-content-between align-items-center me-3 ms-3 mt-3"
+                    <div className="volume-control d-flex flex-column justify-content-between align-items-center me-3 ms-3 mt-4"
                         style={{ height: '260px', width: '30px' }}>
                         <i className="bi bi-volume-up fs-4"></i>
                         <input
@@ -138,12 +138,12 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                 )}
             </div>
             {/* SECOND ROW */}
-            <div className='mb-2'>
+            <div className='mb-5'>
                 {/* MUTE BUTTON */}
                 {videoId && isPlayerReady &&
-                    <div className='d-flex justify-content-center align-items-center gap-2 mb-3'>
+                    <div className='d-flex justify-content-center align-items-center'>
                         <button
-                            className="btn btn-outline-primary d-flex align-items-center gap-2 px-2 py-1"
+                            className="btn btn-outline-primary d-flex align-items-center gap-2"
                             onClick={handleMuteButtonClick}
                         >
                             <i className={`bi ${isMuted ? 'bi-volume-mute' : 'bi-volume-up'} fs-4`}></i>

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import Pad from '../Pad';
 import { clearAllPads, updateNudgeValue } from '../../../store/sequencerSlice';
-import SequencerControls from './SequencerControls';
+import SequencerControls from './SequencerControls/SequencerControls';
 
 interface SequencerPadViewProps {
   sequencerId: string;
@@ -83,7 +83,7 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
   }));
 
   return (
-    <div className="sequencer-pad-view border border-primary border-3 p-3">
+    <div className="sequencer-pad-view p-3">
       <div className="pad-grid" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(8, 1fr)',

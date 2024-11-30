@@ -12,8 +12,8 @@ const Sequencer: React.FC<{ sequencerId: string }> = ({ sequencerId }) => {
   };
 
   return (
-    <div className="sequencer border border-primary border-3 p-3">
-      <h2>Sequencer</h2>
+    <div className="sequencer border border-3 p-3" style={{minWidth: '550px'}}>
+      {/* <h2>Sequencer</h2> */}
       {/* <p>Sequencer ID: {sequencerId}</p> */}
       <div className='mb-3'>
         <VideoModule

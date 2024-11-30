@@ -14,8 +14,8 @@ const VideoModule: React.FC<{ videoModuleId: string }> = ({ videoModuleId }) => 
     } = useVideoModule(videoModuleId);
 
     return (
-        <div className="video-module border border-danger border-3 p-3">
-            <h3>Video Module</h3>  
+        <div className="video-module p-3">
+            {/* <h3>Video Module</h3>   */}
             <VideoLoader 
                 videoUrl={videoUrl}
                 onUrlChange={setVideoUrl}
