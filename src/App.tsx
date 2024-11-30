@@ -10,7 +10,7 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <div className="App">
+        <div className="App bg-dark text-light">
           <AudioWorkspace />
         </div>
       </PersistGate>

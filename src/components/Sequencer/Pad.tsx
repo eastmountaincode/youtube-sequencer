@@ -36,9 +36,12 @@ const Pad: React.FC<PadProps> = ({ id, value, isActive, isSelected, nudgeValue, 
 
       }}
     >
+      {/* Command icon */}
+      <div className="text-dark" style={{marginBottom: '5px'}}>
+        {value !== PadCommand.EMPTY && getIcon(value)}
+      </div>
       {/* id number */}
-      {value !== PadCommand.EMPTY && getIcon(value)}
-      <span style={{
+      <span className="text-dark" style={{
         position: 'absolute',
         bottom: '4px',
         right: '4px',

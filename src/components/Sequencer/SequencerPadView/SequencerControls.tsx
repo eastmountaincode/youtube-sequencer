@@ -41,10 +41,15 @@ const SequencerControls: React.FC<SequencerControlsProps> = ({
     const adjustNudge = (amount: number) => {
         if (selectedPadId !== null) {
             const currentValue = padNudgeValues[selectedPadId];
+            const newValue = Number((currentValue + amount).toFixed(3));
+
+            // Clamp between -1 and 1
+            const clampedValue = Math.max(-1, Math.min(1, newValue));
+
             dispatch(updateNudgeValue({
                 sequencerId,
                 padId: selectedPadId,
-                nudgeValue: Number((currentValue + amount).toFixed(3))
+                nudgeValue: clampedValue
             }));
         }
     };
@@ -142,7 +147,7 @@ const SequencerControls: React.FC<SequencerControlsProps> = ({
                             >
                                 +0.001s
                             </button>
-  
+
                         </div>
                     </div>
                 )}

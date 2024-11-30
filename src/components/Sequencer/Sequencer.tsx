@@ -12,7 +12,7 @@ const Sequencer: React.FC<{ sequencerId: string }> = ({ sequencerId }) => {
   };
 
   return (
-    <div className="sequencer border border-primary border-3 p-3 bg-primary-subtle">
+    <div className="sequencer border border-primary border-3 p-3">
       <h2>Sequencer</h2>
       {/* <p>Sequencer ID: {sequencerId}</p> */}
       <div className='mb-3'>

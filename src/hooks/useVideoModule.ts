@@ -76,7 +76,6 @@ export const useVideoModule = (videoModuleId: string) => {
         // register player with the refs list stored in slice
         playerRefs[videoModuleId] = player;
         dispatch(setModulePlayerReady({ videoModuleId, isReady: true }));
-
     };
 
     return {

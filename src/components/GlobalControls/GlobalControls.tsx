@@ -7,34 +7,18 @@ import { playerRefs } from "../../store/videoModuleSlice";
 import BpmControl from "./BpmControl";
 import SaveLoad from "./SaveLoad";
 import { audioEngine } from "../../services/audioEngine";
+import MetronomeControl from "./MetronomeControl";
+import PlayPauseControl from "./PlayPauseControl";
 
 const GlobalControls: React.FC = () => {
     const dispatch = useDispatch();
 
-    const { isPlaying, currentStep } = useSelector((state: RootState) => state.audioEngine);
+    const { currentStep } = useSelector((state: RootState) => state.audioEngine);
     const videoModules = useSelector((state: RootState) => state.videoModule.modules);
     const readyStates = useSelector((state: RootState) => state.videoModuleReadiness.modules);
     const readyModuleIds = Object.entries(readyStates)
         .filter(([_, state]) => state.isPlayerReady)
         .map(([id]) => id);
-    const [metronomeEnabled, setMetronomeEnabled] = useState(false);
-
-
-    const handlePlayPause = () => {
-        const newPlayingState = !isPlaying;
-        dispatch(setPlaying(newPlayingState));
-
-        readyModuleIds.forEach(moduleId => {
-            const player = playerRefs[moduleId];
-            if (player) {
-                if (newPlayingState) {
-                    sendPlayCommand(player);
-                } else {
-                    sendPauseCommand(player);
-                }
-            }
-        });
-    };
 
     const renderStepNumber = (step: number) => {
         // Convert to 1-based index and handle numbers 1-numPads
@@ -53,53 +37,31 @@ const GlobalControls: React.FC = () => {
         }
     };
 
-    const handleMetronomeToggle = () => {
-        const newState = !metronomeEnabled;
-        setMetronomeEnabled(newState);
-        audioEngine.setMetronomeEnabled(newState);
-    };
-
-
     return (
-        <div className="global-controls border border-warning border-3 p-3">
+        <div className="global-controls border border-warning border-3 p-3 overflow-hidden">
             <h4>Global Controls</h4>
-            <div className="d-flex flex-column align-items-center w-100">
-                <div className="d-flex align-items-center mb-2 w-100" style={{ maxWidth: '600px' }}>
-                    {/* BPM CONTROL */}
+            <div className="d-flex flex-column align-items-center ">
+                {/* First Row */}
+                <div className="d-flex align-items-center p-2 gap-3">
                     <BpmControl />
-                    {/* PLAY PAUSE CONTROL */}
-                    <div className="transport-controls">
-                        <button
-                            className="btn btn-primary me-2"
-                            onClick={handlePlayPause}
-                        >
-                            <i className={`bi ${isPlaying ? 'bi-pause-fill' : 'bi-play-fill'}`}></i>
-                        </button>
-                        {/* METRONOME CONTROL */}
-                        <button
-                            className={`btn ${metronomeEnabled ? 'btn-success' : 'btn-outline-secondary'} me-2`}
-                            onClick={handleMetronomeToggle}
-                        >
-                            <i className="bi bi-music-note-beamed"></i>
-                        </button>
-                    </div>
+                    <PlayPauseControl />
+                    <MetronomeControl />
                     <SaveLoad />
-
                 </div>
-                <div className="d-flex align-items-center justify-content-center">
-                    <div className="video-modules-status me-3">
-                        <span className="badge bg-secondary me-2">
-                            V Modules: {Object.keys(videoModules).length}
-                        </span>
-                        <span className="badge bg-success">
-                            Ready: {readyModuleIds.length}
-                        </span>
-                    </div>
 
-                </div>
-                <div className="d-flex align-items-center justify-content-center mt-3">
+                {/* Second Row */}
+                <div className="d-flex align-items-center justify-content-between p-2 gap-5 mt-2 mb-2">
                     <div className="current-step">
                         <span className="fs-4">Step: {renderStepNumber(currentStep)}</span>
+                    </div>
+
+                    <div className="video-modules-status">
+                        <span className="badge bg-secondary me-2" style={{ userSelect: 'none' }}>
+                            V Modules: {Object.keys(videoModules).length}
+                        </span>
+                        <span className="badge bg-success" style={{ userSelect: 'none' }}>
+                            Ready: {readyModuleIds.length}
+                        </span>
                     </div>
                 </div>
             </div>

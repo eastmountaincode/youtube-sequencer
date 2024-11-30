@@ -55,7 +55,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
         dispatch(setVolume({ sequencerId: videoModuleId, volume: newVolume }));
         const player = playerRefs[videoModuleId];
         if (player) {
-            executeCommand(PadCommand.VOLUME, player, dispatch, newVolume);
+            executeCommand(PadCommand.VOLUME, player, dispatch, 0, newVolume);
         }
     };
 
@@ -116,7 +116,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                 </div>
                 {/* VOLUME SLIDER */}
                 {videoId && isPlayerReady && (
-                    <div className="volume-control d-flex flex-column justify-content-between align-items-center me-3 ms-3"
+                    <div className="volume-control d-flex flex-column justify-content-between align-items-center me-3 ms-3 mt-3"
                         style={{ height: '260px', width: '30px' }}>
                         <i className="bi bi-volume-up fs-4"></i>
                         <input
@@ -132,7 +132,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                         />
                         <div className="d-flex flex-column align-items-center">
                             <i className="bi bi-volume-down fs-4"></i>
-                            <span className="fw-bold mt-2">{volume}</span>
+                            <span className="mt-2" style={{fontFamily: 'monospace'}}>{volume}%</span>
                         </div>
                     </div>
                 )}
@@ -141,7 +141,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
             <div className='mb-2'>
                 {/* MUTE BUTTON */}
                 {videoId && isPlayerReady &&
-                    <div className='d-flex justify-content-center align-items-center gap-2'>
+                    <div className='d-flex justify-content-center align-items-center gap-2 mb-3'>
                         <button
                             className="btn btn-outline-primary d-flex align-items-center gap-2 px-2 py-1"
                             onClick={handleMuteButtonClick}

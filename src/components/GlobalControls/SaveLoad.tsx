@@ -14,7 +14,7 @@ const SaveLoad: React.FC = () => {
             sequencer: sequencerState,
             persistentAudioSettings: persistentAudioState
         };
-        
+
         const blob = new Blob([JSON.stringify(state)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -30,9 +30,8 @@ const SaveLoad: React.FC = () => {
             const text = await file.text();
             const loadedState = JSON.parse(text);
 
-            // Reset video module readiness states
-            dispatch({ type: 'videoModuleReadiness/resetAllReadinessStates' });
-            
+            dispatch({ type: 'videoModuleReadiness/resetAllReadinessStates' }); // Reset video module readiness states
+
             dispatch({ type: 'videoModule/setState', payload: loadedState.videoModule });
             dispatch({ type: 'sequencer/setState', payload: loadedState.sequencer });
             dispatch({ type: 'persistentAudioSettings/setState', payload: loadedState.persistentAudioSettings });
@@ -42,15 +41,16 @@ const SaveLoad: React.FC = () => {
     };
 
     return (
-        <div className="save-load d-flex gap-2">
-            <button 
-                className="btn btn-primary"
+        <div className="save-load d-flex gap-2 p-3 justify-content-center flex-column align-items-center">
+            <button
+                className="btn btn-sm btn-primary d-flex align-items-center justify-content-center"
                 onClick={saveStateToFile}
+                style={{ width: '85px' }}
             >
                 <i className="bi bi-download me-2"></i>
                 Save
             </button>
-            <label className="btn btn-primary">
+            <label className="btn btn-sm btn-primary d-flex align-items-center justify-content-center" style={{ width: '85px' }}>
                 <i className="bi bi-upload me-2"></i>
                 Load
                 <input

@@ -29,6 +29,7 @@ export const sendJumpToTimeCommand = (player: YT.Player, percentage: number, nud
 };
 
 export const sendVolumeChangeCommand = (player: YT.Player, volume: number) => {
+    console.log('changing volume to', volume);
     // Volume must be between 0 and 100
     const clampedVolume = Math.max(0, Math.min(100, volume));
     player.setVolume(clampedVolume);

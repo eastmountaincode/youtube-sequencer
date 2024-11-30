@@ -29,7 +29,7 @@ const AudioWorkspace: React.FC = () => {
 
   return (
     <div className="audio-workspace border border-dark border-3 p-3">
-      <h1>Audio Workspace</h1>
+      {/* <h1>Audio Workspace</h1> */}
       <GlobalControls />
       <div className="sequencers mt-3" style={{
         display: 'grid',
