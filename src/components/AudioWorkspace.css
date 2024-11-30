@@ -1,0 +1,12 @@
+.sequencers-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  @media (max-width: 1175px) {
+    .sequencers-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  

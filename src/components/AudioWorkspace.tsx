@@ -7,6 +7,8 @@ import KeyInputArea from "./KeyInputArea";
 import { PadCommand } from "../types";
 import { updatePadCommand } from "../store/sequencerSlice";
 import { useAudioEngine } from "../hooks/useAudioEngine";
+import './AudioWorkspace.css'
+
 
 const AudioWorkspace: React.FC = () => {
   const sequencers = useSelector((state: RootState) => state.sequencer.sequencers);
@@ -16,7 +18,7 @@ const AudioWorkspace: React.FC = () => {
   const dispatch = useDispatch();
   const selectedSequencerId = useSelector((state: RootState) => state.sequencer.selectedSequencerId);
   const selectedPadId = useSelector((state: RootState) => state.sequencer.selectedPadId);
-  
+
   const handleCommandSelect = (command: PadCommand) => {
     if (selectedSequencerId !== null && selectedPadId !== null) {
       dispatch(updatePadCommand({
@@ -31,12 +33,7 @@ const AudioWorkspace: React.FC = () => {
     <div className="audio-workspace border border-dark border-3 p-3">
       {/* <h1>Audio Workspace</h1> */}
       <GlobalControls />
-      <div className="sequencers mt-3" style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gridTemplateRows: 'repeat(2, 1fr)',
-        gap: '1rem'
-      }}>
+      <div className="sequencers mt-3 sequencers-grid">
         {sequencerIds.map(sequencerId => (
           <Sequencer key={sequencerId} sequencerId={sequencerId} />
         ))}

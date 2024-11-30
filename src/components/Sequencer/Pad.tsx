@@ -20,7 +20,6 @@ const Pad: React.FC<PadProps> = ({ id, value, isActive, isSelected, nudgeValue, 
       style={{
         aspectRatio: '1',
         backgroundColor: isActive ? '#007bff' : '#e9ecef',
-        //borderRadius: '4px',
         borderBottomLeftRadius: '0px',
         borderBottomRightRadius: '0px',
         cursor: 'pointer',
@@ -29,10 +28,9 @@ const Pad: React.FC<PadProps> = ({ id, value, isActive, isSelected, nudgeValue, 
         alignItems: 'center',
         fontSize: '1.5rem',
         fontWeight: 'bold',
-        // transition: 'all 0.1s ease-in-out',
         position: 'relative',
         border: 'none',
-        outline: isSelected ? '4px solid #ff9800' : 'none'
+        outline: isSelected ? '4px solid #ff9800' : 'none',
 
       }}
     >
