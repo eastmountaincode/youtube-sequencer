@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { setPlaying } from "../../store/audioEngineSlice";
@@ -6,6 +6,7 @@ import { sendPlayCommand, sendPauseCommand } from '../../utils/videoModuleComman
 import { playerRefs } from "../../store/videoModuleSlice";
 import BpmControl from "./BpmControl";
 import SaveLoad from "./SaveLoad";
+import { audioEngine } from "../../services/audioEngine";
 
 const GlobalControls: React.FC = () => {
     const dispatch = useDispatch();
@@ -16,6 +17,8 @@ const GlobalControls: React.FC = () => {
     const readyModuleIds = Object.entries(readyStates)
         .filter(([_, state]) => state.isPlayerReady)
         .map(([id]) => id);
+    const [metronomeEnabled, setMetronomeEnabled] = useState(false);
+
 
     const handlePlayPause = () => {
         const newPlayingState = !isPlaying;
@@ -50,6 +53,13 @@ const GlobalControls: React.FC = () => {
         }
     };
 
+    const handleMetronomeToggle = () => {
+        const newState = !metronomeEnabled;
+        setMetronomeEnabled(newState);
+        audioEngine.setMetronomeEnabled(newState);
+    };
+
+
     return (
         <div className="global-controls border border-warning border-3 p-3">
             <h4>Global Controls</h4>
@@ -64,6 +74,13 @@ const GlobalControls: React.FC = () => {
                             onClick={handlePlayPause}
                         >
                             <i className={`bi ${isPlaying ? 'bi-pause-fill' : 'bi-play-fill'}`}></i>
+                        </button>
+                        {/* METRONOME CONTROL */}
+                        <button
+                            className={`btn ${metronomeEnabled ? 'btn-success' : 'btn-outline-secondary'} me-2`}
+                            onClick={handleMetronomeToggle}
+                        >
+                            <i className="bi bi-music-note-beamed"></i>
                         </button>
                     </div>
                     <SaveLoad />

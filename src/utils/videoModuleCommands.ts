@@ -24,6 +24,7 @@ export const sendSeekBackwardCommand = (player: YT.Player) => {
 export const sendJumpToTimeCommand = (player: YT.Player, percentage: number, nudgeValue: number = 0) => {
     const duration = player.getDuration();
     const targetTime = duration * (percentage / 100);
+    console.log('jumping to time', targetTime + nudgeValue);;
     player.seekTo(targetTime + nudgeValue, true);
 };
 

@@ -20,7 +20,7 @@ const Pad: React.FC<PadProps> = ({ id, value, isActive, isSelected, nudgeValue, 
       style={{
         aspectRatio: '1',
         backgroundColor: isActive ? '#007bff' : '#e9ecef',
-        borderRadius: '4px',
+        //borderRadius: '4px',
         borderBottomLeftRadius: '0px',
         borderBottomRightRadius: '0px',
         cursor: 'pointer',
@@ -36,10 +36,11 @@ const Pad: React.FC<PadProps> = ({ id, value, isActive, isSelected, nudgeValue, 
 
       }}
     >
+      {/* id number */}
       {value !== PadCommand.EMPTY && getIcon(value)}
       <span style={{
         position: 'absolute',
-        bottom: '2px',
+        bottom: '4px',
         right: '4px',
         fontSize: '0.7rem',
         opacity: 0.7,
@@ -65,10 +66,10 @@ const Pad: React.FC<PadProps> = ({ id, value, isActive, isSelected, nudgeValue, 
           bottom: 0,
           left: '50%',
           transform: `translateX(${nudgeValue < 0 ? '-100%' : '0%'})`,
-          width: `${Math.min(Math.abs(nudgeValue * 20), 50)}%`,
+          width: `${Math.min(Math.abs(nudgeValue * 50), 50)}%`,
+
           height: '5px',
           backgroundColor: '#007bff',
-          transition: 'width 0.1s ease-out'
         }} />
       )}
     </div>
