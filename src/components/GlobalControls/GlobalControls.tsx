@@ -38,19 +38,27 @@ const GlobalControls: React.FC = () => {
     };
 
     return (
-        <div className="global-controls border border-warning border-3 p-3 overflow-hidden">
-            <h4>Global Controls</h4>
-            <div className="d-flex flex-column align-items-center ">
+        <div className="global-controls border border-warning border-1 overflow-hidden">
+            <h4 className="p-3">Global Controls</h4>
+            <div className="d-flex flex-column align-items-center">
+                
                 {/* First Row */}
-                <div className="d-flex align-items-center p-2 gap-3">
-                    <BpmControl />
-                    <PlayPauseControl />
-                    <MetronomeControl />
-                    <SaveLoad />
+                <div className="d-flex flex-wrap align-items-center p-3 gap-3 justify-content-center">
+                    <div className="d-flex gap-3">
+                        <BpmControl />
+                        <PlayPauseControl />
+                    </div>
+                    <div className="d-flex gap-3">
+                        <MetronomeControl />
+                        <SaveLoad />
+                    </div>
                 </div>
 
+                <hr className="border border-warning border-1 w-100" />
+
+
                 {/* Second Row */}
-                <div className="d-flex align-items-center justify-content-between p-2 gap-5 mt-2 mb-2">
+                <div className="d-flex align-items-center justify-content-between p-2 gap-5 mt-1 mb-3">
                     <div className="current-step">
                         <span className="fs-4">Step: {renderStepNumber(currentStep)}</span>
                     </div>

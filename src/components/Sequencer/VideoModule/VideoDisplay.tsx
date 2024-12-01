@@ -69,7 +69,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
     return (
 
 
-        <div className="video-preview d-flex flex-column justify-content-center align-items-center border border-3 border-success"
+        <div className="video-preview d-flex flex-column justify-content-center align-items-center border border-1 border-success"
             style={{ height: '370px' }}>
 
             {/* FIRST ROW */}
@@ -110,7 +110,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                         </div>
                     ) : (
                         <div className="d-flex justify-content-center align-items-center h-100">
-                            <i className="bi bi-youtube fs-1 text-muted"></i>
+                            <i className="bi bi-youtube fs-1 text-light"></i>
                         </div>
                     )}
                 </div>
@@ -132,7 +132,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                         />
                         <div className="d-flex flex-column align-items-center">
                             <i className="bi bi-volume-down fs-4"></i>
-                            <span className="mt-2" style={{fontFamily: 'monospace'}}>{volume}%</span>
+                            <span className="mt-2" style={{ fontFamily: 'monospace' }}>{volume}%</span>
                         </div>
                     </div>
                 )}

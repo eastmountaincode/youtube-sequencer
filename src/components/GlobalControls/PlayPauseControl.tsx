@@ -30,12 +30,13 @@ const PlayPauseControl: React.FC = () => {
     };
 
     return (
-        <div className='p-3'>
+        <div className='p-3 d-flex justify-content-center align-items-center' style={{ width: '130px' }}>
             <button
-                className="btn btn-primary"
+                className="btn btn-outline-danger"
                 onClick={handlePlayPause}
             >
                 <i className={`bi ${isPlaying ? 'bi-pause-fill' : 'bi-play-fill'}`}></i>
+                {isPlaying ? ' Pause' : ' Play'}
             </button>
         </div>
     );

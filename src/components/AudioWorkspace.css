@@ -8,5 +8,8 @@
     .sequencers-grid {
       grid-template-columns: 1fr;
     }
+    .sequencers {
+      margin: 0px 180px;
+    }
   }
   

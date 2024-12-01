@@ -83,7 +83,7 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
   }));
 
   return (
-    <div className="sequencer-pad-view p-3">
+    <div className="sequencer-pad-view ms-3 me-3"> 
       <div className="pad-grid" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(8, 1fr)',

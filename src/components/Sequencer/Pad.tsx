@@ -31,6 +31,7 @@ const Pad: React.FC<PadProps> = ({ id, value, isActive, isSelected, nudgeValue, 
         position: 'relative',
         border: 'none',
         outline: isSelected ? '4px solid #ff9800' : 'none',
+        transition: 'background-color 0.3s ease',
 
       }}
     >

@@ -62,30 +62,8 @@ const KeyInputArea: React.FC<KeyInputAreaProps> = ({ onCommandSelect }) => {
     }, [onCommandSelect]);
     
     return (
-        <div className="key-input-area border border-success border-3 p-3">
-            <h4>Key Input Area</h4>
-            <div className="number-grid" style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(9, minmax(0, 60px))', // Cap max size at 60px
-                gap: '10px',
-                marginBottom: '10px'
-            }}>
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-                    <button
-                        key={num}
-                        className="btn btn-outline-primary"
-                        style={{
-                            aspectRatio: '1',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                          }}
-                        onClick={() => onCommandSelect(numberToCommand[num])}
-                    >
-                        {num}
-                    </button>
-                ))}
-            </div>
+        <div className="key-input-area border border-1 p-3 mt-3 overflow-hidden">
+            {/* <h4>Key Input Area</h4> */}
             <div className="command-buttons d-flex gap-2">
                 <button className="btn btn-outline-success" onClick={() => onCommandSelect(PadCommand.PLAY)}>Play</button>
                 <button className="btn btn-outline-warning" onClick={() => onCommandSelect(PadCommand.PAUSE)}>Pause</button>

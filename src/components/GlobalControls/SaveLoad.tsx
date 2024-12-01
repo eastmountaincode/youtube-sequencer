@@ -43,16 +43,16 @@ const SaveLoad: React.FC = () => {
     return (
         <div className="save-load d-flex gap-2 p-3 justify-content-center flex-column align-items-center">
             <button
-                className="btn btn-sm btn-primary d-flex align-items-center justify-content-center"
+                className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center"
                 onClick={saveStateToFile}
-                style={{ width: '85px' }}
+                style={{ width: '155px' }}
             >
                 <i className="bi bi-download me-2"></i>
-                Save
+                Save Workspace
             </button>
-            <label className="btn btn-sm btn-primary d-flex align-items-center justify-content-center" style={{ width: '85px' }}>
+            <label className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center" style={{ width: '155px' }}>
                 <i className="bi bi-upload me-2"></i>
-                Load
+                Load Workspace
                 <input
                     type="file"
                     accept=".ytx"
