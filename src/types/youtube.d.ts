@@ -11,4 +11,8 @@ declare namespace YT {
         unMute(): void;
         isMuted(): boolean;
     }
+
+    interface PlayerEvent {
+        target: Player;
+    }
 }
