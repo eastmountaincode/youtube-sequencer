@@ -14,6 +14,7 @@ export const useAudioEngine = ({ sequencerIds }: UseAudioEngineProps) => {
 
   const { isPlaying } = useSelector((state: RootState) => state.audioEngine);
   const sequencers = useSelector((state: RootState) => state.sequencer.sequencers);
+  const bpm = useSelector((state: RootState) => state.persistentAudioSettings.bpm);
 
   // Keep AudioEngine's sequencers in sync with Redux store
   useEffect(() => {
@@ -26,7 +27,8 @@ export const useAudioEngine = ({ sequencerIds }: UseAudioEngineProps) => {
       audioEngine.configure({
         dispatch,
         sequencers,
-        playerRefs
+        playerRefs,
+        initialBpm: bpm
       });
       audioEngine.start();
     } else {

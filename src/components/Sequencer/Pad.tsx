@@ -1,6 +1,6 @@
 import React from 'react';
 import { PadCommand } from '../../types';
-import { getIcon } from '../../utils/misc';
+import { getIcon } from '../../utils/getIcon';
 
 interface PadProps {
   id: number;

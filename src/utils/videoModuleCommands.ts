@@ -1,5 +1,6 @@
 import { AppDispatch } from "../store/store";
 import { PadCommand } from "../types";
+import { Dispatch } from "@reduxjs/toolkit";
 
 // Functions for our controller -> the hook -> useVideoModule
 export const sendPlayCommand = (player: YT.Player) => {
@@ -44,16 +45,17 @@ export const sendPlayerUnmuteCommand = (player: YT.Player) => {
     player.unMute();
 };
 
+interface CommandParameters {
+    command: PadCommand;
+    player: YT.Player;
+    dispatch: Dispatch;
+    nudgeValue?: number;
+    volume?: number;
+    setIsMuted?: (isMuted: boolean) => void;
+}
 
-export const executeCommand = (
-    command: PadCommand, 
-    player: YT.Player, 
-    dispatch: AppDispatch,
-    nudgeValue: number = 0,
-    value?: number,
-    setIsMuted?: (isMuted: boolean) => void,
 
-) => {
+export const executeCommand = ({ command, player, dispatch, nudgeValue = 0, volume = 100, setIsMuted }: CommandParameters) => {
     switch (command) {
         case PadCommand.PLAY:
             sendPlayCommand(player);
@@ -95,8 +97,8 @@ export const executeCommand = (
             sendJumpToTimeCommand(player, 90, nudgeValue);
             break;
         case PadCommand.VOLUME:
-            if (typeof value === 'number') {
-                sendVolumeChangeCommand(player, value);
+            if (typeof volume === 'number') {
+                sendVolumeChangeCommand(player, volume);
             }
             break;
         case PadCommand.PLAYER_MUTE:

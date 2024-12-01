@@ -21,7 +21,7 @@ const SequencerControls: React.FC<SequencerControlsProps> = ({
     React.useEffect(() => {
         const observer = new ResizeObserver(entries => {
             const width = entries[0].contentRect.width;
-            setIsNarrow(width < 550); // Adjust threshold as needed
+            setIsNarrow(width < 550); 
         });
 
         if (containerRef.current) {

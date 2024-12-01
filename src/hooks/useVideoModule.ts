@@ -6,6 +6,7 @@ import { executeCommand } from "../utils/videoModuleCommands";
 import { PadCommand } from "../types";
 import { playerRefs } from "../store/videoModuleSlice";
 import { setModulePlayerReady, setModuleLoadButtonPressed } from "../store/videoModuleReadinessSlice";
+import { exec } from "child_process";
 
 export const useVideoModule = (videoModuleId: string) => {
     const dispatch = useDispatch();
@@ -37,10 +38,18 @@ export const useVideoModule = (videoModuleId: string) => {
 
     const handleMuteToggle = (player: YT.Player) => {
         if (isMuted) {
-            executeCommand(PadCommand.PLAYER_UNMUTE, player, dispatch);
+            executeCommand({
+                player: player,
+                command: PadCommand.PLAYER_UNMUTE,
+                dispatch: dispatch,
+            })
 
         } else {
-            executeCommand(PadCommand.PLAYER_MUTE, player, dispatch);
+            executeCommand({
+                player,
+                command: PadCommand.PLAYER_MUTE,
+                dispatch: dispatch,
+            })
 
         }
         setIsMuted(!isMuted);

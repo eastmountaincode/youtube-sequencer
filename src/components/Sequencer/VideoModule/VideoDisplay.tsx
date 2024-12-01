@@ -25,6 +25,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
         state.persistentAudioSettings?.volumes?.[videoModuleId] ?? 100
     );
 
+
     const { isMuted, handleMuteToggle } = useVideoModule(videoModuleId);
 
     // Get readiness states from Redux
@@ -35,6 +36,8 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
 
     useEffect(() => {
         if (videoId) {
+
+
             new window.YT.Player(`youtube-player-${videoModuleId}`, {
                 videoId: videoId,
                 playerVars: {
@@ -43,19 +46,33 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                 events: {
                     onReady: (event: YT.PlayerEvent) => {
                         console.log('YT.Player onReady fired!');
-                        onPlayerReady(event.target);
+                        const player = event.target;
+                        executeCommand({
+                            command: PadCommand.VOLUME,
+                            player: player,
+                            dispatch: dispatch,
+                            nudgeValue: 0,
+                            volume: volume
+                        }); 
+                        onPlayerReady(player);
                     }
                 }
             });
         }
-    }, [videoId]);
+    }, [videoId, videoModuleId, dispatch]);
 
     const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newVolume = parseInt(event.target.value);
         dispatch(setVolume({ sequencerId: videoModuleId, volume: newVolume }));
         const player = playerRefs[videoModuleId];
         if (player) {
-            executeCommand(PadCommand.VOLUME, player, dispatch, 0, newVolume);
+            executeCommand({
+                command: PadCommand.VOLUME,
+                player: player,
+                dispatch: dispatch,
+                nudgeValue: 0,
+                volume: newVolume
+            });
         }
     };
 
@@ -69,7 +86,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
     return (
 
 
-        <div className="video-preview d-flex flex-column justify-content-center align-items-center border border-1 border-success"
+        <div className="video-preview d-flex flex-column justify-content-center align-items-center border border-1 border-success overflow-hidden"
             style={{ height: '370px' }}>
 
             {/* FIRST ROW */}

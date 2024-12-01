@@ -1,17 +1,12 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import React from "react";
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import { setPlaying } from "../../store/audioEngineSlice";
-import { sendPlayCommand, sendPauseCommand } from '../../utils/videoModuleCommands';
-import { playerRefs } from "../../store/videoModuleSlice";
 import BpmControl from "./BpmControl";
 import SaveLoad from "./SaveLoad";
-import { audioEngine } from "../../services/audioEngine";
 import MetronomeControl from "./MetronomeControl";
 import PlayPauseControl from "./PlayPauseControl";
 
 const GlobalControls: React.FC = () => {
-    const dispatch = useDispatch();
 
     const { currentStep } = useSelector((state: RootState) => state.audioEngine);
     const videoModules = useSelector((state: RootState) => state.videoModule.modules);
@@ -39,11 +34,11 @@ const GlobalControls: React.FC = () => {
 
     return (
         <div className="global-controls border border-warning border-1 overflow-hidden">
-            <h4 className="p-3">Global Controls</h4>
+            <h4 className="pt-3 ps-3">Global Controls</h4>
             <div className="d-flex flex-column align-items-center">
                 
                 {/* First Row */}
-                <div className="d-flex flex-wrap align-items-center p-3 gap-3 justify-content-center">
+                <div className="d-flex flex-wrap align-items-center gap-3 justify-content-center">
                     <div className="d-flex gap-3">
                         <BpmControl />
                         <PlayPauseControl />

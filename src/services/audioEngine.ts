@@ -21,10 +21,6 @@ export class AudioEngine {
     private metronomeVolume: number = 0.3;
     private metronomeDivision: number = 24; // 24 is half notes
 
-
-
-
-
     constructor() {
         this.audioContext = new AudioContext();
         this.oscillator = this.audioContext.createOscillator();
@@ -49,10 +45,11 @@ export class AudioEngine {
         this.globalTick = 0;
     }
 
-    configure({ dispatch, sequencers, playerRefs }: any) {
+    configure({ dispatch, sequencers, playerRefs, initialBpm }: any) {
         this.dispatch = dispatch;
         this.sequencers = sequencers;
         this.playerRefs = playerRefs;
+        this.setBpm(initialBpm);
         this.isConfigured = true;
 
     }
@@ -169,7 +166,12 @@ export class AudioEngine {
                 const nudgeValue = this.sequencers[sequencerId].nudgeValues[step];
 
                 if (currentStepCommand !== PadCommand.EMPTY) {
-                    executeCommand(currentStepCommand, player, this.dispatch, nudgeValue);
+                    executeCommand({
+                        player: player,
+                        command: currentStepCommand,
+                        dispatch: this.dispatch,
+                        nudgeValue: nudgeValue
+                    })
                 }
             }
         });
