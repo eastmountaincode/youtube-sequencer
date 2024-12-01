@@ -7,6 +7,8 @@ import { playerRefs } from '../../../store/videoModuleSlice';
 import { RootState } from '../../../store/store';
 import { setVolume } from '../../../store/persistentAudioSettingsSlice';
 
+/// <reference types="youtube" />
+
 interface VideoDisplayProps {
     videoId: string | null;
     videoModuleId: string;
