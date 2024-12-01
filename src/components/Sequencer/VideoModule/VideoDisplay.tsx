@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { executeCommand } from '../../../utils/videoModuleCommands';
 import { PadCommand } from '../../../types';
 import { useVideoModule } from '../../../hooks/useVideoModule';

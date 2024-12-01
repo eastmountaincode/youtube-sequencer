@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store/store';
 import NudgeControls from './NudgeControls';
 import ClearAllPadsButton from './ClearAllPadsButton';

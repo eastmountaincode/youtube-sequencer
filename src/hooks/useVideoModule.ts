@@ -6,7 +6,6 @@ import { executeCommand } from "../utils/videoModuleCommands";
 import { PadCommand } from "../types";
 import { playerRefs } from "../store/videoModuleSlice";
 import { setModulePlayerReady, setModuleLoadButtonPressed } from "../store/videoModuleReadinessSlice";
-import { exec } from "child_process";
 
 export const useVideoModule = (videoModuleId: string) => {
     const dispatch = useDispatch();
