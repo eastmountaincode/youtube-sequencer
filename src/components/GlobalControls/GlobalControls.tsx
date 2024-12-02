@@ -35,7 +35,7 @@ const GlobalControls: React.FC = () => {
     return (
         <div className="global-controls border border-success border-3 overflow-hidden bg-success bg-opacity-10">
             <h4 className="pt-3 ps-3">Global Controls</h4>
-            <div className="d-flex flex-column align-items-center p-3">
+            <div className="d-flex flex-column align-items-center p-2">
 
                 {/* First Row */}
 
