@@ -145,9 +145,9 @@ export default function About() {
             Variable tempo control
           </li>
           <li className="list-group-item bg-transparent text-light">
-      <i className="bi bi-alarm me-2"></i>
-      Built-in metronome with adjustable time divisions
-    </li>
+            <i className="bi bi-alarm me-2"></i>
+            Built-in metronome with adjustable time divisions
+          </li>
         </ul>
       </section>
 
@@ -259,27 +259,56 @@ export default function About() {
       </section>
 
       <section className="mb-5">
-  <h3>Save & Load</h3>
-  <p>
-    Save your sequences and load them later using the workspace controls:
-  </p>
-  <div className="ms-4 d-flex gap-2">
-    <button className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center" style={{ width: '155px' }}>
-      <i className="bi bi-download me-2"></i>
-      Save Workspace
-    </button>
-    <button className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center" style={{ width: '155px' }}>
-      <i className="bi bi-upload me-2"></i>
-      Load Workspace
-    </button>
-  </div>
-  <p className="mt-3">
-    Your sequences are saved as <code>.dance</code> files, containing all your video sources, patterns, and timing settings. Share these files with friends to let them play your sequences!
-  </p>
-  <p className="mt-2">
-    After loading a <code>.dance</code> file, remember to click <button className="btn btn-primary btn-sm mx-2">Load Video <i className="bi bi-floppy ms-1"></i></button> for each track to load the videos.
-  </p>
-</section>
+        <h3>Save & Load</h3>
+        <p>
+          Save your sequences and load them later using the workspace controls:
+        </p>
+        <div className="ms-4 d-flex gap-2">
+          <button className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center" style={{ width: '155px' }}>
+            <i className="bi bi-download me-2"></i>
+            Save Workspace
+          </button>
+          <button className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center" style={{ width: '155px' }}>
+            <i className="bi bi-upload me-2"></i>
+            Load Workspace
+          </button>
+        </div>
+        <p className="mt-3">
+          Your sequences are saved as <code>.dance</code> files, containing all your video sources, patterns, and timing settings. Share these files with friends to let them play your sequences!
+        </p>
+        <p className="mt-2">
+          After loading a <code>.dance</code> file, remember to click <button className="btn btn-primary btn-sm mx-2">Load Video <i className="bi bi-floppy ms-1"></i></button> for each track to load the videos.
+        </p>
+      </section>
+
+      <section className="mb-5">
+        <h3>Let's Connect</h3>
+        <p>
+
+          If you were inspired by this project, feel free to reach out - I'd love to hear what you're working on too!<i className="bi bi-stars ms-2"></i>
+        </p>
+        <p>
+          Currently seeking front-end and full-stack web development opportunities.
+        </p>
+        <div className="d-flex flex-wrap gap-3 mt-4">
+          <a href="https://www.linkedin.com/in/andrew-boylan-92842810a/"
+            className="btn btn-outline-light"
+            target="_blank"
+            rel="noopener noreferrer">
+            <i className="bi bi-linkedin me-2"></i>LinkedIn
+          </a>
+          <a href="https://www.instagram.com/ndrewboylan/"
+            className="btn btn-outline-light"
+            target="_blank"
+            rel="noopener noreferrer">
+            <i className="bi bi-instagram me-2"></i>Instagram
+          </a>
+          <a href={`mailto:${['andreweboylan', 'gmail.com'].join('@')}`}
+            className="btn btn-outline-light">
+            <i className="bi bi-envelope me-2"></i>Email
+          </a>
+        </div>
+      </section>
 
 
 
