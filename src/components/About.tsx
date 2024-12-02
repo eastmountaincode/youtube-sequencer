@@ -103,7 +103,7 @@ const ExampleNudgeControls = () => {
 
 export default function About() {
   return (
-    <div className="container mt-4 ps-4 pe-4">
+    <div className="container mt-5 ps-4 pe-4">
       <h2 className="mb-4">How To Use Youtube Sequencer</h2>
 
       <section className="mb-5">
@@ -285,7 +285,7 @@ export default function About() {
         <h3>Let's Connect</h3>
         <p>
 
-          If you were inspired by this project, feel free to reach out - I'd love to hear what you're working on too!<i className="bi bi-stars ms-2"></i>
+          If you were inspired by this project, feel free to reach out - I'd love to hear about what you're working on too!<i className="bi bi-stars ms-2"></i>
         </p>
         <p>
           Currently seeking front-end and full-stack web development opportunities.
