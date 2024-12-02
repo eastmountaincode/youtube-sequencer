@@ -15,7 +15,7 @@ function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter>
-          <div className="App bg-dark text-light min-vh-100">
+          <div className="App bg-dark text-light pb-5">
             <Header />
             <main>
               <Routes>

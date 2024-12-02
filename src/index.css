@@ -5,6 +5,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  background-color: #212529 !important;  /* Bootstrap's bg-dark color */
+
 }
 
 code {
