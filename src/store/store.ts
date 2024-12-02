@@ -6,19 +6,23 @@ import sequencerPadReducer from './sequencerSlice';
 import videoModuleReducer from './videoModuleSlice';
 import videoModuleReadinessReducer from './videoModuleReadinessSlice';
 import persistentAudioSettingsReducer from './persistentAudioSettingsSlice';
+import authReducer from './authSlice';
+
 
 const rootReducer = combineReducers({
   audioEngine: audioEngineReducer,
   sequencer: sequencerPadReducer,
   videoModule: videoModuleReducer,
   videoModuleReadiness: videoModuleReadinessReducer,
-  persistentAudioSettings: persistentAudioSettingsReducer
+  persistentAudioSettings: persistentAudioSettingsReducer,
+  auth: authReducer
+
 });
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['videoModule', 'sequencer', 'persistentAudioSettings']
+  whitelist: ['videoModule', 'sequencer', 'persistentAudioSettings', 'auth']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
