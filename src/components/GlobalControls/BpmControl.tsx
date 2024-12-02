@@ -77,23 +77,22 @@ const BpmControl: React.FC = () => {
 
     return (
         <div className="bpm-control p-3">
-            <div className="d-flex flex-column gap-2">
-                <div className="d-flex align-items-center gap-3">
-                    <div className='d-flex align-items-center' style={{ width: '100px' }}>
+            <div className="d-flex flex-column gap-2 justify-content-center">
+                <div className="d-flex flex-wrap align-items-center gap-2">
+                    <div className='d-flex align-items-center' style={{ minWidth: '70px' }}>
                         <i className="bi bi-heart-pulse-fill fs-4"><span className='ms-1' style={{userSelect: 'none'}}>BPM</span></i>
                     </div>
-
-                    <div className="input-group" style={{ width: '180px' }}>
-
+    
+                    <div className="input-group" style={{ minWidth: '120px', maxWidth: '160px', flex: '1' }}>
                         <button
-                            className="btn btn-outline-secondary"
+                            className="btn btn-outline-secondary btn-sm"
                             onClick={() => adjustBpm(-1)}
                         >
                             <i className="bi bi-dash-circle"></i>
                         </button>
                         <input
                             type="number"
-                            className="form-control text-center"
+                            className="form-control form-control-sm text-center"
                             value={bpmInput}
                             onChange={handleInputChange}
                             onFocus={(e) => e.target.select()}
@@ -102,17 +101,17 @@ const BpmControl: React.FC = () => {
                             max={300}
                         />
                         <button
-                            className="btn btn-outline-secondary"
+                            className="btn btn-outline-secondary btn-sm"
                             onClick={() => adjustBpm(1)}
                         >
                             <i className="bi bi-plus-circle"></i>
                         </button>
-
                     </div>
+    
                     <button
-                        className="btn btn-outline-secondary"
+                        className="btn btn-outline-secondary btn-sm"
                         onClick={handleTapTempo}
-                        style={{ width: '73px' }}
+                        style={{ minWidth: '60px' }}
                     >
                         <i className="bi bi-hand-index-thumb"></i> Tap
                     </button>
@@ -129,6 +128,7 @@ const BpmControl: React.FC = () => {
             </div>
         </div>
     );
+    
 };
 
 export default React.memo(BpmControl);

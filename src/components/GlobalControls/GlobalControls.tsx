@@ -33,36 +33,33 @@ const GlobalControls: React.FC = () => {
     };
 
     return (
-        <div className="global-controls border border-warning border-1 overflow-hidden">
+        <div className="global-controls border border-success border-3 overflow-hidden bg-success bg-opacity-10">
             <h4 className="pt-3 ps-3">Global Controls</h4>
-            <div className="d-flex flex-column align-items-center">
-                
+            <div className="d-flex flex-column align-items-center p-3">
+
                 {/* First Row */}
-                <div className="d-flex flex-wrap align-items-center gap-3 justify-content-center">
-                    <div className="d-flex gap-3">
-                        <BpmControl />
-                        <PlayPauseControl />
-                    </div>
-                    <div className="d-flex gap-3">
-                        <MetronomeControl />
-                        <SaveLoad />
-                    </div>
+
+                <div className="d-flex flex-wrap gap-2 justify-content-center align-items-center" style={{ width: '100%' }}>
+                    <BpmControl />
+                    <PlayPauseControl />
+                    <MetronomeControl />
+                    <SaveLoad />
                 </div>
 
-                <hr className="border border-warning border-1 w-100" />
+                <hr className="border border-success border-1 w-100" />
 
 
                 {/* Second Row */}
-                <div className="d-flex align-items-center justify-content-between p-2 gap-5 mt-1 mb-3">
-                    <div className="current-step">
+                <div className="d-flex flex-wrap align-items-center justify-content-left gap-3 p-2">
+                    <div className="current-step" style={{ width: '120px' }}>
                         <span className="fs-4">Step: {renderStepNumber(currentStep)}</span>
                     </div>
 
-                    <div className="video-modules-status">
-                        <span className="badge bg-secondary me-2" style={{ userSelect: 'none' }}>
+                    <div className="video-modules-status d-flex flex-wrap gap-2">
+                        <span className="badge bg-secondary" style={{ userSelect: 'none', width: '90px' }}>
                             V Modules: {Object.keys(videoModules).length}
                         </span>
-                        <span className="badge bg-success" style={{ userSelect: 'none' }}>
+                        <span className="badge bg-success" style={{ userSelect: 'none', width: '70px' }}>
                             Ready: {readyModuleIds.length}
                         </span>
                     </div>

@@ -32,7 +32,7 @@ const AudioWorkspace: React.FC = () => {
   return (
     <div className="audio-workspace border border-dark border-3 p-3">
       <div className="d-flex justify-content-center align-items-center p-2">
-        <h1>Dancing In The Datacenter</h1>
+        <h2>Dancing In The Datacenter</h2>
         <i className="bi bi-brilliance fs-2 ms-2 "></i>
       </div>
       <GlobalControls />

@@ -11,12 +11,13 @@ const Sequencer: React.FC<{ sequencerId: string }> = ({ sequencerId }) => {
     dispatch(setSelectedPad({ sequencerId, padId }));
   };
 
+  const sequencerNumber = sequencerId.replace('seq', '');
+
   return (
-    <div className="sequencer border border-1 p-3 overflow-hidden"style={{width: '550px', maxWidth: '100%'}}>
+    <div className="sequencer border border-1 p-3 overflow-hidden bg-primary bg-opacity-10" style={{ width: '550px', maxWidth: '100%' }}>
 
 
-      <h4>Sequencer</h4>
-      {/* <p>Sequencer ID: {sequencerId}</p> */}
+      <h4>Sequencer {sequencerNumber}</h4>
       <div className='mb-3'>
         <VideoModule
           videoModuleId={sequencerId}

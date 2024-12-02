@@ -28,7 +28,7 @@ const ClearAllPadsButton: React.FC<ClearAllPadsButtonProps> = ({
     return (
         <div style={{ marginLeft: '24px', minWidth: '130px' }}>
             <button
-                className="btn btn-outline-secondary btn-sm"
+                className="btn btn-outline-light btn-sm"
                 onClick={handleClearAll}
             >
                 <i className="bi bi-trash me-1"></i>

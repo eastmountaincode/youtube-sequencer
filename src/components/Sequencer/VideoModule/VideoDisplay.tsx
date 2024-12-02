@@ -88,7 +88,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
     return (
 
 
-        <div className="video-preview d-flex flex-column justify-content-center align-items-center border border-1 border-success overflow-hidden"
+        <div className="video-preview d-flex flex-column justify-content-center align-items-center border border-1 border-light overflow-hidden"
             style={{ height: '370px' }}>
 
             {/* FIRST ROW */}

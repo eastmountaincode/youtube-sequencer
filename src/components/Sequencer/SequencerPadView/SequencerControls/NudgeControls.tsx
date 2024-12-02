@@ -95,32 +95,32 @@ const NudgeControls: React.FC<NudgeControlsProps> = ({
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '4px' }}>
                 <button
-                    className="btn btn-outline-secondary btn-sm"
+                    className="btn btn-outline-light btn-sm"
                     onClick={() => adjustNudge(-0.001)}
                 >
                     -0.001s
                 </button>
                 <button
-                    className="btn btn-outline-secondary btn-sm"
+                    className="btn btn-outline-light btn-sm"
                     onClick={() => adjustNudge(-0.01)}
                 >
                     -0.01s
                 </button>
                 <button
-                    className="btn btn-outline-secondary btn-sm"
+                    className="btn btn-outline-light btn-sm"
                     onClick={handleZeroNudge}
                     style={{ width: '80px' }}
                 >
                     Zero
                 </button>
                 <button
-                    className="btn btn-outline-secondary btn-sm"
+                    className="btn btn-outline-light btn-sm"
                     onClick={() => adjustNudge(0.01)}
                 >
                     +0.01s
                 </button>
                 <button
-                    className="btn btn-outline-secondary btn-sm"
+                    className="btn btn-outline-light btn-sm"
                     onClick={() => adjustNudge(0.001)}
                 >
                     +0.001s

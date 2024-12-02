@@ -20,7 +20,7 @@ const numberToCommand: Record<number, PadCommand> = {
 const KeyInputArea: React.FC<KeyInputAreaProps> = ({ onCommandSelect }) => {
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
-            switch(event.key) {
+            switch (event.key) {
                 case '1':
                 case '2':
                 case '3':
@@ -53,28 +53,38 @@ const KeyInputArea: React.FC<KeyInputAreaProps> = ({ onCommandSelect }) => {
                 case 'u':
                     onCommandSelect(PadCommand.PLAYER_UNMUTE);
                     break;
-    
+
             }
         };
-    
+
         window.addEventListener('keydown', handleKeyPress);
         return () => window.removeEventListener('keydown', handleKeyPress);
     }, [onCommandSelect]);
-    
+
     return (
-        <div className="key-input-area border border-1 p-3 mt-3 overflow-hidden">
-            {/* <h4>Key Input Area</h4> */}
-            <div className="command-buttons d-flex gap-2">
-                <button className="btn btn-outline-success" onClick={() => onCommandSelect(PadCommand.PLAY)}>Play</button>
-                <button className="btn btn-outline-warning" onClick={() => onCommandSelect(PadCommand.PAUSE)}>Pause</button>
-                <button className="btn btn-outline-info" onClick={() => onCommandSelect(PadCommand.ARROW_LEFT)}>←</button>
-                <button className="btn btn-outline-info" onClick={() => onCommandSelect(PadCommand.ARROW_RIGHT)}>→</button>
-                <button className="btn btn-outline-secondary" onClick={() => onCommandSelect(PadCommand.EMPTY)}>Empty</button>
-                <button className="btn btn-outline-danger" onClick={() => onCommandSelect(PadCommand.PLAYER_MUTE)}>Mute</button>
-                <button className="btn btn-outline-danger" onClick={() => onCommandSelect(PadCommand.PLAYER_UNMUTE)}>Unmute</button>
+        <div className="key-input-area border border-1 bg-primary bg-opacity-10 p-3 mt-3">
+            <h5 className='pb-2'>Addl. Command Select</h5>
+            <div className="command-buttons d-flex flex-wrap gap-2 justify-content-left">
+                <div className="btn-group" role="group">
+                    <button className="btn btn-sm btn-outline-success" onClick={() => onCommandSelect(PadCommand.PLAY)}>Play</button>
+                    <button className="btn btn-sm btn-outline-warning" onClick={() => onCommandSelect(PadCommand.PAUSE)}>Pause</button>
+                </div>
+
+                <div className="btn-group" role="group">
+                    <button className="btn btn-sm btn-outline-info" onClick={() => onCommandSelect(PadCommand.ARROW_LEFT)}>←</button>
+                    <button className="btn btn-sm btn-outline-info" onClick={() => onCommandSelect(PadCommand.ARROW_RIGHT)}>→</button>
+                </div>
+
+                <button className="btn btn-sm btn-outline-secondary" onClick={() => onCommandSelect(PadCommand.EMPTY)}>Empty</button>
+
+                <div className="btn-group" role="group">
+                    <button className="btn btn-sm btn-outline-danger" onClick={() => onCommandSelect(PadCommand.PLAYER_MUTE)}>Mute</button>
+                    <button className="btn btn-sm btn-outline-danger" onClick={() => onCommandSelect(PadCommand.PLAYER_UNMUTE)}>Unmute</button>
+                </div>
             </div>
         </div>
     );
+
 };
 
 export default KeyInputArea;
