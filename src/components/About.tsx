@@ -126,6 +126,33 @@ export default function About() {
       </section>
 
       <section className="mb-5">
+        <h3>Features</h3>
+        <ul className="list-group list-group-flush bg-transparent">
+          <li className="list-group-item bg-transparent text-light">
+            <i className="bi bi-grid me-2"></i>
+            32-step sequencer grid
+          </li>
+          <li className="list-group-item bg-transparent text-light">
+            <i className="bi bi-youtube me-2"></i>
+            Use any Youtube video as a sound source
+          </li>
+          <li className="list-group-item bg-transparent text-light">
+            <i className="bi bi-sliders me-2"></i>
+            Adjust volume per track
+          </li>
+          <li className="list-group-item bg-transparent text-light">
+            <i className="bi bi-clock-history me-2"></i>
+            Variable tempo control
+          </li>
+          <li className="list-group-item bg-transparent text-light">
+      <i className="bi bi-alarm me-2"></i>
+      Built-in metronome with adjustable time divisions
+    </li>
+        </ul>
+      </section>
+
+
+      <section className="mb-5">
         <h3>Getting Started</h3>
         <ol className="list-group list-group-numbered list-group-flush bg-transparent">
           <li className="list-group-item bg-transparent text-light d-flex align-items-center py-3 position-relative">
@@ -208,7 +235,9 @@ export default function About() {
           </li>
 
           <li className="list-group-item bg-transparent text-light d-flex align-items-center py-3 position-relative">
-            <span className="ms-4">Press play to hear your sequence</span>
+            <span className="ms-4">
+              Press <button className="btn btn-outline-danger btn-sm mx-2" style={{ minWidth: '90px' }}><i className="bi bi-play-fill"></i> Play</button> to hear your sequence
+            </span>
           </li>
           <li className="list-group-item bg-transparent text-light d-flex align-items-center py-3 position-relative">
             <span className="ms-4">Add more videos to create a full composition</span>
@@ -219,47 +248,44 @@ export default function About() {
       <section className="mb-5">
         <h3>Nudge Controls</h3>
         <p>
-          After selecting a pad, use the nudge controls to adjust the timing of a seek command
-          (<i className="bi bi-1-square-fill"></i> - <i className="bi bi-9-square-fill"></i>)
-          with millisecond precision. For example, a pad with a seek command of <i className="bi bi-1-square-fill ms-1 me-1"></i> and a nudge value of <span style={{ fontFamily: 'monospace' }}>0.030s</span> will seek to 10% of the video duration plus 30 milliseconds.
+          Fine-tune the timing of your seek commands (<i className="bi bi-1-square-fill"></i> - <i className="bi bi-9-square-fill"></i>) using the nudge controls. Select any pad and adjust its timing with millisecond precision. For example, a pad with a seek command of <i className="bi bi-1-square-fill ms-1 me-1"></i> and a nudge value of <span style={{ fontFamily: 'monospace' }}>0.030s</span> will seek to 10% of the video duration plus 30 milliseconds.
         </p>
-
         <div className="ms-4">
           <ExampleNudgeControls />
         </div>
-      </section>
 
+        <p className="mt-4">You'll see a thin blue bar under each pad indicating the pad's nudge value.</p>
+
+      </section>
 
       <section className="mb-5">
-        <h3>Features</h3>
-        <ul className="list-group list-group-flush bg-transparent">
-          <li className="list-group-item bg-transparent text-light">
-            <i className="bi bi-grid me-2"></i>
-            16-step sequencer grid
-          </li>
-          <li className="list-group-item bg-transparent text-light">
-            <i className="bi bi-youtube me-2"></i>
-            Use any Youtube video as a sound source
-          </li>
-          <li className="list-group-item bg-transparent text-light">
-            <i className="bi bi-sliders me-2"></i>
-            Adjust volume per track
-          </li>
-          <li className="list-group-item bg-transparent text-light">
-            <i className="bi bi-clock-history me-2"></i>
-            Variable tempo control
-          </li>
-        </ul>
-      </section>
+  <h3>Save & Load</h3>
+  <p>
+    Save your sequences and load them later using the workspace controls:
+  </p>
+  <div className="ms-4 d-flex gap-2">
+    <button className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center" style={{ width: '155px' }}>
+      <i className="bi bi-download me-2"></i>
+      Save Workspace
+    </button>
+    <button className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center" style={{ width: '155px' }}>
+      <i className="bi bi-upload me-2"></i>
+      Load Workspace
+    </button>
+  </div>
+  <p className="mt-3">
+    Your sequences are saved as <code>.dance</code> files, containing all your video sources, patterns, and timing settings. Share these files with friends to let them play your sequences!
+  </p>
+  <p className="mt-2">
+    After loading a <code>.dance</code> file, remember to click <button className="btn btn-primary btn-sm mx-2">Load Video <i className="bi bi-floppy ms-1"></i></button> for each track to load the videos.
+  </p>
+</section>
 
-      <section>
-        <h3>Tips</h3>
-        <ul className="list-group list-group-flush bg-transparent">
-          <li className="list-group-item bg-transparent text-light">Try short videos for more precise timing</li>
-          <li className="list-group-item bg-transparent text-light">Experiment with different video combinations</li>
-          <li className="list-group-item bg-transparent text-light">Use the mute buttons to isolate specific tracks</li>
-        </ul>
-      </section>
+
+
+
+
+
     </div>
   );
 }
