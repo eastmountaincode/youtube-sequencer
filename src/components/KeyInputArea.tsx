@@ -65,7 +65,7 @@ const KeyInputArea: React.FC<KeyInputAreaProps> = ({ onCommandSelect }) => {
         <div className="key-input-area border border-1 bg-primary bg-opacity-10 p-3 mt-3">
             <h5 className='pb-2'>Addl. Command Select</h5>
             <div className="command-buttons d-flex flex-wrap gap-2 justify-content-left">
-                <div className="btn-group" role="group">
+                <div className="d-flex gap-1">
                     <button className="btn btn-sm btn-outline-success" onClick={() => onCommandSelect(PadCommand.PLAY)}>Play</button>
                     <button className="btn btn-sm btn-outline-warning" onClick={() => onCommandSelect(PadCommand.PAUSE)}>Pause</button>
                 </div>
