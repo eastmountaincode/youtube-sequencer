@@ -40,16 +40,16 @@ const NudgeControls: React.FC<NudgeControlsProps> = ({
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '320px', padding: '8px' }}>
-            <div className="d-flex align-items-center" style={{ gap: '16px' }}>
-                <label htmlFor="nudgeSlider" style={{ minWidth: '60px', fontWeight: 500 }}>Nudge:</label>
-                <div style={{ position: 'relative', width: '200px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '8px' }}>
+            <div className="d-flex flex-wrap align-items-center gap-2">
+                <label htmlFor="nudgeSlider" style={{ fontWeight: 500 }}>Nudge:</label>
+                <div style={{ position: 'relative', flex: '1', minWidth: '50px' }}>
                     <div style={{
                         position: 'absolute',
                         top: '50%',
                         left: '0',
                         right: '0',
-                        height: '4px',
+                        height: '6px',
                         backgroundColor: '#f0f0f0',
                         transform: 'translateY(-50%)',
                         borderRadius: '2px'
@@ -58,8 +58,8 @@ const NudgeControls: React.FC<NudgeControlsProps> = ({
                         position: 'absolute',
                         top: '50%',
                         left: '50%',
-                        width: `${Math.min(Math.abs(padNudgeValues[selectedPadId!] * 49), 50)}%`,
-                        height: '4px',
+                        width: `${Math.min(Math.abs(padNudgeValues[selectedPadId!] * 50), 50)}%`,
+                        height: '6px',
                         backgroundColor: '#007bff',
                         transform: `translateY(-50%) ${padNudgeValues[selectedPadId!] < 0 ? 'translateX(-100%)' : ''}`,
                         borderRadius: '2px'
@@ -89,45 +89,20 @@ const NudgeControls: React.FC<NudgeControlsProps> = ({
                         }}
                     />
                 </div>
-                <span style={{ minWidth: '70px', textAlign: 'right', fontFamily: 'monospace', fontSize: '14px' }}>
+                <span style={{ minWidth: '60px', textAlign: 'right', fontFamily: 'monospace', fontSize: '14px' }}>
                     {(padNudgeValues[selectedPadId!]).toFixed(3)}s
                 </span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '4px' }}>
-                <button
-                    className="btn btn-outline-light btn-sm"
-                    onClick={() => adjustNudge(-0.001)}
-                >
-                    -0.001s
-                </button>
-                <button
-                    className="btn btn-outline-light btn-sm"
-                    onClick={() => adjustNudge(-0.01)}
-                >
-                    -0.01s
-                </button>
-                <button
-                    className="btn btn-outline-light btn-sm"
-                    onClick={handleZeroNudge}
-                    style={{ width: '80px' }}
-                >
-                    Zero
-                </button>
-                <button
-                    className="btn btn-outline-light btn-sm"
-                    onClick={() => adjustNudge(0.01)}
-                >
-                    +0.01s
-                </button>
-                <button
-                    className="btn btn-outline-light btn-sm"
-                    onClick={() => adjustNudge(0.001)}
-                >
-                    +0.001s
-                </button>
+            <div className="d-flex flex-wrap justify-content-center gap-1">
+                <button className="btn btn-outline-light btn-sm" onClick={() => adjustNudge(-0.001)}>-0.001s</button>
+                <button className="btn btn-outline-light btn-sm" onClick={() => adjustNudge(-0.01)}>-0.01s</button>
+                <button className="btn btn-outline-light btn-sm" onClick={handleZeroNudge} style={{ width: '70px' }}>Zero</button>
+                <button className="btn btn-outline-light btn-sm" onClick={() => adjustNudge(0.01)}>+0.01s</button>
+                <button className="btn btn-outline-light btn-sm" onClick={() => adjustNudge(0.001)}>+0.001s</button>
             </div>
         </div>
     );
+    
 };
 
 export default NudgeControls;
