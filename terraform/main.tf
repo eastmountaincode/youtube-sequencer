@@ -1,12 +1,55 @@
-### Configure the AWS Provider - this tells Terraform to use AWS
+### Configure the AWS Provider with existing credentials
 provider "aws" {
-  region = "us-east-1"  # specify the region
+  region = "us-east-1"
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
 }
 
+### Use default VPC
+resource "aws_default_vpc" "default_vpc" {
+
+  tags = {
+    Name = "default vpc"
+  }
+}
+
+### Get a list of all available availability zones in our region
+data "aws_availability_zones" "availability_zones" {}
+
+### Get the default subnets in two different availability zones
+resource "aws_default_subnet" "subnet_az1" {
+  availability_zone = data.aws_availability_zones.availability_zones.names[0]
+}
+
+resource "aws_default_subnet" "subnet_az2" {
+  availability_zone = data.aws_availability_zones.availability_zones.names[1]
+}
+
+### Create security group for RDS database access
+resource "aws_security_group" "rds_security_group" {
+  name        = "database_security_group"
+  description = "Enable PostgreSQL access on port 5432"
+  vpc_id      = aws_default_vpc.default_vpc.id
+
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # Allow access from anywhere
+  }
+
+  tags = {
+    Name = "database_security_group"
+  }
+}
+
+
+
+
+
+
+
 ### Create an S3 bucket to store our .dance pattern files
-### pattern_storage is the local name of the bucket
-### this line is declaring a variable called pattern_storage, 
-### ...like var pattern_storage = youtube-sequencer-patterns
 resource "aws_s3_bucket" "pattern_storage" {
   bucket = "youtube-sequencer-patterns"  # the actual name of the bucket visible in AWS
 }
@@ -24,16 +67,14 @@ resource "aws_s3_bucket_cors_configuration" "pattern_storage" {
   }
 }
 
-### Enable versioning to protect against accidental deletes
-### ...just kidding, we don't have to do this because we're not changing the .dance files
-### setting it to "Disabled" now.
-### ...ok we can't disable, but we can set it to "Suspended"
+### Disable versioning
 resource "aws_s3_bucket_versioning" "pattern_storage" {
   bucket = aws_s3_bucket.pattern_storage.id
   versioning_configuration {
-    status = "Suspended"
+    status = "Disabled"
   }
 }
+
 ### Enable server-side encryption by default
 resource "aws_s3_bucket_server_side_encryption_configuration" "pattern_storage" {
   bucket = aws_s3_bucket.pattern_storage.id
@@ -55,6 +96,36 @@ resource "aws_s3_bucket_public_access_block" "pattern_storage" {
   restrict_public_buckets = true
 }
 
+### Create a new security group called youtube-sequencer-rds
+
+## Get our IP
+data "http" "ip" {
+  url = "https://api.ipify.org"
+}
+
+resource "aws_security_group" "rds" {
+  name        = "youtube-sequencer-rds"
+  description = "Allow PostgreSQL inbound traffic"
+
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["${data.http.ip.response_body}/32"]
+  }
+
+  egress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["${data.http.ip.response_body}/32"]
+  }
+}
+
+output "ip" {
+  value = data.http.ip.response_body
+}
+
 ### Create a RDS database instance to store Pattern and Like data
 resource "aws_db_instance" "pattern_db" {
   identifier          = "youtube-sequencer-db"
@@ -69,10 +140,14 @@ resource "aws_db_instance" "pattern_db" {
   password           = var.db_password
   
   skip_final_snapshot = true ## don't create a final backup snapshot when database is deleted
-  
-  # Free tier settings
   multi_az            = false ## keeps the database in a single availability zone
   publicly_accessible = false ## don't allow public access to the database
+
+  vpc_security_group_ids = [aws_security_group.rds.id]
+
 }
 
-
+### Output the RDS instance endpoint
+output "rds_endpoint" {
+  value = aws_db_instance.pattern_db.endpoint
+}
