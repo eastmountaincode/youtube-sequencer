@@ -14,30 +14,36 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect } from 'react';
 import { auth } from './firebase/firebase';
 import SharePatterns from './components/SharePatterns';
+import { ApolloProvider } from '@apollo/client';
+import { client } from './apollo/client';
 
 function App() {
 
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-      <AuthStateManager />
+    <ApolloProvider client={client}>
 
-        <BrowserRouter>
-          <div className="App bg-dark text-light pb-5">
-            <Header />
-            <main>
-              <Routes>
-                <Route path="/" element={<AudioWorkspace />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/share" element={<SharePatterns />} />
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <AuthStateManager />
 
-              </Routes>
-            </main>
-          </div>
-        </BrowserRouter>
-      </PersistGate>
-    </Provider>
+          <BrowserRouter>
+            <div className="App bg-dark text-light pb-5">
+              <Header />
+              <main>
+                <Routes>
+                  <Route path="/" element={<AudioWorkspace />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/share" element={<SharePatterns />} />
+
+                </Routes>
+              </main>
+            </div>
+          </BrowserRouter>
+        </PersistGate>
+      </Provider>
+    </ApolloProvider>
+
   );
 }
 

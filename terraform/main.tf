@@ -119,10 +119,6 @@ resource "aws_security_group" "ec2_security_group" {
 
 ############################## Security group creation end ###############################
 
-
-
-
-
 ######################## S3 bucket start #######################################
 
 ### Create an S3 bucket to store our .dance pattern files
