@@ -13,6 +13,7 @@ import { setUser } from './store/authSlice';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect } from 'react';
 import { auth } from './firebase/firebase';
+import SharePatterns from './components/SharePatterns';
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/" element={<AudioWorkspace />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/share" element={<SharePatterns />} />
 
               </Routes>
             </main>

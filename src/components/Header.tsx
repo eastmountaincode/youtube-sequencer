@@ -32,6 +32,16 @@ export default function Header() {
                 Sequencer
               </NavLink>
             </li>
+
+            <li className="nav-item">
+              <NavLink
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                to="/share"
+              >
+                Share Patterns
+              </NavLink>
+            </li>
+            
             <li className="nav-item">
               <NavLink
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}

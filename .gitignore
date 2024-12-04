@@ -19,6 +19,7 @@
 .env.production.local
 .env
 ._*
+keys/*
 
 npm-debug.log*
 yarn-debug.log*
