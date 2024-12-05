@@ -78,6 +78,7 @@ resource "aws_security_group" "rds_security_group" {
     from_port   = 5432 ## default port for PostgreSQL
     to_port     = 5432
     protocol    = "tcp"
+    security_groups = [aws_security_group.ec2_security_group.id] // allow access from EC2 instance
     cidr_blocks = ["0.0.0.0/0"]  # Allow access from anywhere
   }
 
