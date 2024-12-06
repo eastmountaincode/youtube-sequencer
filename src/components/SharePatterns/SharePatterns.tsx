@@ -1,5 +1,7 @@
 import { useQuery } from '@apollo/client';
-import { GET_PATTERNS } from '../graphql/queries';
+import { GET_PATTERNS } from '../../graphql/queries';
+import UploadPattern from './UploadPattern';
+import DownloadPattern from './DownloadPattern';
 
 interface Pattern {
   id: number;
@@ -51,6 +53,7 @@ const SharePatterns = () => {
   return (
     <div className="container mt-4">
       <h2 className="text-center mb-4">Share Patterns</h2>
+      <UploadPattern/>
       <div className="row">
         {data?.patterns.patterns.map(pattern => (
           <div key={pattern.id} className="col-md-4 mb-4">
@@ -60,6 +63,8 @@ const SharePatterns = () => {
                 <p className="card-text">{pattern.description}</p>
                 <p className="card-text">Likes: {pattern.likes_count}</p>
                 <p className="card-text">Created on: {new Date(parseInt(pattern.created_at)).toLocaleDateString()}</p>
+                <DownloadPattern s3_url={pattern.s3_url} />
+
               </div>
             </div>
           </div>

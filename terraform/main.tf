@@ -79,7 +79,7 @@ resource "aws_security_group" "rds_security_group" {
     to_port     = 5432
     protocol    = "tcp"
     security_groups = [aws_security_group.ec2_security_group.id] // allow access from EC2 instance
-    cidr_blocks = ["0.0.0.0/0"]  # Allow access from anywhere
+    ## cidr_blocks = ["0.0.0.0/0"]  # Allow access from anywhere
   }
 
   egress {
@@ -222,6 +222,7 @@ resource "aws_instance" "api_server" {
 
   
   vpc_security_group_ids = [aws_security_group.ec2_security_group.id]
+  iam_instance_profile   = aws_iam_instance_profile.ec2_profile.name
 
   tags = {
     Name = "youtube-sequencer-api"
@@ -229,6 +230,66 @@ resource "aws_instance" "api_server" {
 }
 
 ########################### EC2 end #######################################
+
+
+########################## profile creation start ##############################
+
+# Create instance profile
+resource "aws_iam_instance_profile" "ec2_profile" {
+  name = "ec2_s3_profile"
+  role = aws_iam_role.ec2_s3_access.name
+}
+
+########################## profile creation end ##############################
+
+######################### role creation start ##############################
+
+# Create IAM role for EC2
+resource "aws_iam_role" "ec2_s3_access" {
+  name = "ec2_s3_access"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+######################### role creation end ##############################
+
+######################### policy creation start ##############################
+
+# Create S3 access policy
+resource "aws_iam_role_policy" "s3_access_policy" {
+  name = "s3_access_policy"
+  role = aws_iam_role.ec2_s3_access.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject", 
+          "s3:DeleteObject",
+          "s3:ListBucket"
+        ]
+        Resource = [
+          "${aws_s3_bucket.pattern_storage.arn}",
+          "${aws_s3_bucket.pattern_storage.arn}/*"
+        ]
+      }
+    ]
+  })
+}
 
 ########################### outputs start #######################################
 

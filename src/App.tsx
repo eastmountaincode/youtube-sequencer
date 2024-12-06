@@ -13,7 +13,7 @@ import { setUser } from './store/authSlice';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect } from 'react';
 import { auth } from './firebase/firebase';
-import SharePatterns from './components/SharePatterns';
+import SharePatterns from './components/SharePatterns/SharePatterns';
 import { ApolloProvider } from '@apollo/client';
 import { client } from './apollo/client';
 
