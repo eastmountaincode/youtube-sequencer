@@ -19,7 +19,7 @@ const Login = () => {
         displayName: result.user.displayName,
         photoURL: result.user.photoURL
       }));
-      navigate('/'); // maybe later this will take us to pattern sharing page
+      navigate('/share');
 
     } catch (error) {
       console.error('Error signing in with Google:', error);

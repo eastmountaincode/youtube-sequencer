@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client';
 import React, { useState } from 'react';
 import { GET_PRESIGNED_URL, CREATE_PATTERN } from '../../graphql/mutations';
+import { GET_PATTERNS } from '../../graphql/queries';
 const S3_BUCKET = process.env.REACT_APP_S3_BUCKET;
 const AWS_REGION = process.env.REACT_APP_AWS_REGION;
 
@@ -9,7 +10,18 @@ const UploadPattern = () => {
     const [uploadStatus, setUploadStatus] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     const [getPresignedUrl] = useMutation(GET_PRESIGNED_URL);
-    const [createPattern] = useMutation(CREATE_PATTERN);
+    const [createPattern] = useMutation(CREATE_PATTERN, {
+        refetchQueries: [
+          {
+            query: GET_PATTERNS,
+            variables: {
+              limit: 10,
+              offset: 0,
+              orderBy: "created_at DESC"
+            }
+          }
+        ]
+      });
 
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -43,7 +55,7 @@ const UploadPattern = () => {
                     variables: {
                       input: {
                         name: file.name,
-                        description: "My awesome pattern",
+                        description: "test",
                         s3_url: s3BaseUrl,
                         creator_id: "user123" // Will come from auth context later
                       }
