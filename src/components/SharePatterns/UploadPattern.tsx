@@ -2,6 +2,8 @@ import { useMutation } from '@apollo/client';
 import React, { useState } from 'react';
 import { GET_PRESIGNED_URL, CREATE_PATTERN } from '../../graphql/mutations';
 import { GET_PATTERNS } from '../../graphql/queries';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 const S3_BUCKET = process.env.REACT_APP_S3_BUCKET;
 const AWS_REGION = process.env.REACT_APP_AWS_REGION;
 
@@ -10,18 +12,20 @@ const UploadPattern = () => {
     const [uploadStatus, setUploadStatus] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     const [getPresignedUrl] = useMutation(GET_PRESIGNED_URL);
+    const user = useSelector((state: RootState) => state.auth.user)
     const [createPattern] = useMutation(CREATE_PATTERN, {
         refetchQueries: [
-          {
-            query: GET_PATTERNS,
-            variables: {
-              limit: 10,
-              offset: 0,
-              orderBy: "created_at DESC"
+            {
+                query: GET_PATTERNS,
+                variables: {
+                    limit: 10,
+                    offset: 0,
+                    orderBy: "created_at DESC",
+                    userId: user?.uid || null
+                }
             }
-          }
         ]
-      });
+    });
 
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -57,12 +61,17 @@ const UploadPattern = () => {
                         name: file.name,
                         description: "test",
                         s3_url: s3BaseUrl,
-                        creator_id: "user123" // Will come from auth context later
+                        creator_id: user?.uid || "anonymous"
                       }
+                    },
+                    onError: (error) => {
+                      console.error('Create pattern error:', error);
+                      setUploadStatus('Upload failed: ' + error.message);
+                    },
+                    onCompleted: () => {
+                      setUploadStatus('Upload successful!');
                     }
                   });
-
-                setUploadStatus('Upload successful!');
             }
 
         } catch (error) {

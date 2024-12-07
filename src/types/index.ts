@@ -18,5 +18,16 @@ export enum PadCommand {
     EMPTY = 'EMPTY'
 }
 
+export interface Pattern {
+    id: string;
+    name: string;
+    description: string;
+    s3_url: string;
+    creator_id: string;
+    created_at: string;
+    likes_count: number;
+    liked_by_user: boolean;
+  }
+
 
 

@@ -4,11 +4,9 @@ import { LIKE_PATTERN } from '../../graphql/mutations';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Tooltip } from 'bootstrap';
-import tooltip from 'bootstrap/js/dist/tooltip';
-
 
 interface LikeFunctionProps {
-    patternId: number;
+    patternId: string;
     isLiked: boolean;
     onLikeUpdate: (likesCount: number) => void;
 }

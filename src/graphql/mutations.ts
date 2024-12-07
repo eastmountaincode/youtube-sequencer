@@ -32,7 +32,7 @@ export const GET_DOWNLOAD_URL = gql`
 `;
 
 export const LIKE_PATTERN = gql`
-  mutation LikePattern($patternId: Int!, $userId: String!) {
+  mutation LikePattern($patternId: String!, $userId: String!) {
     likePattern(patternId: $patternId, userId: $userId) {
       id
       likes_count

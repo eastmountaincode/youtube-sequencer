@@ -1,6 +1,9 @@
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- Tables
 CREATE TABLE patterns (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(255) NOT NULL,
     description TEXT,
     s3_url VARCHAR(255) NOT NULL,
@@ -9,10 +12,9 @@ CREATE TABLE patterns (
     likes_count INTEGER DEFAULT 0
 );
 
--- 
 CREATE TABLE likes (
     user_id VARCHAR(255) NOT NULL,
-    pattern_id INTEGER NOT NULL REFERENCES patterns(id),
+    pattern_id UUID NOT NULL REFERENCES patterns(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id, pattern_id)
 );

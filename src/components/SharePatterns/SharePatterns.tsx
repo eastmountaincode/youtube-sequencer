@@ -5,17 +5,7 @@ import DownloadPattern from './DownloadPattern';
 import PatternCard from './PatternCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-
-interface Pattern {
-  id: number;
-  name: string;
-  description: string;
-  s3_url: string;
-  creator_id: string;
-  created_at: string;
-  likes_count: number;
-  liked_by_user: boolean;
-}
+import { Pattern } from '../../types';
 
 // Update the interface
 interface PatternResponse {

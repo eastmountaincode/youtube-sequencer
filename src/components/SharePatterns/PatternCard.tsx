@@ -1,17 +1,7 @@
 import React, { useState } from 'react';
 import DownloadPattern from './DownloadPattern';
 import LikeFunction from './LikeFunction';
-
-interface Pattern {
-  id: number;
-  name: string;
-  description: string;
-  s3_url: string;
-  creator_id: string;
-  created_at: string;
-  likes_count: number;
-  liked_by_user: boolean;
-}
+import { Pattern } from '../../types';
 
 interface PatternCardProps {
   pattern: Pattern;

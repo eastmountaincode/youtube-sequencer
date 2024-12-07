@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client';
 
-
 // #limit: Int! specifies how many patterns to fetch per request
 // #offset: Int! specifies the offset from which to start fetching patterns.
 //    so for example, if limit is 10 and offset is 20, it will fetch patterns 21-30
