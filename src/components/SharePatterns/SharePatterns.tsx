@@ -2,6 +2,9 @@ import { useQuery } from '@apollo/client';
 import { GET_PATTERNS } from '../../graphql/queries';
 import UploadPattern from './UploadPattern';
 import DownloadPattern from './DownloadPattern';
+import PatternCard from './PatternCard';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 interface Pattern {
   id: number;
@@ -11,22 +14,26 @@ interface Pattern {
   creator_id: string;
   created_at: string;
   likes_count: number;
+  liked_by_user: boolean;
 }
 
 // Update the interface
-interface PatternsResponse {
-  patterns: {
+interface PatternResponse {
+  patternResponse: {
     patterns: Pattern[];
     totalCount: number;
   }
 }
 
 const SharePatterns = () => {
-  const { loading, error, data } = useQuery<PatternsResponse>(GET_PATTERNS, {
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  const { loading, error, data } = useQuery<PatternResponse>(GET_PATTERNS, {
     variables: {
       limit: 10,
       offset: 0,
-      orderBy: "created_at DESC"
+      orderBy: "created_at DESC",
+      userId: user?.uid || null
     },
     onError: (error) => {
       console.log('GraphQL Error:', error);
@@ -53,22 +60,10 @@ const SharePatterns = () => {
   return (
     <div className="container mt-4">
       <h2 className="text-center mb-4">Share Patterns</h2>
-      <UploadPattern/>
+      <UploadPattern />
       <div className="row">
-        {data?.patterns.patterns.map(pattern => (
-          <div key={pattern.id} className="col-md-4 mb-4">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">{pattern.name}</h5>
-                <p className="card-text">{pattern.description}</p>
-                <p className="card-text">Likes: {pattern.likes_count}</p>
-                <p className="card-text">Created on: {new Date(parseInt(pattern.created_at)).toLocaleDateString()}</p>
-                <DownloadPattern s3_url={pattern.s3_url} />
-
-              </div>
-            </div>
-          </div>
-
+        {data?.patternResponse.patterns.map(pattern => (
+          <PatternCard key={pattern.id} pattern={pattern} />
         ))}
       </div>
     </div>

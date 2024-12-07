@@ -17,6 +17,9 @@ CREATE TABLE likes (
     PRIMARY KEY (user_id, pattern_id)
 );
 
+-- Create index on user_id for faster lookups
+CREATE INDEX idx_likes_user_id ON likes(user_id);
+
 -- Trigger functions
 CREATE OR REPLACE FUNCTION update_likes_count()
 RETURNS TRIGGER AS $$
