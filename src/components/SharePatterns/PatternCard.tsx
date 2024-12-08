@@ -12,21 +12,40 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
 
   return (
     <div className="col-md-4 mb-4">
-      <div className="card">
-        <div className="card-body">
-          <h5 className="card-title">{pattern.name}</h5>
-          <p className="card-text">{pattern.description}</p>
-          <p className="card-text">Likes: {likesCount}</p> {/* // Use local state instead of the prop */}
-          <p className="card-text">
-            Created on: {new Date(parseInt(pattern.created_at)).toLocaleDateString()}
-          </p>
-          <div className="d-flex justify-content-between align-items-center">
-            <DownloadPattern s3_url={pattern.s3_url} />
-            <LikeFunction
-              patternId={pattern.id}
-              isLiked={pattern.liked_by_user}
-              onLikeUpdate={setLikesCount}
-            />
+      <div className="card bg-dark text-light border-primary h-100"> 
+        <div className="card-body p-0 d-flex flex-column"> 
+          <div className='p-4 flex-grow-1 d-flex flex-column'> 
+            {/* Title and description*/}
+            <div>
+              <h5 className="card-title fw-bold mb-3">{pattern.name}</h5>
+              <p className="card-text text-light mb-3 opacity-75">{pattern.description}</p>
+            </div>
+
+            {/* Stats pushed to bottom of content area */}
+            <div className="mt-auto"> {/* Add mt-auto to push down */}
+              <div className="d-flex justify-content-between">
+                <small className="text-light opacity-75">
+                  <i className="bi bi-heart-fill me-1"></i> {likesCount} likes
+                </small>
+                <small className="text-light opacity-75">
+                  <i className="bi bi-calendar me-1"></i>
+                  {new Date(parseInt(pattern.created_at)).toLocaleDateString()}
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-auto d-flex">
+            <div className="w-50">
+              <DownloadPattern s3_url={pattern.s3_url} />
+            </div>
+            <div className="w-50">
+              <LikeFunction
+                patternId={pattern.id}
+                isLiked={pattern.liked_by_user}
+                onLikeUpdate={setLikesCount}
+              />
+            </div>
           </div>
         </div>
       </div>

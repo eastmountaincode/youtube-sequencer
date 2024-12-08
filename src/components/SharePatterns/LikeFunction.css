@@ -1,0 +1,12 @@
+.btn-rounded-bottom-right {
+    border-radius: 0 0 0.375em 0 !important;
+}
+
+.like-button i {
+    transition: all 0.2s ease;
+  }
+  
+  .like-button:hover i {
+    transform: scale(1.2);
+    color: #ff4d4d !important;
+  }

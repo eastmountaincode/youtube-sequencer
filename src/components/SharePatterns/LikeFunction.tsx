@@ -4,6 +4,7 @@ import { LIKE_PATTERN } from '../../graphql/mutations';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Tooltip } from 'bootstrap';
+import './LikeFunction.css';
 
 interface LikeFunctionProps {
     patternId: string;
@@ -27,13 +28,13 @@ const DisabledLikeButton: React.FC = () => {
     }, []);
 
     return (
-        <span ref={wrapperRef}>
+        <span ref={wrapperRef} className="d-flex justify-content-center w-100">
             <button
-                className="btn p-0 border-0"  // Added border-0
+                className="btn p-0 border-0 w-100 d-flex justify-content-center"
                 disabled
                 style={{
                     cursor: 'not-allowed',
-                    backgroundColor: 'transparent'  // Remove button background
+                    backgroundColor: 'transparent'
                 }}
             >
                 <i className="bi bi-heart text-secondary"></i>
@@ -48,7 +49,8 @@ const EnabledLikeButton: React.FC<{
 }> = ({ liked, onClick }) => (
     <button
         onClick={onClick}
-        className="btn btn p-0"
+        className="btn p-0 border-0 w-100 d-flex justify-content-center like-button"
+        style={{ backgroundColor: 'transparent' }}
     >
         <i className={`bi ${liked ? 'bi-heart-fill text-danger' : 'bi-heart text-danger'}`}></i>
     </button>
@@ -80,7 +82,7 @@ const LikeFunction: React.FC<LikeFunctionProps> = ({ patternId, isLiked, onLikeU
     };
 
     return (
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-stretch h-100 btn-rounded-bottom-right">
             {user ? (
                 <EnabledLikeButton liked={liked} onClick={handleLikeClick} />
             ) : (

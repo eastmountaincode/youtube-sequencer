@@ -1,6 +1,9 @@
 import { useMutation } from '@apollo/client';
 import React, { useState } from 'react';
 import { GET_DOWNLOAD_URL } from '../../graphql/mutations';
+import './DownloadPattern.css';  // Correct spelling
+
+
 
 interface DownloadPatternProps {
   s3_url: string;
@@ -29,9 +32,13 @@ const DownloadPattern = ({ s3_url }: DownloadPatternProps) => {
 
   return (
     <button 
-      className="btn btn-primary btn-sm"
-      onClick={handleDownload}
-      disabled={isDownloading}
+    className="btn btn-outline-primary btn-sm rounded-0 btn-rounded-bottom-left w-100"
+    onClick={handleDownload}
+    disabled={isDownloading}
+    style={{ 
+      borderLeft: 'none',
+      borderBottom: 'none'
+    }}
     >
       {isDownloading ? (
         <span className="spinner-border spinner-border-sm" />
