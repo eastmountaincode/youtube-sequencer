@@ -1,6 +1,12 @@
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- Drop existing tables and triggers
+DROP TRIGGER IF EXISTS update_pattern_likes_count ON likes;
+DROP FUNCTION IF EXISTS update_likes_count();
+DROP TABLE IF EXISTS likes;
+DROP TABLE IF EXISTS patterns;
+
 -- Tables
 CREATE TABLE patterns (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -14,7 +20,7 @@ CREATE TABLE patterns (
 
 CREATE TABLE likes (
     user_id VARCHAR(255) NOT NULL,
-    pattern_id UUID NOT NULL REFERENCES patterns(id),
+    pattern_id UUID NOT NULL REFERENCES patterns(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id, pattern_id)
 );
