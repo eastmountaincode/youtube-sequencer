@@ -9,6 +9,7 @@ const AWS_REGION = process.env.REACT_APP_AWS_REGION;
 
 const UploadPattern = () => {
     const [file, setFile] = useState<File | null>(null);
+    const [description, setDescription] = useState<string>('');
     const [uploadStatus, setUploadStatus] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     const [getPresignedUrl] = useMutation(GET_PRESIGNED_URL);
@@ -57,21 +58,21 @@ const UploadPattern = () => {
 
                 await createPattern({
                     variables: {
-                      input: {
-                        name: file.name,
-                        description: "test",
-                        s3_url: s3BaseUrl,
-                        creator_id: user?.uid || "anonymous"
-                      }
+                        input: {
+                            name: file.name,
+                            description: description,
+                            s3_url: s3BaseUrl,
+                            creator_id: user?.uid || "anonymous"
+                        }
                     },
                     onError: (error) => {
-                      console.error('Create pattern error:', error);
-                      setUploadStatus('Upload failed: ' + error.message);
+                        console.error('Create pattern error:', error);
+                        setUploadStatus('Upload failed: ' + error.message);
                     },
                     onCompleted: () => {
-                      setUploadStatus('Upload successful!');
+                        setUploadStatus('Upload successful!');
                     }
-                  });
+                });
             }
 
         } catch (error) {
@@ -86,6 +87,7 @@ const UploadPattern = () => {
         <div className="card bg-dark text-light border-secondary p-4 mb-4">
             <h3 className="mb-3">Upload Pattern</h3>
             <form onSubmit={handleSubmit}>
+                {/* FILE INPUT */}
                 <div className="mb-3">
                     <label className="form-label">.dance File</label>
                     <input
@@ -96,6 +98,31 @@ const UploadPattern = () => {
                         required
                         disabled={isLoading}
                     />
+                </div>
+                {/* DESCRIPTION */}
+                <div className="mb-3 position-relative">
+                    <label className="form-label">Description</label>
+                    <div className="input-group">
+                        <textarea
+                            className="form-control"
+                            style={{ maxHeight: '100px' }}
+                            placeholder="Enter a short pattern description..."
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            rows={1}
+                            disabled={isLoading}
+                        />
+                        {description && (
+                            <button
+                                type="button"
+                                className="btn btn-outline-secondary"
+                                onClick={() => setDescription('')}
+                                disabled={isLoading}
+                            >
+                                <i className="bi bi-x"></i>
+                            </button>
+                        )}
+                    </div>
                 </div>
                 <button
                     type="submit"

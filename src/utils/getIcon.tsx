@@ -1,5 +1,6 @@
 import React from 'react';
 import { PadCommand } from '../types';
+import Pad from '../components/Sequencer/Pad';
 
 export const getIcon = (command: PadCommand) => {
   switch (command) {
@@ -11,6 +12,8 @@ export const getIcon = (command: PadCommand) => {
       return <i className="bi bi-arrow-left-square-fill"></i>;
     case PadCommand.ARROW_RIGHT:
       return <i className="bi bi-arrow-right-square-fill"></i>;
+    case PadCommand.ZERO:
+      return <i className="bi bi-0-square-fill"></i>;
     case PadCommand.ONE:
       return <i className="bi bi-1-square-fill"></i>;
     case PadCommand.TWO:

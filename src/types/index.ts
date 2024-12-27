@@ -3,6 +3,7 @@ export enum PadCommand {
     PAUSE = 'PAUSE',
     ARROW_LEFT = 'ARROW_LEFT',
     ARROW_RIGHT = 'ARROW_RIGHT',
+    ZERO = '0',
     ONE = '1',
     TWO = '2',
     THREE = '3',

@@ -183,7 +183,7 @@ export default function About() {
                   <tbody>
                     <tr>
                       <td><i className="bi bi-1-square-fill fs-4"></i></td>
-                      <td><kbd>1-9</kbd></td>
+                      <td><kbd>0-9</kbd></td>
                       <td>Jump to video timestamp. <i className="bi bi-1-square-fill fs-5"></i> seeks to 10% of video duration, <i className="bi bi-2-square-fill fs-5"></i> to 20%, and so on, up to 90%</td>
 
 

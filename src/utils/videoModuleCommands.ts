@@ -68,6 +68,9 @@ export const executeCommand = ({ command, player, dispatch, nudgeValue = 0, volu
         case PadCommand.ARROW_RIGHT:
             sendSeekForwardCommand(player);
             break;
+        case PadCommand.ZERO:
+            sendJumpToTimeCommand(player, 0, nudgeValue);
+            break;
         case PadCommand.ONE:
             sendJumpToTimeCommand(player, 10, nudgeValue);
             break;
@@ -112,4 +115,3 @@ export const executeCommand = ({ command, player, dispatch, nudgeValue = 0, volu
             break;
     }
 };
-

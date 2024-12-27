@@ -6,6 +6,7 @@ interface KeyInputAreaProps {
 }
 
 const numberToCommand: Record<number, PadCommand> = {
+    0: PadCommand.ZERO,
     1: PadCommand.ONE,
     2: PadCommand.TWO,
     3: PadCommand.THREE,
@@ -21,6 +22,7 @@ const KeyInputArea: React.FC<KeyInputAreaProps> = ({ onCommandSelect }) => {
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
             switch (event.key) {
+                case '0':
                 case '1':
                 case '2':
                 case '3':
