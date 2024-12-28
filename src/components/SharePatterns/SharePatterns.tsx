@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Pattern } from '../../types';
 
-// Update the interface
 interface PatternResponse {
   patternResponse: {
     patterns: Pattern[];

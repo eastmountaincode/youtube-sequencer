@@ -36,6 +36,7 @@ const UploadPattern = () => {
         setIsLoading(true);
         try {
             // Get pre-signed URL
+            // If we don't use a pre-signed URL< the AWS access key is part of URL, not good
             setUploadStatus('Getting upload URL...');
             const { data } = await getPresignedUrl({
                 variables: { filename: file.name }
@@ -43,7 +44,7 @@ const UploadPattern = () => {
             //console.log('Pre-signed URL:', data.getPresignedUrl.url);
             console.log('key', data.getPresignedUrl.key);
 
-            // Upload to S3
+            // Upload to S3 using pre-signed URL (data.getPresignedUrl.url)
             setUploadStatus('Uploading to server...');
             const response = await fetch(data.getPresignedUrl.url, {
                 method: 'PUT',
