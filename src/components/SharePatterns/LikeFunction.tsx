@@ -30,7 +30,7 @@ const DisabledLikeButton: React.FC = () => {
     return (
         <span ref={wrapperRef} className="d-flex justify-content-center w-100">
             <button
-                className="btn p-0 border-0 w-100 d-flex justify-content-center"
+                className="btn p-0 border-0 w-100 d-flex justify-content-center align-items-center"
                 disabled
                 style={{
                     cursor: 'not-allowed',
@@ -49,7 +49,7 @@ const EnabledLikeButton: React.FC<{
 }> = ({ liked, onClick }) => (
     <button
         onClick={onClick}
-        className="btn p-0 border-0 w-100 d-flex justify-content-center like-button"
+        className="btn p-0 border-0 w-100 d-flex justify-content-center align-items-center like-button"
         style={{ backgroundColor: 'transparent' }}
     >
         <i className={`bi ${liked ? 'bi-heart-fill text-danger' : 'bi-heart text-danger'}`}></i>

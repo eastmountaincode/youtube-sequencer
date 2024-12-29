@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import DownloadPattern from './DownloadPattern';
 import LikeFunction from './LikeFunction';
 import { Pattern } from '../../types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 interface PatternCardProps {
   pattern: Pattern;
@@ -9,28 +11,45 @@ interface PatternCardProps {
 
 const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
   const [likesCount, setLikesCount] = useState(pattern.likes_count);
+  const user = useSelector((state: RootState) => state.auth.user);
 
   return (
     <div className="col-md-4 mb-4">
-      <div className="card bg-dark text-light border-primary h-100"> 
-        <div className="card-body p-0 d-flex flex-column"> 
-          <div className='p-4 flex-grow-1 d-flex flex-column'> 
-            {/* Title and description*/}
-            <div>
-              <h5 className="card-title fw-bold mb-3">{pattern.name}</h5>
-              <p className="card-text text-light mb-3 opacity-75">{pattern.description}</p>
+      <div className="card bg-dark text-light border-primary h-100">
+        <div className="card-body p-0 d-flex flex-column">
+          <div className='p-4 flex-grow-1 d-flex flex-column'>
+            {/* Header with title and delete button */}
+            <div className="d-flex justify-content-between align-items-start mb-3">
+              <h5 className="card-title fw-bold mb-0 me-4" style={{ wordBreak: 'break-word' }}>
+                {pattern.name}
+              </h5>
+              {user?.uid === pattern.creator_id && (
+                <button
+                  className="btn btn-outline-secondary flex-shrink-0"
+                  onClick={() => console.log('Delete clicked')}
+                >
+                  <i className="bi bi-trash"></i>
+                </button>
+              )}
             </div>
 
-            {/* Stats pushed to bottom of content area */}
-            <div className="mt-auto"> 
+            {/* Description */}
+            <p className="card-text text-light mb-3 opacity-75">
+              {pattern.description}
+            </p>
+
+            {/* Pattern metadata */}
+            <div className="mt-auto">
               <div className="mb-2">
                 <small className="text-light opacity-75">
-                  <i className="bi bi-person-fill me-1"></i> {pattern.creator_display_name}
+                  <i className="bi bi-person-fill me-2"></i>
+                  {pattern.creator_display_name}
                 </small>
               </div>
               <div className="d-flex justify-content-between">
                 <small className="text-light opacity-75">
-                  <i className="bi bi-heart-fill me-1"></i> {likesCount} likes
+                  <i className="bi bi-heart-fill me-2"></i>
+                  {likesCount} likes
                 </small>
                 <small className="text-light opacity-75">
                   <i className="bi bi-calendar me-1"></i>
@@ -40,6 +59,7 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
             </div>
           </div>
 
+          {/* Action buttons */}
           <div className="mt-auto d-flex">
             <div className="w-50">
               <DownloadPattern s3_url={pattern.s3_url} />

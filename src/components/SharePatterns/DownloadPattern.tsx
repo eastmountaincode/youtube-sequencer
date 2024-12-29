@@ -32,7 +32,7 @@ const DownloadPattern = ({ s3_url }: DownloadPatternProps) => {
 
   return (
     <button 
-    className="btn btn-outline-primary btn-sm rounded-0 btn-rounded-bottom-left w-100"
+    className="btn btn-outline-primary btn-sm rounded-0 btn-rounded-bottom-left w-100 p-2"
     onClick={handleDownload}
     disabled={isDownloading}
     style={{ 
