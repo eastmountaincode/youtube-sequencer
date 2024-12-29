@@ -4,6 +4,10 @@ import LikeFunction from './LikeFunction';
 import { Pattern } from '../../types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
+import { useMutation } from '@apollo/client';
+import { DELETE_PATTERN } from '../../graphql/mutations';
+import { GET_PATTERNS } from '../../graphql/queries';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 
 interface PatternCardProps {
   pattern: Pattern;
@@ -12,6 +16,31 @@ interface PatternCardProps {
 const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
   const [likesCount, setLikesCount] = useState(pattern.likes_count);
   const user = useSelector((state: RootState) => state.auth.user);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletePattern] = useMutation(DELETE_PATTERN, {
+    refetchQueries: [
+      {
+        query: GET_PATTERNS,
+        variables: {
+          limit: 10,
+          offset: 0,
+          orderBy: "created_at DESC",
+          userId: user?.uid || null
+        }
+      }
+    ]
+  });
+
+  const handleConfirmDelete = async () => {
+    try {
+      await deletePattern({
+        variables: { patternId: pattern.id }
+      });
+      setShowDeleteModal(false);
+    } catch (error) {
+      console.error('Error deleting pattern:', error);
+    }
+  };
 
   return (
     <div className="col-md-4 mb-4">
@@ -26,8 +55,8 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
               {user?.uid === pattern.creator_id && (
                 <button
                   className="btn btn-outline-secondary flex-shrink-0"
-                  onClick={() => console.log('Delete clicked')}
-                >
+                  onClick={() => setShowDeleteModal(true)}
+                  >
                   <i className="bi bi-trash"></i>
                 </button>
               )}
@@ -74,6 +103,12 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
           </div>
         </div>
       </div>
+      <DeleteConfirmationModal
+      isOpen={showDeleteModal}
+      onClose={() => setShowDeleteModal(false)}
+      onConfirm={handleConfirmDelete}
+      patternName={pattern.name}
+    />
     </div>
   );
 };

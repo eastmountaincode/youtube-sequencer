@@ -40,3 +40,12 @@ export const LIKE_PATTERN = gql`
     }
   }
 `;
+
+export const DELETE_PATTERN = gql`
+  mutation DeletePattern($patternId: String!) {
+    deletePattern(patternId: $patternId) {
+      id
+      success
+    }
+  }
+`;
