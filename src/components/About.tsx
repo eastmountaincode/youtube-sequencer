@@ -120,8 +120,7 @@ export default function About() {
         </p>
         <p>
           Traditional sampling can be time-consuming, requiring you to download, trim, and import audio files.
-          Youtube Sequencer removes these barriers - just paste a URL and start creating. It's immediate,
-          experimental, and most importantly, fun.
+          Youtube Sequencer removes these barriers - just paste a URL and start creating.
         </p>
       </section>
 
