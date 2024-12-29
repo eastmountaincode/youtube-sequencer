@@ -25,7 +25,7 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
             <div className="mt-auto"> 
               <div className="mb-2">
                 <small className="text-light opacity-75">
-                  <i className="bi bi-person-fill me-1"></i> {pattern.creator_id}
+                  <i className="bi bi-person-fill me-1"></i> {pattern.creator_display_name}
                 </small>
               </div>
               <div className="d-flex justify-content-between">

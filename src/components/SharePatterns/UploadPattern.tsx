@@ -64,7 +64,8 @@ const UploadPattern = () => {
                             name: file.name,
                             description: description,
                             s3_url: s3BaseUrl,
-                            creator_id: user?.uid || "anonymous"
+                            creator_id: user?.uid || "anonymous",
+                            creator_display_name: user?.displayName || "Anonymous"
                         }
                     },
                     onError: (error) => {
