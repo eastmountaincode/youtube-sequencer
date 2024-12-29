@@ -4,6 +4,7 @@ import { GET_PRESIGNED_URL, CREATE_PATTERN } from '../../graphql/mutations';
 import { GET_PATTERNS } from '../../graphql/queries';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
+import { Link } from 'react-router-dom';
 const S3_BUCKET = process.env.REACT_APP_S3_BUCKET;
 const AWS_REGION = process.env.REACT_APP_AWS_REGION;
 
@@ -83,6 +84,19 @@ const UploadPattern = () => {
             setIsLoading(false);
         }
     };
+
+    if (!user) {
+        return (
+            <div className="card bg-dark text-light border-secondary p-4 mb-4">
+                <h3 className="mb-3">Upload Pattern</h3>
+                <div className="text-center">
+                    <Link to="/login" className="btn btn-outline-light">
+                        Sign in to upload patterns
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="card bg-dark text-light border-secondary p-4 mb-4">

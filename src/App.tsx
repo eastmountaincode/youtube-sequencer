@@ -9,7 +9,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import About from './components/About';
-import Login from './components/Login';
+import Login from './components/Account/Login';
 import { setUser } from './store/authSlice';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect } from 'react';
@@ -17,6 +17,7 @@ import { auth } from './firebase/firebase';
 import SharePatterns from './components/SharePatterns/SharePatterns';
 import { ApolloProvider } from '@apollo/client';
 import { client } from './apollo/client';
+import SignUp from './components/Account/SignUp';
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
                   <Route path="/about" element={<About />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/share" element={<SharePatterns />} />
+                  <Route path="/signup" element={<SignUp />} />
 
                 </Routes>
               </main>
