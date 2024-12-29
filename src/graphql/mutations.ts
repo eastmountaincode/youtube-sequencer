@@ -17,6 +17,7 @@ export const CREATE_PATTERN = gql`
       description
       s3_url
       creator_id
+      creator_display_name
       created_at
       likes_count
     }

@@ -25,6 +25,7 @@ export interface Pattern {
     description: string;
     s3_url: string;
     creator_id: string;
+    creator_display_name: string;
     created_at: string;
     likes_count: number;
     liked_by_user: boolean;

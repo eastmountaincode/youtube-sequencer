@@ -22,7 +22,12 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
             </div>
 
             {/* Stats pushed to bottom of content area */}
-            <div className="mt-auto"> {/* Add mt-auto to push down */}
+            <div className="mt-auto"> 
+              <div className="mb-2">
+                <small className="text-light opacity-75">
+                  <i className="bi bi-person-fill me-1"></i> {pattern.creator_id}
+                </small>
+              </div>
               <div className="d-flex justify-content-between">
                 <small className="text-light opacity-75">
                   <i className="bi bi-heart-fill me-1"></i> {likesCount} likes
