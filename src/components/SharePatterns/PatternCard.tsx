@@ -6,8 +6,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { useMutation } from '@apollo/client';
 import { DELETE_PATTERN } from '../../graphql/mutations';
-import { GET_PATTERNS } from '../../graphql/queries';
+import { GET_PATTERNS, GET_USER_PATTERNS } from '../../graphql/queries';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
+import { getRefetchQueries } from '../../utils/refetchQueries';
 
 interface PatternCardProps {
   pattern: Pattern;
@@ -18,20 +19,9 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
   const user = useSelector((state: RootState) => state.auth.user);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
-  
+
   const [deletePattern] = useMutation(DELETE_PATTERN, {
-    
-    refetchQueries: [
-      {
-        query: GET_PATTERNS,
-        variables: {
-          limit: itemsPerPage,
-          offset: 0,
-          orderBy: orderBy,
-          userId: user?.uid || null
-        }
-      }
-    ]
+    refetchQueries: getRefetchQueries(itemsPerPage, orderBy, user?.uid)
   });
 
   const handleConfirmDelete = async () => {
@@ -59,7 +49,7 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
                 <button
                   className="btn btn-outline-secondary flex-shrink-0"
                   onClick={() => setShowDeleteModal(true)}
-                  >
+                >
                   <i className="bi bi-trash"></i>
                 </button>
               )}
@@ -107,11 +97,11 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
         </div>
       </div>
       <DeleteConfirmationModal
-      isOpen={showDeleteModal}
-      onClose={() => setShowDeleteModal(false)}
-      onConfirm={handleConfirmDelete}
-      patternName={pattern.name}
-    />
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleConfirmDelete}
+        patternName={pattern.name}
+      />
     </div>
   );
 };

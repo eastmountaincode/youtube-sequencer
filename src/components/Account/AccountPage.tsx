@@ -1,9 +1,51 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Navigate } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
+import { GET_USER_PATTERNS } from '../../graphql/queries';
+import OrderBySelect from '../SharePatterns/OrderBySelect';
+import PatternCard from '../SharePatterns/PatternCard';
+import { Pattern } from '../../types';
+import { useState } from 'react';
+import PaginationControls from '../SharePatterns/PaginationControls';
+
+interface PatternResponse {
+    userPatterns: {
+        patterns: Pattern[];
+        totalCount: number;
+    }
+}
 
 const AccountPage = () => {
+    const [currentPage, setCurrentPage] = useState(0);
     const user = useSelector((state: RootState) => state.auth.user);
+    const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
+
+    const { loading, error, data } = useQuery(GET_USER_PATTERNS, {
+        variables: {
+            userId: user?.uid || '',
+            limit: itemsPerPage,
+            offset: currentPage * itemsPerPage,
+            orderBy: orderBy
+        },
+        skip: !user
+    });
+
+    const totalPages = Math.ceil((data?.userPatterns.totalCount || 0) / itemsPerPage);
+
+    if (loading) return (
+        <div className="container mt-4 text-center">
+            <div className="spinner-border text-light" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    );
+
+    if (error) return (
+        <div className="container mt-4 alert alert-danger">
+            Error loading patterns: {error.message}
+        </div>
+    );
 
     if (!user) {
         return <Navigate to="/login" />;
@@ -58,8 +100,20 @@ const AccountPage = () => {
                 <div className="card-body">
                     <div className="tab-content">
                         <div className="tab-pane fade show active" id="my-patterns">
-                            <h3>My Patterns</h3>
-                            {/* Pattern grid will go here */}
+                            <div className="d-flex justify-content-between align-items-center mb-4">
+                                <h3>My Patterns</h3>
+                                <OrderBySelect />
+                            </div>
+                            <div className="row">
+                                {data?.userPatterns.patterns.map((pattern: Pattern) => (
+                                    <PatternCard key={pattern.id} pattern={pattern} />
+                                ))}
+                            </div>
+                            <PaginationControls
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={setCurrentPage}
+                            />
                         </div>
                         <div className="tab-pane fade" id="liked-patterns">
                             <h3>Liked Patterns</h3>

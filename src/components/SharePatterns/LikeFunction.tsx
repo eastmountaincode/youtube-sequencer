@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Tooltip } from 'bootstrap';
 import './LikeFunction.css';
+import { GET_PATTERNS, GET_USER_PATTERNS } from '../../graphql/queries';
+import { getRefetchQueries } from '../../utils/refetchQueries';
 
 interface LikeFunctionProps {
     patternId: string;
@@ -59,20 +61,23 @@ const EnabledLikeButton: React.FC<{
 const LikeFunction: React.FC<LikeFunctionProps> = ({ patternId, isLiked, onLikeUpdate }) => {
     const user = useSelector((state: RootState) => state.auth.user);
     const [liked, setLiked] = useState(isLiked);
-    const [likePattern] = useMutation(LIKE_PATTERN);
+    const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
+    const [likePattern] = useMutation(LIKE_PATTERN, {
+        refetchQueries: getRefetchQueries(itemsPerPage, orderBy, user?.uid)
+    });
 
     useEffect(() => {
         setLiked(isLiked);
-      }, [isLiked]);
+    }, [isLiked]);
 
     const handleLikeClick = async () => {
         try {
             const { data } = await likePattern({
                 variables: {
-                  patternId,
-                  userId: user.uid
+                    patternId,
+                    userId: user.uid
                 }
-              });
+            });
             setLiked(!liked);
             onLikeUpdate(data.likePattern.likes_count);  // Update parent component
 

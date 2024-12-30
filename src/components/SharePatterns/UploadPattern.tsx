@@ -1,10 +1,11 @@
 import { useMutation } from '@apollo/client';
 import React, { useState } from 'react';
 import { GET_PRESIGNED_URL, CREATE_PATTERN } from '../../graphql/mutations';
-import { GET_PATTERNS } from '../../graphql/queries';
+import { GET_PATTERNS, GET_USER_PATTERNS } from '../../graphql/queries';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Link } from 'react-router-dom';
+import { getRefetchQueries } from '../../utils/refetchQueries';
 const S3_BUCKET = process.env.REACT_APP_S3_BUCKET;
 const AWS_REGION = process.env.REACT_APP_AWS_REGION;
 
@@ -18,17 +19,7 @@ const UploadPattern = () => {
     const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
 
     const [createPattern] = useMutation(CREATE_PATTERN, {
-        refetchQueries: [
-            {
-                query: GET_PATTERNS,
-                variables: {
-                    limit: itemsPerPage,
-                    offset: 0,
-                    orderBy: orderBy,
-                    userId: user?.uid || null
-                }
-            }
-        ]
+        refetchQueries: getRefetchQueries(itemsPerPage, orderBy, user?.uid)
     });
 
 

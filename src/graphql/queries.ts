@@ -43,3 +43,23 @@ export const GET_USER_PATTERNS = gql`
     }
   }
 `;
+
+export const GET_LIKED_PATTERNS = gql`
+  query GetLikedPatterns($userId: String!, $limit: Int!, $offset: Int!, $orderBy: String!) {
+    likedPatterns(userId: $userId, limit: $limit, offset: $offset, orderBy: $orderBy) {
+      patterns {
+        id
+        name
+        description
+        s3_url
+        creator_id
+        creator_display_name
+        created_at
+        likes_count
+        liked_by_user
+      }
+      totalCount
+    }
+  }
+`;
+
