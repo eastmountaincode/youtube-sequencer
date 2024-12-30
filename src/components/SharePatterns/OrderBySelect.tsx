@@ -19,8 +19,8 @@ const OrderBySelect = () => {
         >
           <option value="created_at DESC">Newest First</option>
           <option value="created_at ASC">Oldest First</option>
-          <option value="likes_count DESC">Most Liked</option>
-          <option value="likes_count ASC">Least Liked</option>
+          <option value="likes_count DESC, created_at DESC">Most Liked</option>
+          <option value="likes_count ASC, created_at DESC">Least Liked</option>
         </select>
       </div>
     );

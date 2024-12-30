@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type OrderBy = 'created_at DESC' | 'created_at ASC' | 'likes_count DESC' | 'likes_count ASC';
+type OrderBy = 'created_at DESC' | 'created_at ASC' | 'likes_count DESC, created_at DESC' | 'likes_count ASC, created_at DESC';
 
 interface PatternsDisplayState {
   orderBy: OrderBy;
