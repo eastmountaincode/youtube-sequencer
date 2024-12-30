@@ -2,11 +2,12 @@ import { useQuery } from '@apollo/client';
 import { GET_PATTERNS } from '../../graphql/queries';
 import UploadPattern from './UploadPattern';
 import PatternCard from './PatternCard';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Pattern } from '../../types';
 import { useState } from 'react';
 import PaginationControls from './PaginationControls';
+import OrderBySelect from './OrderBySelect';
 
 interface PatternResponse {
   patternResponse: {
@@ -17,14 +18,15 @@ interface PatternResponse {
 
 const SharePatterns = () => {
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 9;
+  const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
   const user = useSelector((state: RootState) => state.auth.user);
+  const dispatch = useDispatch();
 
   const { loading, error, data } = useQuery<PatternResponse>(GET_PATTERNS, {
     variables: {
       limit: itemsPerPage,
       offset: currentPage * itemsPerPage,
-      orderBy: "created_at DESC",
+      orderBy: orderBy,
       userId: user?.uid || null
     },
     onError: (error) => {
@@ -55,6 +57,7 @@ const SharePatterns = () => {
     <div className="container mt-4">
       <h2 className="text-center mb-4">Share Patterns</h2>
       <UploadPattern />
+      <OrderBySelect />
       <div className="row">
         {data?.patternResponse.patterns.map(pattern => (
           <PatternCard key={pattern.id} pattern={pattern} />
