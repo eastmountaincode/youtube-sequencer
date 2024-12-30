@@ -43,7 +43,7 @@ const DownloadPattern = ({ s3_url }: DownloadPatternProps) => {
       {isDownloading ? (
         <span className="spinner-border spinner-border-sm" />
       ) : (
-        <i className="bi bi-download me-1" />
+        <i className="bi bi-download me-2" />
       )}
       Download
     </button>

@@ -1,4 +1,4 @@
-import { GET_PATTERNS, GET_USER_PATTERNS } from '../graphql/queries';
+import { GET_LIKED_PATTERNS, GET_PATTERNS, GET_USER_PATTERNS } from '../graphql/queries';
 
 export const getRefetchQueries = (itemsPerPage: number, orderBy: string, userId: string | null) => [
   {
@@ -12,6 +12,15 @@ export const getRefetchQueries = (itemsPerPage: number, orderBy: string, userId:
   },
   {
     query: GET_USER_PATTERNS,
+    variables: {
+      userId: userId || '',
+      limit: itemsPerPage,
+      offset: 0,
+      orderBy: orderBy
+    }
+  },
+  {
+    query: GET_LIKED_PATTERNS,
     variables: {
       userId: userId || '',
       limit: itemsPerPage,

@@ -1,3 +1,5 @@
+import { DocumentNode } from "graphql";
+
 export enum PadCommand {
     PLAY = 'PLAY',
     PAUSE = 'PAUSE',
@@ -29,7 +31,14 @@ export interface Pattern {
     created_at: string;
     likes_count: number;
     liked_by_user: boolean;
-  }
+}
+
+export interface PatternGridProps {
+    title: string;
+    query: DocumentNode;
+    userId: string;
+    isActive: boolean;
+}
 
 
 

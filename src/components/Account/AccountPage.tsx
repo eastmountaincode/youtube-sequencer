@@ -2,22 +2,14 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Navigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { GET_USER_PATTERNS } from '../../graphql/queries';
-import OrderBySelect from '../SharePatterns/OrderBySelect';
-import PatternCard from '../SharePatterns/PatternCard';
-import { Pattern } from '../../types';
+import { GET_LIKED_PATTERNS, GET_USER_PATTERNS } from '../../graphql/queries';
 import { useState } from 'react';
-import PaginationControls from '../SharePatterns/PaginationControls';
+import PatternGrid from '../SharePatterns/PatternGrid';
 
-interface PatternResponse {
-    userPatterns: {
-        patterns: Pattern[];
-        totalCount: number;
-    }
-}
 
 const AccountPage = () => {
     const [currentPage, setCurrentPage] = useState(0);
+    const [activeTab, setActiveTab] = useState('my-patterns');
     const user = useSelector((state: RootState) => state.auth.user);
     const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
 
@@ -75,54 +67,45 @@ const AccountPage = () => {
 
             {/* Patterns Tabs */}
             <div className="card bg-dark text-light border-secondary p-2">
-                <div className="card-header">
-                    <ul className="nav nav-tabs card-header-tabs">
-                        <li className="nav-item">
-                            <button
-                                className="nav-link active text-light bg-dark"
-                                data-bs-toggle="tab"
-                                data-bs-target="#my-patterns"
-                            >
-                                My Patterns
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button
-                                className="nav-link text-light bg-dark"
-                                data-bs-toggle="tab"
-                                data-bs-target="#liked-patterns"
-                            >
-                                Liked Patterns
-                            </button>
-                        </li>
-                    </ul>
+                <div className="card-header ps-4 p-3">
+                <ul className="nav nav-tabs card-header-tabs">
+          <li className="nav-item">
+            <button
+              className={`nav-link text-light bg-dark ${activeTab === 'my-patterns' ? 'active' : ''}`}
+              onClick={() => setActiveTab('my-patterns')}
+            >
+              My Patterns
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link text-light bg-dark ${activeTab === 'liked-patterns' ? 'active' : ''}`}
+              onClick={() => setActiveTab('liked-patterns')}
+            >
+              Liked Patterns
+            </button>
+          </li>
+        </ul>
                 </div>
-                <div className="card-body">
+                <div className="card-body p-4">
                     <div className="tab-content">
-                        <div className="tab-pane fade show active" id="my-patterns">
-                            <div className="d-flex justify-content-between align-items-center mb-4">
-                                <h3>My Patterns</h3>
-                                <OrderBySelect />
-                            </div>
-                            <div className="row">
-                                {data?.userPatterns.patterns.map((pattern: Pattern) => (
-                                    <PatternCard key={pattern.id} pattern={pattern} />
-                                ))}
-                            </div>
-                            <PaginationControls
-                                currentPage={currentPage}
-                                totalPages={totalPages}
-                                onPageChange={setCurrentPage}
-                            />
-                        </div>
-                        <div className="tab-pane fade" id="liked-patterns">
-                            <h3>Liked Patterns</h3>
-                            {/* Liked patterns grid will go here */}
-                        </div>
+                        <PatternGrid
+                            title="My Patterns"
+                            query={GET_USER_PATTERNS}
+                            userId={user.uid}
+                            isActive={activeTab === 'my-patterns'}
+                        />
+                        <PatternGrid
+                            title="Liked Patterns"
+                            query={GET_LIKED_PATTERNS}
+                            userId={user.uid}
+                            isActive={activeTab === 'liked-patterns'}
+                        />
                     </div>
                 </div>
             </div>
         </div>
+
     );
 };
 
