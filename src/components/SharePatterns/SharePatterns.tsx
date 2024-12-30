@@ -1,11 +1,12 @@
 import { useQuery } from '@apollo/client';
 import { GET_PATTERNS } from '../../graphql/queries';
 import UploadPattern from './UploadPattern';
-import DownloadPattern from './DownloadPattern';
 import PatternCard from './PatternCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Pattern } from '../../types';
+import { useState } from 'react';
+import PaginationControls from './PaginationControls';
 
 interface PatternResponse {
   patternResponse: {
@@ -15,12 +16,14 @@ interface PatternResponse {
 }
 
 const SharePatterns = () => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 9;
   const user = useSelector((state: RootState) => state.auth.user);
 
   const { loading, error, data } = useQuery<PatternResponse>(GET_PATTERNS, {
     variables: {
-      limit: 10,
-      offset: 0,
+      limit: itemsPerPage,
+      offset: currentPage * itemsPerPage,
       orderBy: "created_at DESC",
       userId: user?.uid || null
     },
@@ -31,6 +34,8 @@ const SharePatterns = () => {
       console.log('GraphQL Response:', data);
     }
   });
+
+  const totalPages = Math.ceil((data?.patternResponse.totalCount || 0) / itemsPerPage);
 
   if (loading) return (
     <div className="container mt-4 text-center">
@@ -55,6 +60,12 @@ const SharePatterns = () => {
           <PatternCard key={pattern.id} pattern={pattern} />
         ))}
       </div>
+      {/* Pagination Controls */}
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 };

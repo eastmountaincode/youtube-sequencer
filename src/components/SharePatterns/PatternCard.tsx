@@ -17,12 +17,15 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
   const [likesCount, setLikesCount] = useState(pattern.likes_count);
   const user = useSelector((state: RootState) => state.auth.user);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const itemsPerPage = 9;
+
   const [deletePattern] = useMutation(DELETE_PATTERN, {
+    
     refetchQueries: [
       {
         query: GET_PATTERNS,
         variables: {
-          limit: 10,
+          limit: itemsPerPage,
           offset: 0,
           orderBy: "created_at DESC",
           userId: user?.uid || null
@@ -81,7 +84,7 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
                   {likesCount} likes
                 </small>
                 <small className="text-light opacity-75">
-                  <i className="bi bi-calendar me-1"></i>
+                  <i className="bi bi-calendar me-2"></i>
                   {new Date(parseInt(pattern.created_at)).toLocaleDateString()}
                 </small>
               </div>

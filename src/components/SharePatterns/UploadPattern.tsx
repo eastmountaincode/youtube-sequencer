@@ -15,12 +15,14 @@ const UploadPattern = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [getPresignedUrl] = useMutation(GET_PRESIGNED_URL);
     const user = useSelector((state: RootState) => state.auth.user)
+    const itemsPerPage = 9;
+
     const [createPattern] = useMutation(CREATE_PATTERN, {
         refetchQueries: [
             {
                 query: GET_PATTERNS,
                 variables: {
-                    limit: 10,
+                    limit: itemsPerPage,
                     offset: 0,
                     orderBy: "created_at DESC",
                     userId: user?.uid || null
