@@ -18,6 +18,7 @@ import SharePatterns from './components/SharePatterns/SharePatterns';
 import { ApolloProvider } from '@apollo/client';
 import { client } from './apollo/client';
 import SignUp from './components/Account/SignUp';
+import AccountPage from './components/Account/AccountPage';
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
                   <Route path="/login" element={<Login />} />
                   <Route path="/share" element={<SharePatterns />} />
                   <Route path="/signup" element={<SignUp />} />
+                  <Route path="/account" element={<AccountPage />} />
 
                 </Routes>
               </main>

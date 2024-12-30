@@ -65,7 +65,10 @@ export default function Header() {
           <div className="d-md-flex ms-md-auto ms-3 me-2 mb-3 mb-md-0 ps-md-4 mt-3 mt-md-0 auth-section">
             {user ? (
               <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3 mt-2 mt-md-0">
-                <div className="d-flex align-items-center">
+                <NavLink
+                  to="/account"
+                  className="d-flex align-items-center text-decoration-none"
+                >
                   {user.photoURL && (
                     <img
                       src={user.photoURL}
@@ -75,7 +78,7 @@ export default function Header() {
                     />
                   )}
                   <span className="text-light me-2">{user.displayName}</span>
-                </div>
+                </NavLink>
                 <button
                   className="btn btn-outline-light"
                   onClick={() => {
@@ -87,8 +90,8 @@ export default function Header() {
                 </button>
               </div>
             ) : (
-              <NavLink 
-                to="/login" 
+              <NavLink
+                to="/login"
                 className="btn btn-outline-light mt-2 mt-md-0"
                 onClick={() => setIsExpanded(false)}
               >

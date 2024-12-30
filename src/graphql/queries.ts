@@ -24,3 +24,22 @@ export const GET_PATTERNS = gql`
     }
   }
 `;
+
+export const GET_USER_PATTERNS = gql`
+  query GetUserPatterns($userId: String!, $limit: Int!, $offset: Int!, $orderBy: String!) {
+    userPatterns(userId: $userId, limit: $limit, offset: $offset, orderBy: $orderBy) {
+      patterns {
+        id
+        name
+        description
+        s3_url
+        creator_id
+        creator_display_name
+        created_at
+        likes_count
+        liked_by_user
+      }
+      totalCount
+    }
+  }
+`;
