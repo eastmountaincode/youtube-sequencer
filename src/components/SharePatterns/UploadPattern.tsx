@@ -15,7 +15,7 @@ const UploadPattern = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [getPresignedUrl] = useMutation(GET_PRESIGNED_URL);
     const user = useSelector((state: RootState) => state.auth.user)
-    const itemsPerPage = 9;
+    const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
 
     const [createPattern] = useMutation(CREATE_PATTERN, {
         refetchQueries: [
@@ -24,7 +24,7 @@ const UploadPattern = () => {
                 variables: {
                     limit: itemsPerPage,
                     offset: 0,
-                    orderBy: "created_at DESC",
+                    orderBy: orderBy,
                     userId: user?.uid || null
                 }
             }

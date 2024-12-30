@@ -17,8 +17,8 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
   const [likesCount, setLikesCount] = useState(pattern.likes_count);
   const user = useSelector((state: RootState) => state.auth.user);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const itemsPerPage = 9;
-
+  const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
+  
   const [deletePattern] = useMutation(DELETE_PATTERN, {
     
     refetchQueries: [
@@ -27,7 +27,7 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
         variables: {
           limit: itemsPerPage,
           offset: 0,
-          orderBy: "created_at DESC",
+          orderBy: orderBy,
           userId: user?.uid || null
         }
       }
