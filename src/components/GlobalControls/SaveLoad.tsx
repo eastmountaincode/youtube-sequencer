@@ -24,7 +24,8 @@ const SaveLoad: React.FC = () => {
             persistentAudioSettings: persistentAudioState
         };
 
-        const blob = new Blob([JSON.stringify(state)], { type: 'application/json' });
+        const formattedJson = JSON.stringify(state, null, 2);  // adds 2 spaces of indentation
+        const blob = new Blob([formattedJson], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;

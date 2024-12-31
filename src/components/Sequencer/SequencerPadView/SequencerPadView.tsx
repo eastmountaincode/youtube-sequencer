@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import Pad from '../Pad';
 import SequencerControls from './SequencerControls/SequencerControls';
+import CommandBankControl from './CommandBankControl';
 
 interface SequencerPadViewProps {
   sequencerId: string;
@@ -75,7 +76,11 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
   }));
 
   return (
-    <div className="sequencer-pad-view ms-3 me-3"> 
+    <div className="sequencer-pad-view ms-3 me-3">
+      {/* COMMAND BANK HERE */}
+      <div>
+        <CommandBankControl />
+      </div>
       <div className="pad-grid" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(8, 1fr)',

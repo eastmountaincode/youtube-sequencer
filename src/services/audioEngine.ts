@@ -159,22 +159,22 @@ export class AudioEngine {
     }
 
     private executeStepCommands(step: number) {
-        Object.keys(this.sequencers).forEach(sequencerId => {
+        Promise.all(Object.keys(this.sequencers).map(sequencerId => {
             const player = this.playerRefs[sequencerId];
             if (player) {
                 const currentStepCommand = this.sequencers[sequencerId].padCommands[step];
                 const nudgeValue = this.sequencers[sequencerId].nudgeValues[step];
-
+    
                 if (currentStepCommand !== PadCommand.EMPTY) {
-                    executeCommand({
+                    return executeCommand({
                         player: player,
                         command: currentStepCommand,
                         dispatch: this.dispatch,
                         nudgeValue: nudgeValue
-                    })
+                    });
                 }
             }
-        });
+        }));
     }
 }
 

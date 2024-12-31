@@ -18,15 +18,17 @@ const Sequencer: React.FC<{ sequencerId: string }> = ({ sequencerId }) => {
 
 
       <h4>Sequencer {sequencerNumber}</h4>
-      <div className='mb-3'>
+      <div>
         <VideoModule
           videoModuleId={sequencerId}
         />
       </div>
-      <SequencerPadView
-        sequencerId={sequencerId}
-        onPadSelect={handlePadSelect}
-      />
+      <div>
+        <SequencerPadView
+          sequencerId={sequencerId}
+          onPadSelect={handlePadSelect}
+        />
+      </div>
     </div>
   );
 };
