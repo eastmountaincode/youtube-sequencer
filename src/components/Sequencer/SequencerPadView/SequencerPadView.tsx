@@ -15,12 +15,20 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
   onPadSelect,
 }) => {
   const currentStep = useSelector((state: RootState) => state.audioEngine.currentStep);
-  const padCommands = useSelector((state: RootState) =>
-    state.sequencer.sequencers[sequencerId as keyof typeof state.sequencer.sequencers].padCommands
+  const sequencer = useSelector((state: RootState) => 
+    state.sequencer.sequencers[sequencerId]
   );
-  const padNudgeValues = useSelector((state: RootState) =>
-    state.sequencer.sequencers[sequencerId as keyof typeof state.sequencer.sequencers].nudgeValues
-  );
+  
+  const activeBank = sequencer.activeBank;
+  const padCommands = sequencer.padCommands[activeBank];
+  const padNudgeValues = sequencer.nudgeValues[activeBank];
+  // const padCommands = useSelector((state: RootState) =>
+  //   state.sequencer.sequencers[sequencerId as keyof typeof state.sequencer.sequencers].padCommands
+  // );
+  // const padNudgeValues = useSelector((state: RootState) =>
+  //   state.sequencer.sequencers[sequencerId as keyof typeof state.sequencer.sequencers].nudgeValues
+  // );
+
   // get selected pad id from redux store
   const selectedPadId = useSelector((state: RootState) => state.sequencer.selectedPadId);
   const selectedSequencerId = useSelector((state: RootState) => state.sequencer.selectedSequencerId);

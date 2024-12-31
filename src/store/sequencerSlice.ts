@@ -5,8 +5,14 @@ const numPads = 32;
 
 // Types
 interface Sequencer {
-  padCommands: PadCommand[];
-  nudgeValues: number[];
+  padCommands: {
+    A: PadCommand[];
+    B: PadCommand[];
+  };
+  nudgeValues: {
+    A: number[];
+    B: number[];
+  };
   activeBank: 'A' | 'B';
 }
 
@@ -30,36 +36,25 @@ interface UpdateNudgeValuePayload {
 
 // Helpers
 const createEmptySequencer = (): Sequencer => ({
-  padCommands: Array(numPads).fill(PadCommand.EMPTY),
-  nudgeValues: Array(numPads).fill(0),
+  padCommands: {
+    A: Array(numPads).fill(PadCommand.EMPTY),
+    B: Array(numPads).fill(PadCommand.EMPTY)
+  },
+  nudgeValues: {
+    A: Array(numPads).fill(0),
+    B: Array(numPads).fill(0)
+  },
   activeBank: 'A'
 });
-
 // Initial State
 const initialState: SequencerState = {
   selectedSequencerId: null,
   selectedPadId: null,
   sequencers: {
-    'seq1': { 
-      padCommands: Array(numPads).fill(PadCommand.EMPTY),
-      nudgeValues: Array(numPads).fill(0),
-      activeBank: 'A'
-     },
-     'seq2': { 
-      padCommands: Array(numPads).fill(PadCommand.EMPTY),
-      nudgeValues: Array(numPads).fill(0),
-      activeBank: 'A'
-     },
-     'seq3': { 
-      padCommands: Array(numPads).fill(PadCommand.EMPTY),
-      nudgeValues: Array(numPads).fill(0),
-      activeBank: 'A'
-     },
-     'seq4': { 
-      padCommands: Array(numPads).fill(PadCommand.EMPTY),
-      nudgeValues: Array(numPads).fill(0),
-      activeBank: 'A'
-     },
+    'seq1': createEmptySequencer(),
+    'seq2': createEmptySequencer(),
+    'seq3': createEmptySequencer(),
+    'seq4': createEmptySequencer()
   }
 };
 
@@ -73,7 +68,8 @@ export const sequencerSlice = createSlice({
     },
     updatePadCommand: (state, action: PayloadAction<UpdatePadCommandPayload>) => {
       const { sequencerId, padId, command } = action.payload;
-      state.sequencers[sequencerId as keyof typeof state.sequencers].padCommands[padId] = command;
+      const activeBank = state.sequencers[sequencerId].activeBank;
+      state.sequencers[sequencerId].padCommands[activeBank][padId] = command;
     },
     clearAllPads: (state, { payload: { sequencerId } }) => {
       state.sequencers[sequencerId as keyof typeof state.sequencers] = createEmptySequencer();
@@ -88,10 +84,11 @@ export const sequencerSlice = createSlice({
     },
     updateNudgeValue: (state, action: PayloadAction<UpdateNudgeValuePayload>) => {
       const { sequencerId, padId, nudgeValue } = action.payload;
+      const activeBank = state.sequencers[sequencerId].activeBank;
       const clampedNudge = Math.max(-3, Math.min(3, nudgeValue));
-      state.sequencers[sequencerId].nudgeValues[padId] = clampedNudge;
+      state.sequencers[sequencerId].nudgeValues[activeBank][padId] = clampedNudge;
     },
-    toggleCommandBank: (state, action: PayloadAction<{sequencerId: string}>) => {
+    toggleCommandBank: (state, action: PayloadAction<{ sequencerId: string }>) => {
       const sequencer = state.sequencers[action.payload.sequencerId];
       sequencer.activeBank = sequencer.activeBank === 'A' ? 'B' : 'A';
     }

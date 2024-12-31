@@ -25,7 +25,7 @@
     right: 0;
     bottom: 0;
     background-color: #212529;
-    transition: .4s;
+    transition: .2s;
     border-radius: 34px;
     border: 1px solid #e9ecef;
     display: flex;
@@ -39,7 +39,7 @@
     z-index: 1;
     font-size: 12px;
     font-weight: bold;
-    transition: .4s;
+    transition: .2s;
     color: #e9ecef;
     user-select: none;
     margin-bottom: 1px;
@@ -55,7 +55,7 @@
     left: 2px;
     bottom: 2px;
     background-color: #e9ecef;
-    transition: .4s;
+    transition: .2s;
     border-radius: 34px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
