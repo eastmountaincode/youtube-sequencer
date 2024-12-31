@@ -7,6 +7,7 @@ const numPads = 32;
 interface Sequencer {
   padCommands: PadCommand[];
   nudgeValues: number[];
+  activeBank: 'A' | 'B';
 }
 
 interface SequencerState {
@@ -30,7 +31,8 @@ interface UpdateNudgeValuePayload {
 // Helpers
 const createEmptySequencer = (): Sequencer => ({
   padCommands: Array(numPads).fill(PadCommand.EMPTY),
-  nudgeValues: Array(numPads).fill(0)
+  nudgeValues: Array(numPads).fill(0),
+  activeBank: 'A'
 });
 
 // Initial State
@@ -40,19 +42,23 @@ const initialState: SequencerState = {
   sequencers: {
     'seq1': { 
       padCommands: Array(numPads).fill(PadCommand.EMPTY),
-      nudgeValues: Array(numPads).fill(0)
+      nudgeValues: Array(numPads).fill(0),
+      activeBank: 'A'
      },
      'seq2': { 
       padCommands: Array(numPads).fill(PadCommand.EMPTY),
-      nudgeValues: Array(numPads).fill(0)
+      nudgeValues: Array(numPads).fill(0),
+      activeBank: 'A'
      },
      'seq3': { 
       padCommands: Array(numPads).fill(PadCommand.EMPTY),
-      nudgeValues: Array(numPads).fill(0)
+      nudgeValues: Array(numPads).fill(0),
+      activeBank: 'A'
      },
      'seq4': { 
       padCommands: Array(numPads).fill(PadCommand.EMPTY),
-      nudgeValues: Array(numPads).fill(0)
+      nudgeValues: Array(numPads).fill(0),
+      activeBank: 'A'
      },
   }
 };
@@ -84,6 +90,10 @@ export const sequencerSlice = createSlice({
       const { sequencerId, padId, nudgeValue } = action.payload;
       const clampedNudge = Math.max(-3, Math.min(3, nudgeValue));
       state.sequencers[sequencerId].nudgeValues[padId] = clampedNudge;
+    },
+    toggleCommandBank: (state, action: PayloadAction<{sequencerId: string}>) => {
+      const sequencer = state.sequencers[action.payload.sequencerId];
+      sequencer.activeBank = sequencer.activeBank === 'A' ? 'B' : 'A';
     }
   }
 });
@@ -92,7 +102,8 @@ export const {
   clearAllPads,
   setSelectedPad,
   clearSelectedPad,
-  updateNudgeValue
+  updateNudgeValue,
+  toggleCommandBank
 } = sequencerSlice.actions;
 
 export default sequencerSlice.reducer;

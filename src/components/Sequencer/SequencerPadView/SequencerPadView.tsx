@@ -79,7 +79,7 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
     <div className="sequencer-pad-view ms-3 me-3">
       {/* COMMAND BANK HERE */}
       <div>
-        <CommandBankControl />
+        <CommandBankControl sequencerId={sequencerId} />
       </div>
       <div className="pad-grid" style={{
         display: 'grid',
