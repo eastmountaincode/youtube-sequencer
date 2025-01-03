@@ -68,7 +68,7 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
                   {pattern.creator_display_name}
                 </small>
               </div>
-              <div className="d-flex justify-content-between">
+              <div className="d-flex flex-column flex-lg-row justify-content-between gap-2">
                 <small className="text-light opacity-75">
                   <i className="bi bi-heart-fill me-2"></i>
                   {likesCount} likes
@@ -79,6 +79,7 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
                 </small>
               </div>
             </div>
+
           </div>
 
           {/* Action buttons */}
