@@ -33,7 +33,10 @@ const UploadPattern = () => {
             // If we don't use a pre-signed URL< the AWS access key is part of URL, not good
             setUploadStatus('Getting upload URL...');
             const { data } = await getPresignedUrl({
-                variables: { filename: file.name }
+                variables: { 
+                    filename: file.name,
+                    folder: process.env.NODE_ENV === 'test' ? 'test_patterns' : 'patterns'
+                }
             });
             //console.log('Pre-signed URL:', data.getPresignedUrl.url);
             console.log('key', data.getPresignedUrl.key);
