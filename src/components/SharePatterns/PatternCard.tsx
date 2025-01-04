@@ -92,6 +92,7 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
                 patternId={pattern.id}
                 isLiked={pattern.liked_by_user}
                 onLikeUpdate={setLikesCount}
+                currentLikeCount={likesCount}
               />
             </div>
           </div>

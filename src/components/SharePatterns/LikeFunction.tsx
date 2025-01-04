@@ -5,13 +5,13 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Tooltip } from 'bootstrap';
 import './LikeFunction.css';
-import { GET_PATTERNS, GET_USER_PATTERNS } from '../../graphql/queries';
 import { getRefetchQueries } from '../../utils/refetchQueries';
 
 interface LikeFunctionProps {
     patternId: string;
     isLiked: boolean;
     onLikeUpdate: (likesCount: number) => void;
+    currentLikeCount: number; // Add this prop
 }
 
 const DisabledLikeButton: React.FC = () => {
@@ -58,7 +58,7 @@ const EnabledLikeButton: React.FC<{
     </button>
 );
 
-const LikeFunction: React.FC<LikeFunctionProps> = ({ patternId, isLiked, onLikeUpdate }) => {
+const LikeFunction: React.FC<LikeFunctionProps> = ({ patternId, isLiked, onLikeUpdate, currentLikeCount }) => {
     const user = useSelector((state: RootState) => state.auth.user);
     const [liked, setLiked] = useState(isLiked);
     const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
@@ -78,8 +78,9 @@ const LikeFunction: React.FC<LikeFunctionProps> = ({ patternId, isLiked, onLikeU
                     userId: user.uid
                 }
             });
+            const newLikeCount = liked ? currentLikeCount - 1 : currentLikeCount + 1;
             setLiked(!liked);
-            onLikeUpdate(data.likePattern.likes_count);  // Update parent component
+            onLikeUpdate(newLikeCount); // update parent component, PatternCard
 
         } catch (error) {
             console.error('Error toggling like:', error);
