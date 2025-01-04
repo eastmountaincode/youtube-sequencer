@@ -209,6 +209,27 @@ resource "aws_db_instance" "pattern_db" {
 
 }
 
+### Create a test RDS database instance 
+resource "aws_db_instance" "pattern_db_test" {
+  identifier          = "youtube-sequencer-db-test"
+  engine              = "postgres"
+  engine_version      = "17.2"
+  instance_class      = "db.t3.micro"
+  allocated_storage   = 20
+  storage_type        = "gp2"
+  db_subnet_group_name = aws_db_subnet_group.database_subnet_group.name
+  vpc_security_group_ids = [aws_security_group.rds_security_group.id]
+  availability_zone   = data.aws_availability_zones.availability_zones.names[0]
+
+  db_name             = "youtube_sequencer_test"
+  username           = "postgres"
+  password           = var.db_password
+  
+  skip_final_snapshot = true
+  multi_az            = false
+  publicly_accessible = false
+}
+
 ######################## RDS end #######################################
 
 ######################## EC2 start #######################################
