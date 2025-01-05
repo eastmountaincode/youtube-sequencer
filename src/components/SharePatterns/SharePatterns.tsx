@@ -29,6 +29,7 @@ const SharePatterns = () => {
       orderBy: orderBy,
       userId: user?.uid || null
     },
+    fetchPolicy: 'network-only',
     onError: (error) => {
       console.log('GraphQL Error:', error);
     },
