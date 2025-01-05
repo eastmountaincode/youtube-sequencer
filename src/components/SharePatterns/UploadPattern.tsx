@@ -1,7 +1,6 @@
 import { useMutation } from '@apollo/client';
 import React, { useState } from 'react';
 import { GET_PRESIGNED_URL, CREATE_PATTERN } from '../../graphql/mutations';
-import { GET_PATTERNS, GET_USER_PATTERNS } from '../../graphql/queries';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Link } from 'react-router-dom';
@@ -14,11 +13,16 @@ const UploadPattern = () => {
     const [description, setDescription] = useState<string>('');
     const [uploadStatus, setUploadStatus] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
+    const [uploadedPatternId, setUploadedPatternId] = useState<string | null>(null);
     const [getPresignedUrl] = useMutation(GET_PRESIGNED_URL);
     const user = useSelector((state: RootState) => state.auth.user)
     const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
 
     const [createPattern] = useMutation(CREATE_PATTERN, {
+        onCompleted: (data) => {
+            setUploadStatus('Upload successful!');
+            setUploadedPatternId(data.createPattern.id);
+        },
         refetchQueries: getRefetchQueries(itemsPerPage, orderBy, user?.uid)
     });
 
@@ -33,7 +37,7 @@ const UploadPattern = () => {
             // If we don't use a pre-signed URL< the AWS access key is part of URL, not good
             setUploadStatus('Getting upload URL...');
             const { data } = await getPresignedUrl({
-                variables: { 
+                variables: {
                     filename: file.name,
                     folder: process.env.NODE_ENV === 'test' ? 'test_patterns' : 'patterns'
                 }
@@ -67,9 +71,6 @@ const UploadPattern = () => {
                     onError: (error) => {
                         console.error('Create pattern error:', error);
                         setUploadStatus('Upload failed: ' + error.message);
-                    },
-                    onCompleted: () => {
-                        setUploadStatus('Upload successful!');
                     }
                 });
             }
@@ -101,8 +102,9 @@ const UploadPattern = () => {
             <form onSubmit={handleSubmit}>
                 {/* FILE INPUT */}
                 <div className="mb-3">
-                    <label className="form-label">.dance File</label>
+                    <label htmlFor="dance-file" className="form-label">.dance File</label>
                     <input
+                        id="dance-file"
                         type="file"
                         className="form-control"
                         accept=".dance"
