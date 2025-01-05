@@ -51,6 +51,7 @@ const EnabledLikeButton: React.FC<{
 }> = ({ liked, onClick }) => (
     <button
         onClick={onClick}
+        data-testid="like-button"
         className="btn p-0 border-0 w-100 d-flex justify-content-center align-items-center like-button"
         style={{ backgroundColor: 'transparent' }}
     >
