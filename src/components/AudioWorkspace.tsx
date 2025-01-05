@@ -9,7 +9,6 @@ import { updatePadCommand } from "../store/sequencerSlice";
 import { useAudioEngine } from "../hooks/useAudioEngine";
 import './AudioWorkspace.css'
 
-
 const AudioWorkspace: React.FC = () => {
   const sequencers = useSelector((state: RootState) => state.sequencer.sequencers);
   const sequencerIds = Object.keys(sequencers);
@@ -20,6 +19,8 @@ const AudioWorkspace: React.FC = () => {
   const selectedPadId = useSelector((state: RootState) => state.sequencer.selectedPadId);
 
   const handleCommandSelect = (command: PadCommand) => {
+
+    // Handle regular pad commands
     if (selectedSequencerId !== null && selectedPadId !== null) {
       dispatch(updatePadCommand({
         sequencerId: selectedSequencerId,

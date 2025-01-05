@@ -36,11 +36,12 @@ export const sendVolumeChangeCommand = (player: YT.Player, volume: number) => {
 };
 
 export const sendPlayerMuteCommand = (player: YT.Player) => {
+    console.log('Executing mute command');
     player.mute();
-
 };
 
 export const sendPlayerUnmuteCommand = (player: YT.Player) => {
+    console.log('Executing unmute command');
     player.unMute();
 };
 

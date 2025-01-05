@@ -18,7 +18,7 @@ export enum PadCommand {
     VOLUME = 'VOLUME',
     PLAYER_MUTE = 'PLAYER_MUTE',
     PLAYER_UNMUTE = 'PLAYER_UNMUTE',
-    EMPTY = 'EMPTY'
+    EMPTY = 'EMPTY',
 }
 
 export interface Pattern {

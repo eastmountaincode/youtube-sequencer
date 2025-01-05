@@ -21,12 +21,6 @@ export const useVideoModule = (videoModuleId: string) => {
     // temporary states that we don't need to persist across sessions
     const [isMuted, setIsMuted] = useState<boolean>(false);
 
-    useEffect(() => {
-        return () => {
-            delete playerRefs[videoModuleId];
-        };
-    }, [videoModuleId]);
-
     const setVideoUrl = (url: string) => {
         dispatch(setModuleVideoUrl({ videoModuleId, videoUrl: url }));
     };
@@ -36,23 +30,32 @@ export const useVideoModule = (videoModuleId: string) => {
     };
 
     const handleMuteToggle = (player: YT.Player) => {
+        console.log('Current isMuted state:', isMuted);
         if (isMuted) {
+            console.log('Attempting to unmute');
             executeCommand({
                 player: player,
                 command: PadCommand.PLAYER_UNMUTE,
                 dispatch: dispatch,
             })
-
         } else {
+            console.log('Attempting to mute');
             executeCommand({
                 player,
                 command: PadCommand.PLAYER_MUTE,
                 dispatch: dispatch,
             })
-
         }
         setIsMuted(!isMuted);
+        console.log('New isMuted state will be:', !isMuted);
     };
+
+    useEffect(() => {
+        return () => {
+            delete playerRefs[videoModuleId];
+        };
+    }, [videoModuleId]);
+
 
     const extractVideoId = (url: string) => {
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -84,6 +87,7 @@ export const useVideoModule = (videoModuleId: string) => {
         // register player with the refs list stored in slice
         playerRefs[videoModuleId] = player;
         dispatch(setModulePlayerReady({ videoModuleId, isReady: true }));
+        
     };
 
     return {

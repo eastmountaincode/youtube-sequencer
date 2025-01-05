@@ -55,7 +55,7 @@ const KeyInputArea: React.FC<KeyInputAreaProps> = ({ onCommandSelect }) => {
                 case 'u':
                     onCommandSelect(PadCommand.PLAYER_UNMUTE);
                     break;
-
+                    
             }
         };
 

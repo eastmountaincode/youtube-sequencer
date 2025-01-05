@@ -16,6 +16,13 @@ interface VideoDisplayProps {
     onClear: () => void;
 }
 
+const moduleKeyMap = {
+    'seq1': 'e',
+    'seq2': 'r',
+    'seq3': 'd',
+    'seq4': 'f'
+};
+
 const VideoDisplay: React.FC<VideoDisplayProps> = ({
     videoId,
     videoModuleId,
@@ -63,6 +70,18 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
         }
     }, [videoId, videoModuleId, dispatch]);
 
+    useEffect(() => {
+        const targetKey = moduleKeyMap[videoModuleId as keyof typeof moduleKeyMap];
+        const handleKeyPress = (event: KeyboardEvent) => {
+            if (event.key === targetKey && playerRefs[videoModuleId]) {
+                handleMuteButtonClick();
+            }
+        };
+    
+        window.addEventListener('keydown', handleKeyPress);
+        return () => window.removeEventListener('keydown', handleKeyPress);
+    }, [videoModuleId, isMuted]);
+    
     const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newVolume = parseInt(event.target.value);
         dispatch(setVolume({ sequencerId: videoModuleId, volume: newVolume }));
@@ -79,8 +98,11 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
     };
 
     const handleMuteButtonClick = () => {
-        const player = playerRefs[videoModuleId]; // Get current player reference
+        console.log('Mute button/key pressed');
+        console.log('Current player:', playerRefs[videoModuleId]);
+        const player = playerRefs[videoModuleId];
         if (player) {
+            console.log('Player muted state before toggle:', player.isMuted());
             handleMuteToggle(player);
         }
     };
