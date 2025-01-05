@@ -8,6 +8,7 @@ import videoModuleReadinessReducer from './videoModuleReadinessSlice';
 import persistentAudioSettingsReducer from './persistentAudioSettingsSlice';
 import authReducer from './authSlice';
 import patternsDisplayReducer from './patternsDisplaySlice';
+import modalReducer from './modalSlice';
 
 
 const rootReducer = combineReducers({
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   persistentAudioSettings: persistentAudioSettingsReducer,
   auth: authReducer,
   patternsDisplay: patternsDisplayReducer,
+  modal: modalReducer,
 
 });
 

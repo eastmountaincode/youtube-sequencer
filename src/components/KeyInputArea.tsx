@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { PadCommand } from '../types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 
 interface KeyInputAreaProps {
     onCommandSelect: (command: PadCommand) => void;
@@ -19,8 +21,12 @@ const numberToCommand: Record<number, PadCommand> = {
 };
 
 const KeyInputArea: React.FC<KeyInputAreaProps> = ({ onCommandSelect }) => {
+    const isSaveModalOpen = useSelector((state: RootState) => state.modal.isSaveModalOpen);
+
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
+            if (isSaveModalOpen) return;
+
             switch (event.key) {
                 case '0':
                 case '1':
@@ -52,7 +58,7 @@ const KeyInputArea: React.FC<KeyInputAreaProps> = ({ onCommandSelect }) => {
                 case 'm':
                     onCommandSelect(PadCommand.PLAYER_MUTE);
                     break;
-                case 'u':
+                case 'n':
                     onCommandSelect(PadCommand.PLAYER_UNMUTE);
                     break;
                     
@@ -61,7 +67,7 @@ const KeyInputArea: React.FC<KeyInputAreaProps> = ({ onCommandSelect }) => {
 
         window.addEventListener('keydown', handleKeyPress);
         return () => window.removeEventListener('keydown', handleKeyPress);
-    }, [onCommandSelect]);
+    }, [onCommandSelect, isSaveModalOpen]);
 
     return (
         <div className="key-input-area border border-1 bg-primary bg-opacity-10 p-3 mt-3">

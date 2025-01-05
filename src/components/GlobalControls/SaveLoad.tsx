@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { audioEngine } from '../../services/audioEngine';
 import { validateFile } from '../../utils/validateFile';
+import { setSaveModalOpen } from '../../store/modalSlice';
 
 const SaveLoad: React.FC = () => {
     const dispatch = useDispatch();
@@ -13,7 +14,8 @@ const SaveLoad: React.FC = () => {
         const now = new Date();
         const dateStr = now.toISOString().split('T')[0]; // Format: YYYY-MM-DD
         return `sequence_${dateStr}`;
-    }); const [showSaveModal, setShowSaveModal] = useState(false);
+    }); 
+    const showSaveModal = useSelector((state: RootState) => state.modal.isSaveModalOpen);    
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -32,7 +34,8 @@ const SaveLoad: React.FC = () => {
         link.download = `${fileName}.dance`;
         link.click();
         URL.revokeObjectURL(url);
-        setShowSaveModal(false);
+        dispatch(setSaveModalOpen(false));
+
     };
 
     const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +71,7 @@ const SaveLoad: React.FC = () => {
             <div className="save-load d-flex gap-2 p-3 justify-content-center flex-column align-items-center">
                 <button
                     className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center"
-                    onClick={() => setShowSaveModal(true)}
+                    onClick={() => dispatch(setSaveModalOpen(true))}
                     style={{ width: '155px' }}
                 >
                     <i className="bi bi-download me-2"></i>
@@ -96,7 +99,7 @@ const SaveLoad: React.FC = () => {
                                     <i className="bi bi-save me-2"></i>
                                     Save Workspace
                                 </h5>
-                                <button type="button" className="btn-close" onClick={() => setShowSaveModal(false)}></button>
+                                <button type="button" className="btn-close" onClick={() => dispatch(setSaveModalOpen(false))}></button>
                             </div>
                             <div className="modal-body text-dark">
                                 <div className="form-group mb-4">
@@ -113,7 +116,7 @@ const SaveLoad: React.FC = () => {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={() => setShowSaveModal(false)}>
+                                <button type="button" className="btn btn-secondary" onClick={() => dispatch(setSaveModalOpen(false))}>
                                     <i className="bi bi-x-circle me-2"></i>
                                     Cancel
                                 </button>

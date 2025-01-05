@@ -20,11 +20,13 @@ const CommandBankControl: React.FC<CommandBankControlProps> = ({ sequencerId }) 
   const activeBank = useSelector((state: RootState) => 
     state.sequencer.sequencers[sequencerId].activeBank
   );
+  const isSaveModalOpen = useSelector((state: RootState) => state.modal.isSaveModalOpen);
 
   useEffect(() => {
     const targetKey = bankKeyMap[sequencerId as keyof typeof bankKeyMap];
     
     const handleKeyPress = (event: KeyboardEvent) => {
+      if (isSaveModalOpen) return;
       if (event.key === targetKey) {
         dispatch(toggleCommandBank({ sequencerId }));
       }
@@ -32,7 +34,7 @@ const CommandBankControl: React.FC<CommandBankControlProps> = ({ sequencerId }) 
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [sequencerId, dispatch]);
+  }, [sequencerId, dispatch, isSaveModalOpen]);
 
   return (
     <div className="bank-switch-container">

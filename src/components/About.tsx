@@ -1,3 +1,4 @@
+import { useState } from "react";
 import NudgeControls from "./Sequencer/SequencerPadView/SequencerControls/NudgeControls";
 
 const ExamplePad = () => (
@@ -102,6 +103,8 @@ const ExampleNudgeControls = () => {
 
 
 export default function About() {
+  const [showKeyboardModal, setShowKeyboardModal] = useState(false);
+
   return (
     <div className="container mt-5 ps-4 pe-4">
       <h2 className="mb-4">How To Use Youtube Sequencer</h2>
@@ -122,6 +125,16 @@ export default function About() {
           Traditional sampling can be time-consuming, requiring you to download, trim, and import audio files.
           Youtube Sequencer removes these barriers - just paste a URL and start creating.
         </p>
+      </section>
+      <section className="mb-5">
+
+        <button
+          className="btn btn-outline-light"
+          onClick={() => setShowKeyboardModal(true)}
+        >
+          <i className="bi bi-keyboard me-2"></i>
+          Show Keyboard Diagram
+        </button>
       </section>
 
       <section className="mb-5">
@@ -258,6 +271,75 @@ export default function About() {
       </section>
 
       <section className="mb-5">
+        <h3>Performance Controls</h3>
+        <p>
+          Quick keyboard controls let you mute tracks and switch sequence banks on the fly while performing:
+        </p>
+
+        <div className="ms-4">
+          <h5 className="mb-3">Quick Mute Controls</h5>
+          <table className="table table-dark table-bordered">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><kbd>e</kbd></td>
+                <td>Toggle mute for Track 1</td>
+              </tr>
+              <tr>
+                <td><kbd>r</kbd></td>
+                <td>Toggle mute for Track 2</td>
+              </tr>
+              <tr>
+                <td><kbd>d</kbd></td>
+                <td>Toggle mute for Track 3</td>
+              </tr>
+              <tr>
+                <td><kbd>f</kbd></td>
+                <td>Toggle mute for Track 4</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h5 className="mb-3 mt-4">Sequence Bank Controls</h5>
+          <p>
+            Each track has two sequence banks (A and B) that can store different patterns. Switch between them instantly:
+          </p>
+          <table className="table table-dark table-bordered">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><kbd>y</kbd></td>
+                <td>Toggle Track 1 between Bank A/B</td>
+              </tr>
+              <tr>
+                <td><kbd>u</kbd></td>
+                <td>Toggle Track 2 between Bank A/B</td>
+              </tr>
+              <tr>
+                <td><kbd>h</kbd></td>
+                <td>Toggle Track 3 between Bank A/B</td>
+              </tr>
+              <tr>
+                <td><kbd>j</kbd></td>
+                <td>Toggle Track 4 between Bank A/B</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+
+      <section className="mb-5">
         <h3>Save & Load</h3>
         <p>
           Save your sequences and load them later using the workspace controls:
@@ -309,11 +391,50 @@ export default function About() {
         </div>
       </section>
 
+      {showKeyboardModal && (
+        <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog modal-xl">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title text-dark">
+                  <i className="bi bi-keyboard me-2"></i>
+                  Keyboard Controls
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowKeyboardModal(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <img
+                  src="/images/keyboard_diagram.jpg"
+                  alt="Keyboard Controls Diagram"
+                  style={{ width: '100%', height: 'auto' }}
+                />
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => setShowKeyboardModal(false)}
+                >
+                  <i className="bi bi-check-circle me-2"></i>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
 
 
 
 
 
     </div>
+
+
   );
 }

@@ -42,6 +42,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
         state.videoModuleReadiness.modules[videoModuleId]
     );
 
+    const isSaveModalOpen = useSelector((state: RootState) => state.modal.isSaveModalOpen);
 
     useEffect(() => {
         if (videoId) {
@@ -72,15 +73,32 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
 
     useEffect(() => {
         const targetKey = moduleKeyMap[videoModuleId as keyof typeof moduleKeyMap];
-        const handleKeyPress = (event: KeyboardEvent) => {
-            if (event.key === targetKey && playerRefs[videoModuleId]) {
-                handleMuteButtonClick();
+        
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (isSaveModalOpen) return;
+            if (event.key === targetKey && playerRefs[videoModuleId] && !event.repeat) {
+                const player = playerRefs[videoModuleId];
+                handleMuteToggle(player);
             }
         };
     
-        window.addEventListener('keydown', handleKeyPress);
-        return () => window.removeEventListener('keydown', handleKeyPress);
-    }, [videoModuleId, isMuted]);
+        const handleKeyUp = (event: KeyboardEvent) => {
+            if (isSaveModalOpen) return;
+            if (event.key === targetKey && playerRefs[videoModuleId]) {
+                const player = playerRefs[videoModuleId];
+                handleMuteToggle(player);
+            }
+        };
+    
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+        
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('keyup', handleKeyUp);
+        };
+    }, [videoModuleId, isMuted, isSaveModalOpen]);
+    
     
     const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newVolume = parseInt(event.target.value);
