@@ -10,7 +10,6 @@ import authReducer from './authSlice';
 import patternsDisplayReducer from './patternsDisplaySlice';
 import modalReducer from './modalSlice';
 
-
 const rootReducer = combineReducers({
   audioEngine: audioEngineReducer,
   sequencer: sequencerPadReducer,
@@ -23,16 +22,35 @@ const rootReducer = combineReducers({
 
 });
 
+const CURRENT_VERSION = 1;
+
 const persistConfig = {
   key: 'root',
   storage,
+  version: CURRENT_VERSION,
   whitelist: ['videoModule', 'sequencer', 'persistentAudioSettings', 'auth']
+};
+
+// Add version check before rehydration
+const versionedReducer = (state: any, action: any) => {
+  // Only check version during rehydration
+  if (action.type === 'persist/REHYDRATE') {
+    const persistedState = state?._persist?.version;
+    console.log('Rehydrating with version:', persistedState);
+    
+    if (persistedState === undefined || persistedState !== CURRENT_VERSION) {
+      storage.removeItem('persist:root');
+      return persistedReducer(undefined, action);
+    }
+  }
+  
+  return persistedReducer(state, action);
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: versionedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

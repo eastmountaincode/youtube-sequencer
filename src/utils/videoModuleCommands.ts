@@ -24,7 +24,7 @@ export const sendSeekBackwardCommand = (player: YT.Player) => {
 export const sendJumpToTimeCommand = (player: YT.Player, percentage: number, nudgeValue: number = 0) => {
     const duration = player.getDuration();
     const targetTime = duration * (percentage / 100);
-    console.log('jumping to time', targetTime + nudgeValue);;
+    //console.log('jumping to time', targetTime + nudgeValue);;
     player.seekTo(targetTime + nudgeValue, true);
 };
 
@@ -36,12 +36,12 @@ export const sendVolumeChangeCommand = (player: YT.Player, volume: number) => {
 };
 
 export const sendPlayerMuteCommand = (player: YT.Player) => {
-    console.log('Executing mute command');
+    //console.log('Executing mute command');
     player.mute();
 };
 
 export const sendPlayerUnmuteCommand = (player: YT.Player) => {
-    console.log('Executing unmute command');
+    //console.log('Executing unmute command');
     player.unMute();
 };
 
