@@ -84,7 +84,7 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
     
         const handleKeyUp = (event: KeyboardEvent) => {
             if (isSaveModalOpen) return;
-            if (event.key === targetKey && playerRefs[videoModuleId]) {
+            if (event.key == targetKey && playerRefs[videoModuleId]) {
                 const player = playerRefs[videoModuleId];
                 handleMuteToggle(player);
             }
