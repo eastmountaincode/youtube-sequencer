@@ -408,7 +408,7 @@ export default function About() {
               </div>
               <div className="modal-body">
                 <img
-                  src="/images/keyboard_diagram.jpg"
+                  src="/images/keyboard_diagram.png"
                   alt="Keyboard Controls Diagram"
                   style={{ width: '100%', height: 'auto' }}
                 />

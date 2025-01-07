@@ -5,7 +5,7 @@ import { useVideoModule } from '../../../hooks/useVideoModule';
 import { useDispatch, useSelector } from 'react-redux';
 import { playerRefs } from '../../../store/videoModuleSlice';
 import { RootState } from '../../../store/store';
-import { setVolume } from '../../../store/persistentAudioSettingsSlice';
+import { setModuleMute, setVolume } from '../../../store/persistentAudioSettingsSlice';
 
 /// <reference types="youtube" />
 
@@ -17,10 +17,10 @@ interface VideoDisplayProps {
 }
 
 const moduleKeyMap = {
-    'seq1': 'e',
-    'seq2': 'r',
-    'seq3': 'd',
-    'seq4': 'f'
+    'seq1': 'y',
+    'seq2': 'u',
+    'seq3': 'h',
+    'seq4': 'j'
 };
 
 const VideoDisplay: React.FC<VideoDisplayProps> = ({
@@ -35,7 +35,9 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
     );
 
 
-    const { isMuted, handleMuteToggle } = useVideoModule(videoModuleId);
+    const isMuted = useSelector((state: RootState) =>
+        state.persistentAudioSettings.mutedModules[videoModuleId] ?? false
+    );
 
     // Get readiness states from Redux
     const { isPlayerReady, isLoadButtonPressed } = useSelector((state: RootState) =>
@@ -63,7 +65,15 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                             dispatch: dispatch,
                             nudgeValue: 0,
                             volume: volume
-                        }); 
+                        });
+                        // Apply initial mute state
+                        if (isMuted) {
+                            executeCommand({
+                                player,
+                                command: PadCommand.PLAYER_MUTE,
+                                dispatch: dispatch,
+                            });
+                        }
                         onPlayerReady(player);
                     }
                 }
@@ -73,33 +83,45 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
 
     useEffect(() => {
         const targetKey = moduleKeyMap[videoModuleId as keyof typeof moduleKeyMap];
-        
+
         const handleKeyDown = (event: KeyboardEvent) => {
             if (isSaveModalOpen) return;
             if (event.key === targetKey && playerRefs[videoModuleId] && !event.repeat) {
                 const player = playerRefs[videoModuleId];
-                handleMuteToggle(player);
+                const newMutedState = !isMuted;
+                dispatch(setModuleMute({ sequencerId: videoModuleId, isMuted: newMutedState }));
+                executeCommand({
+                    player,
+                    command: newMutedState ? PadCommand.PLAYER_MUTE : PadCommand.PLAYER_UNMUTE,
+                    dispatch: dispatch,
+                });
             }
         };
-    
+
         const handleKeyUp = (event: KeyboardEvent) => {
             if (isSaveModalOpen) return;
-            if (event.key == targetKey && playerRefs[videoModuleId]) {
+            if (event.key === targetKey && playerRefs[videoModuleId]) {
                 const player = playerRefs[videoModuleId];
-                handleMuteToggle(player);
+                const newMutedState = !isMuted;
+                dispatch(setModuleMute({ sequencerId: videoModuleId, isMuted: newMutedState }));
+                executeCommand({
+                    player,
+                    command: newMutedState ? PadCommand.PLAYER_MUTE : PadCommand.PLAYER_UNMUTE,
+                    dispatch: dispatch,
+                });
             }
         };
-    
+
         window.addEventListener('keydown', handleKeyDown);
         window.addEventListener('keyup', handleKeyUp);
-        
+
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('keyup', handleKeyUp);
         };
     }, [videoModuleId, isMuted, isSaveModalOpen]);
-    
-    
+
+
     const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newVolume = parseInt(event.target.value);
         dispatch(setVolume({ sequencerId: videoModuleId, volume: newVolume }));
@@ -116,12 +138,15 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
     };
 
     const handleMuteButtonClick = () => {
-        console.log('Mute button/key pressed');
-        console.log('Current player:', playerRefs[videoModuleId]);
         const player = playerRefs[videoModuleId];
         if (player) {
-            console.log('Player muted state before toggle:', player.isMuted());
-            handleMuteToggle(player);
+            const newMutedState = !isMuted;
+            dispatch(setModuleMute({ sequencerId: videoModuleId, isMuted: newMutedState }));
+            executeCommand({
+                player,
+                command: newMutedState ? PadCommand.PLAYER_MUTE : PadCommand.PLAYER_UNMUTE,
+                dispatch: dispatch,
+            });
         }
     };
 

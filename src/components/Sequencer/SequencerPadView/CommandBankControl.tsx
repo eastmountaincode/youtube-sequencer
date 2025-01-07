@@ -9,10 +9,10 @@ interface CommandBankControlProps {
 }
 
 const bankKeyMap = {
-  'seq1': 'y',
-  'seq2': 'u',
-  'seq3': 'h',
-  'seq4': 'j'
+  'seq1': 'e',
+  'seq2': 'r',
+  'seq3': 'd',
+  'seq4': 'f'
 };
 
 const CommandBankControl: React.FC<CommandBankControlProps> = ({ sequencerId }) => {

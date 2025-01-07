@@ -6,20 +6,22 @@ import { executeCommand } from "../utils/videoModuleCommands";
 import { PadCommand } from "../types";
 import { playerRefs } from "../store/videoModuleSlice";
 import { setModulePlayerReady, setModuleLoadButtonPressed } from "../store/videoModuleReadinessSlice";
+import { setModuleMute } from "../store/persistentAudioSettingsSlice";
 
 export const useVideoModule = (videoModuleId: string) => {
     const dispatch = useDispatch();
     // get videoUrl, and videoId from the store, which functions as the MODEL
     // we want to save these to recreate state if we load in a file
-    const videoUrl = useSelector((state: RootState) => 
+    const videoUrl = useSelector((state: RootState) =>
         state.videoModule.modules[videoModuleId]?.videoUrl
-      );
+    );
     const videoId = useSelector((state: RootState) =>
         state.videoModule.modules[videoModuleId]?.videoId
     );
 
-    // temporary states that we don't need to persist across sessions
-    const [isMuted, setIsMuted] = useState<boolean>(false);
+    const isMuted = useSelector((state: RootState) =>
+        state.persistentAudioSettings.mutedModules[videoModuleId] ?? false
+    );
 
     const setVideoUrl = (url: string) => {
         dispatch(setModuleVideoUrl({ videoModuleId, videoUrl: url }));
@@ -30,7 +32,9 @@ export const useVideoModule = (videoModuleId: string) => {
     };
 
     const handleMuteToggle = (player: YT.Player) => {
-        console.log('Current isMuted state:', isMuted);
+        const newMutedState = !isMuted;
+        dispatch(setModuleMute({ sequencerId: videoModuleId, isMuted: newMutedState }));
+
         if (isMuted) {
             console.log('Attempting to unmute');
             executeCommand({
@@ -46,8 +50,6 @@ export const useVideoModule = (videoModuleId: string) => {
                 dispatch: dispatch,
             })
         }
-        setIsMuted(!isMuted);
-        console.log('New isMuted state will be:', !isMuted);
     };
 
     useEffect(() => {
@@ -87,7 +89,7 @@ export const useVideoModule = (videoModuleId: string) => {
         // register player with the refs list stored in slice
         playerRefs[videoModuleId] = player;
         dispatch(setModulePlayerReady({ videoModuleId, isReady: true }));
-        
+
     };
 
     return {
