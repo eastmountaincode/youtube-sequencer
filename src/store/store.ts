@@ -31,19 +31,19 @@ const persistConfig = {
   whitelist: ['videoModule', 'sequencer', 'persistentAudioSettings', 'auth']
 };
 
-// Add version check before rehydration
 const versionedReducer = (state: any, action: any) => {
-  // Only check version during rehydration
   if (action.type === 'persist/REHYDRATE') {
+    console.log('Full rehydration state:', state);
+    console.log('Full rehydration action:', action);
     const persistedState = state?._persist?.version;
     console.log('Rehydrating with version:', persistedState);
     
     if (persistedState === undefined || persistedState !== CURRENT_VERSION) {
+      console.log('Version mismatch - clearing storage');
       storage.removeItem('persist:root');
       return persistedReducer(undefined, action);
     }
   }
-  
   return persistedReducer(state, action);
 };
 
