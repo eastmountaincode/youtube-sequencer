@@ -287,19 +287,19 @@ export default function About() {
             </thead>
             <tbody>
               <tr>
-                <td><kbd>e</kbd></td>
+                <td><kbd>y</kbd></td>
                 <td>Toggle mute for Track 1</td>
               </tr>
               <tr>
-                <td><kbd>r</kbd></td>
+                <td><kbd>u</kbd></td>
                 <td>Toggle mute for Track 2</td>
               </tr>
               <tr>
-                <td><kbd>d</kbd></td>
+                <td><kbd>h</kbd></td>
                 <td>Toggle mute for Track 3</td>
               </tr>
               <tr>
-                <td><kbd>f</kbd></td>
+                <td><kbd>j</kbd></td>
                 <td>Toggle mute for Track 4</td>
               </tr>
             </tbody>
@@ -318,19 +318,19 @@ export default function About() {
             </thead>
             <tbody>
               <tr>
-                <td><kbd>y</kbd></td>
+                <td><kbd>e</kbd></td>
                 <td>Toggle Track 1 between Bank A/B</td>
               </tr>
               <tr>
-                <td><kbd>u</kbd></td>
+                <td><kbd>r</kbd></td>
                 <td>Toggle Track 2 between Bank A/B</td>
               </tr>
               <tr>
-                <td><kbd>h</kbd></td>
+                <td><kbd>d</kbd></td>
                 <td>Toggle Track 3 between Bank A/B</td>
               </tr>
               <tr>
-                <td><kbd>j</kbd></td>
+                <td><kbd>f</kbd></td>
                 <td>Toggle Track 4 between Bank A/B</td>
               </tr>
             </tbody>
@@ -360,6 +360,27 @@ export default function About() {
         <p className="mt-2">
           After loading a <code>.dance</code> file, remember to click <button className="btn btn-primary btn-sm mx-2">Load Video <i className="bi bi-floppy ms-1"></i></button> for each track to load the videos.
         </p>
+      </section>
+
+      <section className="mb-5">
+        <h3>Tips</h3>
+        <div className="list-group list-group-flush bg-transparent">
+          <div className="list-group-item bg-transparent text-light">
+            <i className="bi bi-lightbulb me-2"></i>
+            Look for videos that feature a single sound / instrument. Just using videos of drum samples is cheating ;). Drum breaks are allowed though.
+          </div>
+          <div className="list-group-item bg-transparent text-light">
+            <i className="bi bi-lightbulb me-2"></i>
+            Toggle <button className="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1 mx-1">
+              <i className="bi bi-volume-up"></i>
+              <span>Mute</span>
+            </button> below the video to determine if the <kbd>Y</kbd> <kbd>U</kbd> <kbd>H</kbd> <kbd>J</kbd> performance keys are causing the sound to <span className="text-success">play</span> or to be <span className="text-danger">muted</span>.
+          </div>
+          <div className="list-group-item bg-transparent text-light">
+            <i className="bi bi-lightbulb me-2"></i>
+            Try using the A sequencer command bank for the main sound and the B sequencer command bank for "fills" 
+          </div>
+        </div>
       </section>
 
       <section className="mb-5">
