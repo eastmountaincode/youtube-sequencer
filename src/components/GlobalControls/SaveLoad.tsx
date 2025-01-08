@@ -75,11 +75,11 @@ const SaveLoad: React.FC = () => {
                     style={{ width: '155px' }}
                 >
                     <i className="bi bi-download me-2"></i>
-                    Save Workspace
+                    Save Pattern
                 </button>
                 <label className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center" style={{ width: '155px' }}>
                     <i className="bi bi-upload me-2"></i>
-                    Load Workspace
+                    Load Pattern
                     <input
                         type="file"
                         accept=".dance"

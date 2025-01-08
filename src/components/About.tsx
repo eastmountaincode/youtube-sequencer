@@ -106,7 +106,7 @@ export default function About() {
   const [showKeyboardModal, setShowKeyboardModal] = useState(false);
 
   return (
-    <div className="container mt-5 ps-4 pe-4">
+    <div className="container mt-5 ps-4 pe-4 lead">
       <h2 className="mb-4">How To Use Youtube Sequencer</h2>
 
       <section className="mb-5">
@@ -342,16 +342,16 @@ export default function About() {
       <section className="mb-5">
         <h3>Save & Load</h3>
         <p>
-          Save your sequences and load them later using the workspace controls:
+          Save and load patterns using the Save / Load buttons in Global Controls:
         </p>
         <div className="ms-4 d-flex gap-2">
           <button className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center" style={{ width: '155px' }}>
             <i className="bi bi-download me-2"></i>
-            Save Workspace
+            Save Pattern
           </button>
           <button className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center" style={{ width: '155px' }}>
             <i className="bi bi-upload me-2"></i>
-            Load Workspace
+            Load Pattern
           </button>
         </div>
         <p className="mt-3">
@@ -378,39 +378,53 @@ export default function About() {
           </div>
           <div className="list-group-item bg-transparent text-light">
             <i className="bi bi-lightbulb me-2"></i>
-            Try using the A sequencer command bank for the main sound and the B sequencer command bank for "fills" 
+            Try using the A sequencer command bank for the main sound and the B sequencer command bank for "fills"
           </div>
         </div>
       </section>
 
       <section className="mb-5">
-        <h3>Let's Connect</h3>
-        <p>
+        <h3 className="mb-4">Let's Connect</h3>
 
-          If you were inspired by this project, feel free to reach out - I'd love to hear about what you're working on too!<i className="bi bi-stars ms-2"></i>
-        </p>
-        <p>
-          Currently seeking front-end and full-stack web development opportunities.
-        </p>
-        <div className="d-flex flex-wrap gap-3 mt-4">
-          <a href="https://www.linkedin.com/in/andrew-boylan-92842810a/"
-            className="btn btn-outline-light"
+        <div className="connect-message mb-4">
+          <p className="lead">
+            If you were inspired by this project, feel free to reach out - I'd love to hear about what you're working on too!
+            <i className="bi bi-stars ms-2 text-warning"></i>
+          </p>
+
+          <div className="mt-3">
+            <p className="h5 mb-2">- Andrew</p>
+          </div>
+        </div>
+
+        <div className="social-links d-flex flex-wrap gap-3">
+          <a
+            href="https://www.linkedin.com/in/andrew-boylan-92842810a/"
+            className="btn btn-outline-light btn-lg"
             target="_blank"
-            rel="noopener noreferrer">
+            rel="noopener noreferrer"
+          >
             <i className="bi bi-linkedin me-2"></i>LinkedIn
           </a>
-          <a href="https://www.instagram.com/ndrewboylan/"
-            className="btn btn-outline-light"
+
+          <a
+            href="https://www.instagram.com/ndrewboylan/"
+            className="btn btn-outline-light btn-lg"
             target="_blank"
-            rel="noopener noreferrer">
+            rel="noopener noreferrer"
+          >
             <i className="bi bi-instagram me-2"></i>Instagram
           </a>
-          <a href={`mailto:${['andreweboylan', 'gmail.com'].join('@')}`}
-            className="btn btn-outline-light">
+
+          <a
+            href={`mailto:${['andreweboylan', 'gmail.com'].join('@')}`}
+            className="btn btn-outline-light btn-lg"
+          >
             <i className="bi bi-envelope me-2"></i>Email
           </a>
         </div>
       </section>
+
 
       {showKeyboardModal && (
         <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
