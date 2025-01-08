@@ -3,8 +3,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css';
 import AudioWorkspace from './components/AudioWorkspace';
-import { Provider, useDispatch } from 'react-redux';
-import { persistor, store } from './store/store';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import { persistor, RootState, store } from './store/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
@@ -19,8 +19,14 @@ import { ApolloProvider } from '@apollo/client';
 import { client } from './apollo/client';
 import SignUp from './components/Account/SignUp';
 import AccountPage from './components/Account/AccountPage';
+import SplashScreen from './components/SplashScreen';
 
 function App() {
+  const isRehydrated = useSelector((state: RootState) => state._persist?.rehydrated);
+
+  if (!isRehydrated) {
+    return <SplashScreen/>; // Or your splash screen component
+  }
 
   return (
     <ApolloProvider client={client}>
@@ -48,7 +54,7 @@ function App() {
         </PersistGate>
       </Provider>
     </ApolloProvider>
-
+ 
   );
 }
 
