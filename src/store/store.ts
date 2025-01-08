@@ -22,7 +22,7 @@ const rootReducer = combineReducers({
 
 });
 
-const CURRENT_VERSION = 5;
+const CURRENT_VERSION = 6;
 
 const persistConfig = {
   key: 'root',
