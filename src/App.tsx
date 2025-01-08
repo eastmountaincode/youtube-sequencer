@@ -22,17 +22,11 @@ import AccountPage from './components/Account/AccountPage';
 import SplashScreen from './components/SplashScreen';
 
 function App() {
-  const isRehydrated = useSelector((state: RootState) => state._persist?.rehydrated);
-
-  if (!isRehydrated) {
-    return <SplashScreen/>; // Or your splash screen component
-  }
-
   return (
     <ApolloProvider client={client}>
 
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
+        <PersistGate loading={<SplashScreen />} persistor={persistor}>
           <AuthStateManager />
 
           <BrowserRouter>
@@ -54,7 +48,7 @@ function App() {
         </PersistGate>
       </Provider>
     </ApolloProvider>
- 
+
   );
 }
 
