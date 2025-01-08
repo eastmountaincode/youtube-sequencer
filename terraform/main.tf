@@ -146,11 +146,14 @@ resource "aws_s3_bucket_cors_configuration" "pattern_storage" {
   bucket = aws_s3_bucket.pattern_storage.id  # Reference the bucket we created above
 
   cors_rule {
-    allowed_headers = ["*"]                    # Allow all headers
-    allowed_methods = ["GET", "PUT", "POST"]   # HTTP methods needed for file operations
-    allowed_origins = ["http://localhost:3000"] # Allow requests from our React dev server
-    expose_headers  = ["ETag"]                 # Expose ETag for caching
-    max_age_seconds = 3000                     # Browser can cache CORS response
+    allowed_headers = ["*"]
+    allowed_methods = ["GET", "PUT", "POST"]
+    allowed_origins = [
+      "http://localhost:3000",
+      "https://youtubesequencer.com"
+    ]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
   }
 }
 
