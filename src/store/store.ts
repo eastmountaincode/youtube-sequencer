@@ -22,7 +22,7 @@ const rootReducer = combineReducers({
 
 });
 
-const CURRENT_VERSION = 4;
+const CURRENT_VERSION = 5;
 
 const persistConfig = {
   key: 'root',
@@ -33,11 +33,12 @@ const persistConfig = {
 
 const versionedReducer = (state: any, action: any) => {
   if (action.type === 'persist/REHYDRATE') {
-    console.log('Checking version from payload:', action.payload?._persist?.version);
-    const persistedVersion = action.payload?._persist?.version;
+    const storedVersion = localStorage.getItem('state_version');
+    console.log('Stored version:', storedVersion);
     
-    if (persistedVersion === undefined || persistedVersion !== CURRENT_VERSION) {
-      console.log('Version mismatch detected - clearing storage');
+    if (!storedVersion || parseInt(storedVersion) !== CURRENT_VERSION) {
+      console.log('Version mismatch - clearing storage');
+      localStorage.setItem('state_version', CURRENT_VERSION.toString());
       storage.removeItem('persist:root');
       return persistedReducer(undefined, action);
     }
