@@ -9,6 +9,7 @@ import { DELETE_PATTERN } from '../../graphql/mutations';
 import { GET_PATTERNS, GET_USER_PATTERNS } from '../../graphql/queries';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import { getRefetchQueries } from '../../utils/refetchQueries';
+import LoadIntoSequencer from './LoadIntoSequencer';
 
 interface PatternCardProps {
   pattern: Pattern;
@@ -83,7 +84,10 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
           </div>
 
           {/* Action buttons */}
-          <div className="mt-auto d-flex">
+          <div className="mt-auto d-flex flex-wrap">
+            <div className="w-100">
+              <LoadIntoSequencer s3_url={pattern.s3_url} />
+            </div>
             <div className="w-50">
               <DownloadPattern s3_url={pattern.s3_url} />
             </div>
