@@ -33,13 +33,11 @@ const persistConfig = {
 
 const versionedReducer = (state: any, action: any) => {
   if (action.type === 'persist/REHYDRATE') {
-    console.log('Full rehydration state:', state);
-    console.log('Full rehydration action:', action);
-    const persistedState = state?._persist?.version;
-    console.log('Rehydrating with version:', persistedState);
+    console.log('Checking version from payload:', action.payload?._persist?.version);
+    const persistedVersion = action.payload?._persist?.version;
     
-    if (persistedState === undefined || persistedState !== CURRENT_VERSION) {
-      console.log('Version mismatch - clearing storage');
+    if (persistedVersion === undefined || persistedVersion !== CURRENT_VERSION) {
+      console.log('Version mismatch detected - clearing storage');
       storage.removeItem('persist:root');
       return persistedReducer(undefined, action);
     }
