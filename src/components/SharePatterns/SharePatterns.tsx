@@ -20,7 +20,6 @@ const SharePatterns = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
   const user = useSelector((state: RootState) => state.auth.user);
-  const dispatch = useDispatch();
 
   const { loading, error, data } = useQuery<PatternResponse>(GET_PATTERNS, {
     variables: {
