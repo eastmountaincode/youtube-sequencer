@@ -14,8 +14,7 @@ const Sequencer: React.FC<{ sequencerId: string }> = ({ sequencerId }) => {
   const sequencerNumber = sequencerId.replace('seq', '');
 
   return (
-    <div className="sequencer border border-1 p-3 overflow-hidden bg-primary bg-opacity-10" style={{ width: '550px', maxWidth: '100%' }}>
-
+    <div className="sequencer border border-1 p-3 overflow-hidden bg-primary bg-opacity-10" style={{ width: '500px', maxWidth: '100%' }}>
 
       <h4>Sequencer {sequencerNumber}</h4>
       <div>

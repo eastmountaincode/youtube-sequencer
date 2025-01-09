@@ -32,10 +32,6 @@ const AudioWorkspace: React.FC = () => {
 
   return (
     <div className="audio-workspace border border-dark border-3 p-4">
-      {/* <div className="d-flex justify-content-center align-items-center p-2">
-        <h2>Dancing In The Datacenter</h2>
-        <i className="bi bi-brilliance fs-2 ms-2 "></i>
-      </div> */}
       <GlobalControls />
       <KeyInputArea onCommandSelect={handleCommandSelect} />
       <div className="sequencers mt-3 sequencers-grid d-flex flex-wrap justify-content-center gap-3" style={{ maxWidth: '1700px', margin: '0 auto' }}>
