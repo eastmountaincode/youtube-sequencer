@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface PersistentAudioSettingsState {
     bpm: number;
     volumes: Record<string, number>;
-    mutedModules: Record<string, boolean>; // Add this
+    mutedModules: Record<string, boolean>;
 }
 
 const initialState: PersistentAudioSettingsState = {
