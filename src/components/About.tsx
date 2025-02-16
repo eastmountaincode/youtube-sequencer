@@ -1,109 +1,10 @@
 import { useState } from "react";
-import NudgeControls from "./Sequencer/SequencerPadView/SequencerControls/NudgeControls";
-
-const ExamplePad = () => (
-  <div
-    className="d-inline-block mx-2"
-    style={{
-      width: '30px',
-      aspectRatio: '1',
-      backgroundColor: '#e9ecef',
-      borderBottomLeftRadius: '0px',
-      borderBottomRightRadius: '0px',
-      cursor: 'pointer',
-      display: 'inline-flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      position: 'relative',
-      border: 'none',
-      transition: 'background-color 0.3s ease',
-    }}
-  >
-    <span className="text-dark" style={{
-      position: 'absolute',
-      bottom: '6px',
-      right: '4px',
-      fontSize: '0.7rem',
-      opacity: 0.7,
-      userSelect: 'none'
-    }}>
-      1
-    </span>
-    <div style={{
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      width: '100%',
-      height: '5px',
-      backgroundColor: 'lightgrey',
-    }} />
-  </div>
-);
-
-const ExampleNudgeControls = () => {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '8px', maxWidth: '400px' }}>
-      <div className="d-flex flex-wrap align-items-center gap-2">
-        <label htmlFor="nudgeSlider" style={{ fontWeight: 500 }}>Nudge:</label>
-        <div style={{ position: 'relative', flex: '1', minWidth: '50px' }}>
-          {/* Background track */}
-          <div style={{
-            position: 'absolute',
-            bottom: 13,
-            left: 0,
-            width: '100%',
-            height: '5px',
-            backgroundColor: 'lightgrey',
-          }} />
-          {/* Nudge value bar */}
-          <div style={{
-            position: 'absolute',
-            bottom: 13,
-            left: '50%',
-            width: '13%',
-            height: '5px',
-            backgroundColor: '#007bff',
-          }} />
-          <input
-            id="nudgeSlider"
-            type="range"
-            value="640"
-            min="0"
-            max="1000"
-            disabled
-            style={{
-              position: 'relative',
-              width: '100%',
-              height: '20px',
-              WebkitAppearance: 'none',
-              background: 'transparent',
-              pointerEvents: 'none',
-              marginTop: '6px'
-            }}
-          />
-        </div>
-        <span style={{ minWidth: '60px', textAlign: 'right', fontFamily: 'monospace', fontSize: '14px' }}>
-          0.030s
-        </span>
-      </div>
-      <div className="d-flex flex-wrap justify-content-center gap-1">
-        <button className="btn btn-outline-light btn-sm">-0.001s</button>
-        <button className="btn btn-outline-light btn-sm">-0.01s</button>
-        <button className="btn btn-outline-light btn-sm" style={{ width: '70px' }}>Zero</button>
-        <button className="btn btn-outline-light btn-sm">+0.01s</button>
-        <button className="btn btn-outline-light btn-sm">+0.001s</button>
-      </div>
-    </div>
-  );
-};
-
-
-
-
+import { ExampleNudgeControls, ExamplePad } from "../utils/examplesForAbout";
 
 
 export default function About() {
   const [showKeyboardModal, setShowKeyboardModal] = useState(false);
+  const [showExampleVideoModal, setShowExampleVideoModal] = useState(false);
 
   return (
     <div className="container mt-5 ps-4 pe-4 lead">
@@ -127,14 +28,23 @@ export default function About() {
         </p>
       </section>
       <section className="mb-5">
+        <div className="d-flex flex-column flex-md-row align-items-start">
+          <button
+            className="btn btn-outline-light mb-3 mb-md-0"
+            onClick={() => setShowKeyboardModal(true)}
+          >
+            <i className="bi bi-keyboard me-2"></i>
+            Show Keyboard Diagram
+          </button>
 
-        <button
-          className="btn btn-outline-light"
-          onClick={() => setShowKeyboardModal(true)}
-        >
-          <i className="bi bi-keyboard me-2"></i>
-          Show Keyboard Diagram
-        </button>
+          <button
+            className="btn btn-outline-light ms-md-3"
+            onClick={() => setShowExampleVideoModal(true)}
+          >
+            <i className="bi bi-play-circle me-2"></i>
+            Show Example Video
+          </button>
+        </div>
       </section>
 
       <section className="mb-5">
@@ -399,6 +309,15 @@ export default function About() {
 
         <div className="social-links d-flex flex-wrap gap-3">
           <a
+            href="https://andrew-boylan.com/"
+            className="btn btn-outline-light btn-lg"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i className="bi bi-globe me-2"></i>andrew-boylan.com
+          </a>
+
+          <a
             href="https://www.linkedin.com/in/andrew-boylan-92842810a/"
             className="btn btn-outline-light btn-lg"
             target="_blank"
@@ -453,6 +372,47 @@ export default function About() {
                   type="button"
                   className="btn btn-primary"
                   onClick={() => setShowKeyboardModal(false)}
+                >
+                  <i className="bi bi-check-circle me-2"></i>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showExampleVideoModal && (
+        <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog modal-xl">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title text-dark">
+                  <i className="bi bi-play-circle me-2"></i>
+                  Example Video
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowExampleVideoModal(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <iframe
+                  width="100%"
+                  height="500"
+                  src="https://www.youtube.com/embed/lZfgKpY076A"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => setShowExampleVideoModal(false)}
                 >
                   <i className="bi bi-check-circle me-2"></i>
                   Close
