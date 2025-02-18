@@ -31,15 +31,19 @@ const PlayPauseControl: React.FC = () => {
 
     return (
         <div className='p-3 d-flex justify-content-center align-items-center'>
-  <button
-    className="btn btn-outline-danger"
-    onClick={handlePlayPause}
-    style={{ minWidth: '90px' }}
-  >
-    <i className={`bi ${isPlaying ? 'bi-pause-fill' : 'bi-play-fill'}`}></i>
-    {isPlaying ? ' Pause' : ' Play'}
-  </button>
-</div>
+            <button
+                className="btn btn-outline-danger"
+                onClick={handlePlayPause}
+                style={{ 
+                    minWidth: '120px', // Increased from 90px to 120px
+                    padding: '10px 20px', // Added padding for larger button size
+                    fontSize: '1.2rem' // Increased font size for better visibility
+                }}
+            >
+                <i className={`bi ${isPlaying ? 'bi-pause-fill' : 'bi-play-fill'}`}></i>
+                {isPlaying ? ' Pause' : ' Play'}
+            </button>
+        </div>
     );
 };
 
