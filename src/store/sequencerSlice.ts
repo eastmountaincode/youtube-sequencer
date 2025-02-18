@@ -46,13 +46,59 @@ const createEmptySequencer = (): Sequencer => ({
   },
   activeBank: 'A'
 });
+
 // Initial State
 const initialState: SequencerState = {
-  selectedSequencerId: null,
-  selectedPadId: null,
+  selectedSequencerId: "seq3",
+  selectedPadId: 31,
   sequencers: {
-    'seq1': createEmptySequencer(),
-    'seq2': createEmptySequencer(),
+    'seq1': {
+      padCommands: {
+        A: [
+          PadCommand.THREE, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY,
+          PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY,
+          PadCommand.THREE, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY,
+          PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY
+        ],
+        B: [
+          PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.FOUR, PadCommand.EMPTY, PadCommand.FOUR, PadCommand.FOUR, PadCommand.EMPTY,
+          PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.FOUR, PadCommand.EMPTY, PadCommand.FOUR, PadCommand.FOUR, PadCommand.EMPTY,
+          PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.FOUR, PadCommand.EMPTY, PadCommand.FOUR, PadCommand.FOUR, PadCommand.EMPTY,
+          PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.FOUR, PadCommand.EMPTY, PadCommand.FOUR, PadCommand.FOUR, PadCommand.EMPTY
+        ]
+      },
+      nudgeValues: {
+        A: [
+          0.1, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 0, 0, 0, 0, 0,
+          0.1, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 0, 0, 0, 0, 0
+        ],
+        B: Array(numPads).fill(0)
+      },
+      activeBank: 'A'
+    },
+    'seq2': {
+      padCommands: {
+        A: [
+          PadCommand.ONE, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY,
+          PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY,
+          PadCommand.ONE, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY,
+          PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY
+        ],
+        B: [
+          PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY,
+          PadCommand.ONE, PadCommand.ARROW_RIGHT, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY,
+          PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY,
+          PadCommand.ONE, PadCommand.ARROW_RIGHT, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY, PadCommand.EMPTY
+        ]
+      },
+      nudgeValues: {
+        A: Array(numPads).fill(0),
+        B: Array(numPads).fill(0)
+      },
+      activeBank: 'A'
+    },
     'seq3': createEmptySequencer(),
     'seq4': createEmptySequencer()
   }

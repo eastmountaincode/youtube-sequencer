@@ -16,12 +16,12 @@ interface VideoModuleState {
 const initialState: VideoModuleState = {
   modules: {
     'seq1': {
-      videoUrl: "",
-      videoId: "",
+      videoUrl: "https://www.youtube.com/watch?v=_2UltDBPW0w",
+      videoId: "_2UltDBPW0w",
     },
     'seq2': {
-      videoUrl: "",
-      videoId: "",
+      videoUrl: "https://www.youtube.com/watch?v=LkesIsPGlSU",
+      videoId: "LkesIsPGlSU",
     },
     'seq3': {
       videoUrl: "",
