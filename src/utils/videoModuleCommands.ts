@@ -13,7 +13,7 @@ export const sendPauseCommand = (player: YT.Player) => {
 export const sendSeekForwardCommand = (player: YT.Player) => {
     const currentTime = player.getCurrentTime();
     const duration = player.getDuration();
-    player.seekTo(Math.min(currentTime + 5, duration), true); 
+    player.seekTo(Math.min(currentTime + 5, duration), true);
 };
 
 export const sendSeekBackwardCommand = (player: YT.Player) => {
@@ -29,11 +29,17 @@ export const sendJumpToTimeCommand = (player: YT.Player, percentage: number, nud
 };
 
 export const sendVolumeChangeCommand = (player: YT.Player, volume: number) => {
-    console.log('changing volume to', volume);
+    // console.log('changing volume to', volume);
     // Volume must be between 0 and 100
     const clampedVolume = Math.max(0, Math.min(100, volume));
     player.setVolume(clampedVolume);
 };
+
+export const sendPlaybackSpeedCommand = (player: YT.Player, speed: number) => {
+    // console.log('setting speed to', speed);
+    player.setPlaybackRate(speed);
+};
+
 
 export const sendPlayerMuteCommand = (player: YT.Player) => {
     //console.log('Executing mute command');
@@ -51,11 +57,12 @@ interface CommandParameters {
     dispatch: Dispatch;
     nudgeValue?: number;
     volume?: number;
+    speed?: number;
     setIsMuted?: (isMuted: boolean) => void;
 }
 
 
-export const executeCommand = ({ command, player, dispatch, nudgeValue = 0, volume = 100, setIsMuted }: CommandParameters) => {
+export const executeCommand = ({ command, player, dispatch, nudgeValue = 0, volume = 100, setIsMuted, speed = 1 }: CommandParameters) => {
     switch (command) {
         case PadCommand.PLAY:
             sendPlayCommand(player);
@@ -102,6 +109,11 @@ export const executeCommand = ({ command, player, dispatch, nudgeValue = 0, volu
         case PadCommand.VOLUME:
             if (typeof volume === 'number') {
                 sendVolumeChangeCommand(player, volume);
+            }
+            break;
+        case PadCommand.PLAYBACK_SPEED:
+            if (typeof speed === 'number') {
+                sendPlaybackSpeedCommand(player, speed);
             }
             break;
         case PadCommand.PLAYER_MUTE:

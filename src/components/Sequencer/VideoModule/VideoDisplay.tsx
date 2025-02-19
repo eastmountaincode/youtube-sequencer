@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { executeCommand } from '../../../utils/videoModuleCommands';
 import { PadCommand } from '../../../types';
-import { useVideoModule } from '../../../hooks/useVideoModule';
 import { useDispatch, useSelector } from 'react-redux';
 import { playerRefs } from '../../../store/videoModuleSlice';
 import { RootState } from '../../../store/store';
@@ -45,6 +44,9 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
     );
 
     const isSaveModalOpen = useSelector((state: RootState) => state.modal.isSaveModalOpen);
+
+    const [playbackSpeed, setPlaybackSpeed] = useState(1);
+
 
     useEffect(() => {
         if (videoId) {
@@ -150,11 +152,26 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
         }
     };
 
+    const handleSpeedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newSpeed = Number(event.target.value) / 100;
+        setPlaybackSpeed(newSpeed);
+        const player = playerRefs[videoModuleId];
+        if (player) {
+            executeCommand({
+                command: PadCommand.PLAYBACK_SPEED,
+                player: player,
+                dispatch: dispatch,
+                speed: newSpeed
+            });
+        }
+    };
+    
+
     return (
 
 
         <div className="video-preview d-flex flex-column justify-content-center align-items-center border border-1 border-light overflow-hidden"
-            style={{ height: '370px' }}>
+            style={{ height: '430px' }}>
 
             {/* FIRST ROW */}
             <div className="d-flex justify-content-center align-items-center mt-2">
@@ -221,6 +238,32 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                     </div>
                 )}
             </div>
+            {/* PLAYBACK SPEED ROW */}
+            {videoId && isPlayerReady && (
+                <div className="d-flex flex-column align-items-center mt-3 mb-3">
+                    <div className="d-flex align-items-center gap-3">
+                        <i className="bi bi-speedometer2 fs-4"></i>
+                        <input
+                            type="range"
+                            min="25"
+                            max="200"
+                            step="25"
+                            value={playbackSpeed * 100}
+                            onChange={handleSpeedChange}
+                            className="form-range"
+                            style={{ width: '200px' }}
+                        />
+                    </div>
+                    <span className="mt-1" style={{ fontFamily: 'monospace' }}>
+                        {playbackSpeed === 1 || playbackSpeed === 2
+                            ? Math.floor(playbackSpeed)
+                            : playbackSpeed.toFixed(2)}x
+                    </span>
+                </div>
+            )}
+
+
+
             {/* SECOND ROW */}
             <div className='mb-5'>
                 {/* MUTE BUTTON */}

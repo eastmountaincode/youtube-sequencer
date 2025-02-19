@@ -35,9 +35,9 @@ const PlayPauseControl: React.FC = () => {
                 className="btn btn-outline-danger"
                 onClick={handlePlayPause}
                 style={{ 
-                    minWidth: '120px', // Increased from 90px to 120px
-                    padding: '10px 20px', // Added padding for larger button size
-                    fontSize: '1.2rem' // Increased font size for better visibility
+                    minWidth: '120px',
+                    padding: '10px 20px',
+                    fontSize: '1.2rem' 
                 }}
             >
                 <i className={`bi ${isPlaying ? 'bi-pause-fill' : 'bi-play-fill'}`}></i>

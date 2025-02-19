@@ -19,6 +19,7 @@ export enum PadCommand {
     PLAYER_MUTE = 'PLAYER_MUTE',
     PLAYER_UNMUTE = 'PLAYER_UNMUTE',
     EMPTY = 'EMPTY',
+    PLAYBACK_SPEED = 'PLAYBACK_SPEED',
 }
 
 export interface Pattern {
