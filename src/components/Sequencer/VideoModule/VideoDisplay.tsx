@@ -4,7 +4,7 @@ import { PadCommand } from '../../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { playerRefs } from '../../../store/videoModuleSlice';
 import { RootState } from '../../../store/store';
-import { setModuleMute, setVolume } from '../../../store/persistentAudioSettingsSlice';
+import { setModuleMute, setPlaybackSpeed, setVolume } from '../../../store/persistentAudioSettingsSlice';
 
 /// <reference types="youtube" />
 
@@ -45,8 +45,9 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
 
     const isSaveModalOpen = useSelector((state: RootState) => state.modal.isSaveModalOpen);
 
-    const [playbackSpeed, setPlaybackSpeed] = useState(1);
-
+    const playbackSpeed = useSelector((state: RootState) =>
+        state.persistentAudioSettings?.playbackSpeeds?.[videoModuleId] ?? 1
+    );
 
     useEffect(() => {
         if (videoId) {
@@ -152,20 +153,20 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
         }
     };
 
-    const handleSpeedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newSpeed = Number(event.target.value) / 100;
-        setPlaybackSpeed(newSpeed);
+
+    const handleSpeedChange = (newSpeed: number) => {
+        dispatch(setPlaybackSpeed({ sequencerId: videoModuleId, speed: newSpeed }));
         const player = playerRefs[videoModuleId];
         if (player) {
             executeCommand({
                 command: PadCommand.PLAYBACK_SPEED,
-                player: player,
-                dispatch: dispatch,
+                player,
+                dispatch,
                 speed: newSpeed
             });
         }
     };
-    
+
 
     return (
 
@@ -241,24 +242,19 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
             {/* PLAYBACK SPEED ROW */}
             {videoId && isPlayerReady && (
                 <div className="d-flex flex-column align-items-center mt-3 mb-3">
-                    <div className="d-flex align-items-center gap-3">
-                        <i className="bi bi-speedometer2 fs-4"></i>
-                        <input
-                            type="range"
-                            min="25"
-                            max="200"
-                            step="25"
-                            value={playbackSpeed * 100}
-                            onChange={handleSpeedChange}
-                            className="form-range"
-                            style={{ width: '200px' }}
-                        />
+                    <div className="d-flex align-items-center">
+                        <div className="btn-group gap-1">
+                            {[0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2].map((speed) => (
+                                <button
+                                    key={speed}
+                                    className={`btn btn-sm ${playbackSpeed === speed ? 'btn-warning' : 'btn-outline-primary'}`}
+                                    onClick={() => handleSpeedChange(speed)}
+                                >
+                                    {speed === 1 || speed === 2 ? Math.floor(speed) : speed}x
+                                </button>
+                            ))}
+                        </div>
                     </div>
-                    <span className="mt-1" style={{ fontFamily: 'monospace' }}>
-                        {playbackSpeed === 1 || playbackSpeed === 2
-                            ? Math.floor(playbackSpeed)
-                            : playbackSpeed.toFixed(2)}x
-                    </span>
                 </div>
             )}
 
