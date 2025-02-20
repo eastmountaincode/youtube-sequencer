@@ -25,7 +25,8 @@ export interface ValidFileStructure {
     persistentAudioSettings: {
       bpm: number;
       volumes: Record<string, number>;
-      mutedModules: Record<string, boolean>; // Add this
+      mutedModules: Record<string, boolean>;
+      playbackSpeeds: Record<string, number>;
     };
   }
   
@@ -54,6 +55,7 @@ export interface ValidFileStructure {
       typeof data.persistentAudioSettings.bpm === 'number' &&
       typeof data.persistentAudioSettings.volumes === 'object' &&
       typeof data.persistentAudioSettings.mutedModules === 'object' && 
+      typeof data.persistentAudioSettings.playbackSpeeds === 'object' && 
       typeof data.sequencer.selectedSequencerId === 'string' &&
       typeof data.sequencer.selectedPadId === 'number' &&
       hasValidSequencers

@@ -4,6 +4,7 @@ import { RootState } from '../../store/store';
 import { audioEngine } from '../../services/audioEngine';
 import { validateFile } from '../../utils/validateFile';
 import { setSaveModalOpen } from '../../store/modalSlice';
+import { migrateFileData } from '../../utils/fileMigration';
 
 const SaveLoad: React.FC = () => {
     const dispatch = useDispatch();
@@ -14,8 +15,8 @@ const SaveLoad: React.FC = () => {
         const now = new Date();
         const dateStr = now.toISOString().split('T')[0]; // Format: YYYY-MM-DD
         return `sequence_${dateStr}`;
-    }); 
-    const showSaveModal = useSelector((state: RootState) => state.modal.isSaveModalOpen);    
+    });
+    const showSaveModal = useSelector((state: RootState) => state.modal.isSaveModalOpen);
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -45,18 +46,20 @@ const SaveLoad: React.FC = () => {
                 const text = await file.text();
                 const loadedState = JSON.parse(text);
 
-                if (!validateFile(loadedState)) {
+                const migratedState = migrateFileData(loadedState);
+
+                if (!validateFile(migratedState)) {
                     setErrorMessage('Invalid file.');
                     setShowErrorModal(true);
                     return;
                 }
 
                 dispatch({ type: 'videoModuleReadiness/resetAllReadinessStates' });
-                dispatch({ type: 'videoModule/setState', payload: loadedState.videoModule });
-                dispatch({ type: 'sequencer/setState', payload: loadedState.sequencer });
-                dispatch({ type: 'persistentAudioSettings/setState', payload: loadedState.persistentAudioSettings });
+                dispatch({ type: 'videoModule/setState', payload: migratedState.videoModule });
+                dispatch({ type: 'sequencer/setState', payload: migratedState.sequencer });
+                dispatch({ type: 'persistentAudioSettings/setState', payload: migratedState.persistentAudioSettings });
 
-                audioEngine.setBpm(loadedState.persistentAudioSettings.bpm);
+                audioEngine.setBpm(migratedState.persistentAudioSettings.bpm);
                 event.target.value = '';
 
             } catch (error) {

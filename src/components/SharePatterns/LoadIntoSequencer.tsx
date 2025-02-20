@@ -5,6 +5,7 @@ import { GET_DOWNLOAD_URL } from '../../graphql/mutations';
 import { validateFile } from '../../utils/validateFile';
 import { audioEngine } from '../../services/audioEngine';
 import { useNavigate } from 'react-router-dom';
+import { migrateFileData } from '../../utils/fileMigration';
 
 interface LoadIntoSequencerProps {
   s3_url: string;
@@ -27,16 +28,19 @@ const LoadIntoSequencer = ({ s3_url }: LoadIntoSequencerProps) => {
       const text = await response.text();
       const loadedState = JSON.parse(text);
 
-      if (!validateFile(loadedState)) {
-        throw new Error('Invalid file format');
+      // Add migration step here
+      const migratedState = migrateFileData(loadedState);
+
+      if (!validateFile(migratedState)) {
+          throw new Error('Invalid file format');
       }
 
       dispatch({ type: 'videoModuleReadiness/resetAllReadinessStates' });
-      dispatch({ type: 'videoModule/setState', payload: loadedState.videoModule });
-      dispatch({ type: 'sequencer/setState', payload: loadedState.sequencer });
-      dispatch({ type: 'persistentAudioSettings/setState', payload: loadedState.persistentAudioSettings });
+      dispatch({ type: 'videoModule/setState', payload: migratedState.videoModule });
+      dispatch({ type: 'sequencer/setState', payload: migratedState.sequencer });
+      dispatch({ type: 'persistentAudioSettings/setState', payload: migratedState.persistentAudioSettings });
 
-      audioEngine.setBpm(loadedState.persistentAudioSettings.bpm);
+      audioEngine.setBpm(migratedState.persistentAudioSettings.bpm);
 
       // After successful load, navigate to sequencer
       navigate('/');
