@@ -69,6 +69,13 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                             nudgeValue: 0,
                             volume: volume
                         });
+                        // Set initial playback speed
+                        executeCommand({
+                            command: PadCommand.PLAYBACK_SPEED,
+                            player: player,
+                            dispatch: dispatch,
+                            speed: playbackSpeed
+                        });
                         // Apply initial mute state
                         if (isMuted) {
                             executeCommand({
