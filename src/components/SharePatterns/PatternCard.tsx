@@ -63,12 +63,12 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
 
             {/* Pattern metadata */}
             <div className="mt-auto">
-              <div className="mb-2">
+              {/* <div className="mb-2">
                 <small className="text-light opacity-75">
                   <i className="bi bi-person-fill me-2"></i>
                   {pattern.creator_display_name}
                 </small>
-              </div>
+              </div> */}
               <div className="d-flex flex-column flex-lg-row justify-content-between gap-2">
                 <small className="text-light opacity-75">
                   <i className="bi bi-heart-fill me-2"></i>
