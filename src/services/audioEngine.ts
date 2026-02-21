@@ -1,4 +1,4 @@
-import { setCurrentStep, setCurrentTick } from "../store/audioEngineSlice";
+import { setCurrentStep, setCurrentTick, setExecutedCommand } from "../store/audioEngineSlice";
 import { PadCommand } from "../types";
 import { executeCommand } from "../utils/videoModuleCommands";
 
@@ -20,6 +20,13 @@ export class AudioEngine {
     private bpm: number = 120;
     private metronomeVolume: number = 0.3;
     private metronomeDivision: number = 24; // 24 is half notes
+
+    // MIDI sync
+    private externalClockMode: boolean = false;
+    private tickOffset: number = 0;
+    private onTickCallback: (() => void) | null = null;
+    private onStartCallback: (() => void) | null = null;
+    private onStopCallback: (() => void) | null = null;
 
     constructor() {
         this.audioContext = new AudioContext();
@@ -79,6 +86,77 @@ export class AudioEngine {
         this.metronomeDivision = division;
     }
 
+    // MIDI sync methods
+
+    setExternalClockMode(enabled: boolean) {
+        this.externalClockMode = enabled;
+    }
+
+    setClockCallbacks(callbacks: {
+        onTick: () => void;
+        onStart: () => void;
+        onStop: () => void;
+    }) {
+        this.onTickCallback = callbacks.onTick;
+        this.onStartCallback = callbacks.onStart;
+        this.onStopCallback = callbacks.onStop;
+    }
+
+    setTickOffset(offset: number) {
+        this.tickOffset = offset;
+    }
+
+    resetTick() {
+        this.globalTick = 0;
+    }
+
+    // Called by MidiClockManager in follower mode on each incoming MIDI clock
+    advanceTick() {
+        if (!this.isConfigured) return;
+
+        const totalTicks = 6 * this.numPads;
+        const effectiveTick = ((this.globalTick + this.tickOffset) % totalTicks + totalTicks) % totalTicks;
+
+        // Metronome (plays at "now" — no look-ahead in follower mode)
+        if (this.metronomeEnabled) {
+            const isMetronomeTick = effectiveTick % this.metronomeDivision === 0;
+            if (isMetronomeTick) {
+                const isDownbeat = effectiveTick % 48 === 0;
+                this.playTick(this.audioContext.currentTime, isDownbeat);
+            }
+        }
+
+        this.dispatch(setCurrentTick(effectiveTick));
+
+        // Step boundary
+        if (effectiveTick % 6 === 0) {
+            const step = Math.floor(effectiveTick / 6) % this.numPads;
+            this.dispatch(setCurrentStep(step));
+            this.executeStepCommands(step);
+        }
+
+        // Advance
+        this.globalTick++;
+        if (this.globalTick >= totalTicks) this.globalTick = 0;
+    }
+
+    startFollowerMode() {
+        if (!this.isConfigured) return;
+        this.audioContext.resume();
+        // Resume all video players
+        Object.values(this.playerRefs).forEach((player: any) => {
+            if (player) player.playVideo?.();
+        });
+    }
+
+    stopFollowerMode() {
+        this.globalTick = 0;
+        // Pause all video players
+        Object.values(this.playerRefs).forEach((player: any) => {
+            if (player) player.pauseVideo?.();
+        });
+    }
+
     private playTick(time: number, isDownbeat: boolean) {
         this.oscillator.frequency.setValueAtTime(isDownbeat ? 1500 : 1000, time);
 
@@ -101,6 +179,9 @@ export class AudioEngine {
             throw new Error('AudioEngine must be configured before starting');
         }
 
+        // In follower mode, don't run the internal scheduler
+        if (this.externalClockMode) return;
+
         // Make sure Web Audio API is active
         this.audioContext.resume();
 
@@ -113,6 +194,9 @@ export class AudioEngine {
         this.tickInterval = (60.0 / this.bpm) / this.ppqn;
 
         this.timerID = 1;
+
+        // Leader mode: send MIDI Start
+        this.onStartCallback?.();
 
         const scheduler = () => {
             if (this.timerID !== null) {
@@ -135,6 +219,9 @@ export class AudioEngine {
                         this.executeStepCommands(step);
                     }
 
+                    // Leader mode: send MIDI clock
+                    this.onTickCallback?.();
+
                     // Increment global tick and reset to zero if necessary
                     this.globalTick++;
                     if (this.globalTick >= (6 * this.numPads)) this.globalTick = 0;
@@ -156,6 +243,8 @@ export class AudioEngine {
             this.nextTickTime = 0;
             this.globalTick = 0;
         }
+        // Leader mode: send MIDI Stop
+        this.onStopCallback?.();
     }
 
     private executeStepCommands(step: number) {
@@ -165,14 +254,19 @@ export class AudioEngine {
                 const activeBank = this.sequencers[sequencerId].activeBank;
                 const currentStepCommand = this.sequencers[sequencerId].padCommands[activeBank][step];
                 const nudgeValue = this.sequencers[sequencerId].nudgeValues[activeBank][step];
-    
+
                 if (currentStepCommand !== PadCommand.EMPTY) {
                     executeCommand({
                         player: player,
                         command: currentStepCommand,
                         dispatch: this.dispatch,
                         nudgeValue: nudgeValue
-                    })
+                    });
+                    this.dispatch(setExecutedCommand({
+                        sequencerId,
+                        command: currentStepCommand,
+                        step
+                    }));
                 }
             }
         });

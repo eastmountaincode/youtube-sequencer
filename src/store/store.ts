@@ -9,6 +9,7 @@ import persistentAudioSettingsReducer from './persistentAudioSettingsSlice';
 import authReducer from './authSlice';
 import patternsDisplayReducer from './patternsDisplaySlice';
 import modalReducer from './modalSlice';
+import midiReducer from './midiSlice';
 
 const rootReducer = combineReducers({
   audioEngine: audioEngineReducer,
@@ -19,10 +20,10 @@ const rootReducer = combineReducers({
   auth: authReducer,
   patternsDisplay: patternsDisplayReducer,
   modal: modalReducer,
-
+  midi: midiReducer,
 });
 
-const CURRENT_VERSION = 10;
+const CURRENT_VERSION = 11;
 
 const persistConfig = {
   key: 'root',

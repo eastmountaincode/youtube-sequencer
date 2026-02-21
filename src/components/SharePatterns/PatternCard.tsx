@@ -4,33 +4,25 @@ import LikeFunction from './LikeFunction';
 import { Pattern } from '../../types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import { useMutation } from '@apollo/client';
-import { DELETE_PATTERN } from '../../graphql/mutations';
-import { GET_PATTERNS, GET_USER_PATTERNS } from '../../graphql/queries';
+import * as patternService from '../../services/patternService';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
-import { getRefetchQueries } from '../../utils/refetchQueries';
 import LoadIntoSequencer from './LoadIntoSequencer';
 
 interface PatternCardProps {
   pattern: Pattern;
+  onMutate?: () => void;
 }
 
-const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
+const PatternCard: React.FC<PatternCardProps> = ({ pattern, onMutate }) => {
   const [likesCount, setLikesCount] = useState(pattern.likes_count);
   const user = useSelector((state: RootState) => state.auth.user);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
-
-  const [deletePattern] = useMutation(DELETE_PATTERN, {
-    refetchQueries: getRefetchQueries(itemsPerPage, orderBy, user?.uid)
-  });
 
   const handleConfirmDelete = async () => {
     try {
-      await deletePattern({
-        variables: { patternId: pattern.id }
-      });
+      await patternService.deletePattern(pattern.id);
       setShowDeleteModal(false);
+      onMutate?.();
     } catch (error) {
       console.error('Error deleting pattern:', error);
     }
@@ -76,7 +68,7 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
                 </small>
                 <small className="text-light opacity-75">
                   <i className="bi bi-calendar me-2"></i>
-                  {new Date(parseInt(pattern.created_at)).toLocaleDateString()}
+                  {new Date(pattern.created_at).toLocaleDateString()}
                 </small>
               </div>
             </div>
@@ -86,10 +78,10 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
           {/* Action buttons */}
           <div className="mt-auto d-flex flex-wrap">
             <div className="w-100">
-              <LoadIntoSequencer s3_url={pattern.s3_url} />
+              <LoadIntoSequencer storageKey={pattern.storage_key} />
             </div>
             <div className="w-50">
-              <DownloadPattern s3_url={pattern.s3_url} />
+              <DownloadPattern storageKey={pattern.storage_key} />
             </div>
             <div className="w-50">
               <LikeFunction
@@ -97,6 +89,7 @@ const PatternCard: React.FC<PatternCardProps> = ({ pattern }) => {
                 isLiked={pattern.liked_by_user}
                 onLikeUpdate={setLikesCount}
                 currentLikeCount={likesCount}
+                onMutate={onMutate}
               />
             </div>
           </div>

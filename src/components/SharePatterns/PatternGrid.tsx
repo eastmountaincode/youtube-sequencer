@@ -1,5 +1,3 @@
-import { useQuery } from '@apollo/client';
-import { DocumentNode } from 'graphql';
 import { Pattern } from '../../types';
 import PatternCard from './PatternCard';
 import OrderBySelect from './OrderBySelect';
@@ -8,23 +6,21 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { PatternGridProps } from '../../types';
+import { usePatterns } from '../../hooks/usePatterns';
 
-const PatternGrid = ({ title, query, userId, isActive }: PatternGridProps) => {
+const PatternGrid = ({ title, queryType, userId, isActive }: PatternGridProps) => {
     const [currentPage, setCurrentPage] = useState(0);
     const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
 
-    const { loading, error, data } = useQuery(query, {
-        variables: {
-            userId,
-            limit: itemsPerPage,
-            offset: currentPage * itemsPerPage,
-            orderBy
-        }
-    });
+    const { loading, error, data, refetch } = usePatterns(
+        queryType,
+        itemsPerPage,
+        currentPage * itemsPerPage,
+        orderBy,
+        userId
+    );
 
-    const patterns = data?.userPatterns?.patterns || data?.likedPatterns?.patterns || [];
-    const totalCount = data?.userPatterns?.totalCount || data?.likedPatterns?.totalCount || 0;
-    const totalPages = Math.ceil(totalCount / itemsPerPage);
+    const totalPages = Math.ceil((data?.totalCount || 0) / itemsPerPage);
 
     return (
         <div className={`tab-pane fade ${isActive ? 'show active' : ''}`}>
@@ -40,13 +36,13 @@ const PatternGrid = ({ title, query, userId, isActive }: PatternGridProps) => {
                 </div>
             ) : error ? (
                 <div className="alert alert-danger">
-                    Error loading patterns: {error.message}
+                    Error loading patterns: {error}
                 </div>
             ) : (
                 <>
                     <div className="row">
-                        {patterns.map((pattern: Pattern) => (
-                            <PatternCard key={pattern.id} pattern={pattern} />
+                        {(data?.patterns || []).map((pattern: Pattern) => (
+                            <PatternCard key={pattern.id} pattern={pattern} onMutate={refetch} />
                         ))}
                     </div>
                     <PaginationControls

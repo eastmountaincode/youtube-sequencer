@@ -1,14 +1,14 @@
 .bank-switch-container {
     display: flex;
     justify-content: center;
-    margin: 15px;
+    margin: 8px 0;
 }
 
 .bank-switch {
     position: relative;
     display: inline-block;
-    width: 140px;
-    height: 34px;
+    width: 100px;
+    height: 26px;
 }
 
 .bank-switch input {
@@ -24,62 +24,68 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #212529;
-    transition: .2s;
-    border-radius: 34px;
-    border: 1px solid #e9ecef;
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: .2s ease;
+    border: 1px solid var(--glass-border);
+    border-radius: 13px !important;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 32px;
+    padding: 0 24px;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.06),
+        0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .bank-a,
 .bank-b {
     z-index: 1;
-    font-size: 12px;
-    font-weight: bold;
-    transition: .2s;
-    color: #e9ecef;
+    font-size: 10px;
+    font-weight: 600;
+    transition: .2s ease;
+    color: var(--text-muted);
     user-select: none;
-    margin-bottom: 1px;
-
 }
-
 
 .slider:before {
     position: absolute;
     content: "";
-    height: 28px;
-    width: 70px;
-    left: 2px;
-    bottom: 2px;
-    background-color: #e9ecef;
-    transition: .2s;
-    border-radius: 34px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    height: 22px;
+    width: 50px;
+    left: 1px;
+    bottom: 1px;
+    background: linear-gradient(180deg, #33d1f0 0%, var(--accent) 50%, var(--accent-dim) 100%);
+    transition: .2s ease;
+    border-radius: 12px !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 2px 6px var(--accent-glow);
 }
 
 input:checked+.slider {
-    background-color: #212529;
+    background: var(--glass-bg);
 }
 
 input:checked+.slider:before {
-    transform: translateX(64px);
+    transform: translateX(46px);
 }
 
 input:checked+.slider .bank-a {
-    color: #e9ecef;
+    color: var(--text-muted);
 }
 
 input:checked+.slider .bank-b {
-    color: #212529;
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .slider .bank-a {
-    color: #212529;
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .slider .bank-b {
-    color: #e9ecef;
+    color: var(--text-muted);
 }

@@ -1,28 +1,20 @@
-import { useMutation } from '@apollo/client';
 import React, { useState } from 'react';
-import { GET_DOWNLOAD_URL } from '../../graphql/mutations';
-import './DownloadPattern.css';  // Correct spelling
-
-
+import * as patternService from '../../services/patternService';
+import './DownloadPattern.css';
 
 interface DownloadPatternProps {
-  s3_url: string;
+  storageKey: string;
 }
 
-const DownloadPattern = ({ s3_url }: DownloadPatternProps) => {
-  const [getDownloadUrl] = useMutation(GET_DOWNLOAD_URL);
+const DownloadPattern = ({ storageKey }: DownloadPatternProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
 
   const handleDownload = async () => {
     setIsDownloading(true);
     try {
-      const { data } = await getDownloadUrl({
-        variables: { s3_url }
-      });
-
-      console.log('Download URL:', data.getDownloadUrl.url);
-      
-      window.location.href = data.getDownloadUrl.url;
+      const { url } = await patternService.getDownloadUrl(storageKey);
+      console.log('Download URL:', url);
+      window.location.href = url;
     } catch (error) {
       console.error('Download error:', error);
     } finally {
@@ -31,13 +23,14 @@ const DownloadPattern = ({ s3_url }: DownloadPatternProps) => {
   };
 
   return (
-    <button 
-    className="btn btn-outline-primary btn-sm rounded-0 btn-rounded-bottom-left w-100 p-2"
+    <button
+    className="btn btn-outline-primary btn-sm btn-rounded-bottom-left w-100 p-2"
     onClick={handleDownload}
     disabled={isDownloading}
-    style={{ 
+    style={{
       borderLeft: 'none',
-      borderBottom: 'none'
+      borderBottom: 'none',
+      borderRadius: '0',
     }}
     >
       {isDownloading ? (

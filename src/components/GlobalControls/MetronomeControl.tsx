@@ -23,47 +23,37 @@ const MetronomeControl: React.FC = () => {
         audioEngine.setMetronomeDivision(division);
     };
 
+    const btnStyle = (active: boolean): React.CSSProperties => ({
+        background: active ? 'var(--accent)' : 'var(--bg-tertiary)',
+        border: '1px solid var(--border-color)',
+        color: active ? '#000' : 'var(--text-secondary)',
+        padding: '2px 6px',
+        fontSize: '9px',
+        cursor: 'pointer',
+        fontWeight: active ? 600 : 400,
+    });
+
     return (
-        <div className="d-flex align-items-center gap-2 flex-column justify-content-center p-3">
+        <div className="d-flex align-items-center gap-2">
             <button
-                className={`btn btn-sm d-flex align-items-center justify-content-center ${metronomeEnabled ? 'btn-success' : 'btn-outline-secondary'}`}
                 onClick={handleMetronomeToggle}
-                style={{ width: '160px' }}
+                style={{ ...btnStyle(metronomeEnabled), minWidth: '36px' }}
             >
-                <i className="bi bi-alarm me-2"></i>
-                {metronomeEnabled ? 'Metronome Is On' : 'Metronome Is Off'}
+                MET
             </button>
-            <div className="d-flex align-items-center gap-2" style={{ minWidth: '150px' }}>
-                <i className="bi bi-volume-down"></i>
-                <input
-                    type="range"
-                    className="form-range"
-                    min="0"
-                    max="100"
-                    value={metronomeVolume}
-                    onChange={handleMetronomeVolumeChange}
-                />
-                <i className="bi bi-volume-up"></i>
-            </div>
-            <div className="d-flex gap-2 mt-2">
-                <button
-                    className={`btn btn-sm ${metronomeDivision === 24 ? 'btn-primary' : 'btn-outline-primary'}`}
-                    onClick={() => handleDivisionChange(24)}
-                >
-                    1/2
-                </button>
-                <button
-                    className={`btn btn-sm ${metronomeDivision === 12 ? 'btn-primary' : 'btn-outline-primary'}`}
-                    onClick={() => handleDivisionChange(12)}
-                >
-                    1/4
-                </button>
-                <button
-                    className={`btn btn-sm ${metronomeDivision === 6 ? 'btn-primary' : 'btn-outline-primary'}`}
-                    onClick={() => handleDivisionChange(6)}
-                >
-                    1/8
-                </button>
+            <input
+                type="range"
+                className="form-range"
+                min="0"
+                max="100"
+                value={metronomeVolume}
+                onChange={handleMetronomeVolumeChange}
+                style={{ width: '50px', height: '4px' }}
+            />
+            <div className="d-flex gap-1">
+                <button style={btnStyle(metronomeDivision === 24)} onClick={() => handleDivisionChange(24)}>1/2</button>
+                <button style={btnStyle(metronomeDivision === 12)} onClick={() => handleDivisionChange(12)}>1/4</button>
+                <button style={btnStyle(metronomeDivision === 6)} onClick={() => handleDivisionChange(6)}>1/8</button>
             </div>
         </div>
     );

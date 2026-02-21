@@ -1,17 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useMutation } from '@apollo/client';
-import { LIKE_PATTERN } from '../../graphql/mutations';
+import * as patternService from '../../services/patternService';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Tooltip } from 'bootstrap';
 import './LikeFunction.css';
-import { getRefetchQueries } from '../../utils/refetchQueries';
 
 interface LikeFunctionProps {
     patternId: string;
     isLiked: boolean;
     onLikeUpdate: (likesCount: number) => void;
-    currentLikeCount: number; // Add this prop
+    currentLikeCount: number;
+    onMutate?: () => void;
 }
 
 const DisabledLikeButton: React.FC = () => {
@@ -50,6 +49,7 @@ const EnabledLikeButton: React.FC<{
     onClick: () => void;
 }> = ({ liked, onClick }) => (
     <button
+        type="button"
         onClick={onClick}
         data-testid="like-button"
         className="btn p-0 border-0 w-100 d-flex justify-content-center align-items-center like-button"
@@ -59,13 +59,9 @@ const EnabledLikeButton: React.FC<{
     </button>
 );
 
-const LikeFunction: React.FC<LikeFunctionProps> = ({ patternId, isLiked, onLikeUpdate, currentLikeCount }) => {
+const LikeFunction: React.FC<LikeFunctionProps> = ({ patternId, isLiked, onLikeUpdate, currentLikeCount, onMutate }) => {
     const user = useSelector((state: RootState) => state.auth.user);
     const [liked, setLiked] = useState(isLiked);
-    const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
-    const [likePattern] = useMutation(LIKE_PATTERN, {
-        refetchQueries: getRefetchQueries(itemsPerPage, orderBy, user?.uid)
-    });
 
     useEffect(() => {
         setLiked(isLiked);
@@ -73,16 +69,10 @@ const LikeFunction: React.FC<LikeFunctionProps> = ({ patternId, isLiked, onLikeU
 
     const handleLikeClick = async () => {
         try {
-            const { data } = await likePattern({
-                variables: {
-                    patternId,
-                    userId: user.uid
-                }
-            });
+            await patternService.toggleLike(patternId, user.uid);
             const newLikeCount = liked ? currentLikeCount - 1 : currentLikeCount + 1;
             setLiked(!liked);
-            onLikeUpdate(newLikeCount); // update parent component, PatternCard
-
+            onLikeUpdate(newLikeCount);
         } catch (error) {
             console.error('Error toggling like:', error);
         }

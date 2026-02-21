@@ -8,6 +8,8 @@ import { playerRefs } from "../../store/videoModuleSlice";
 const PlayPauseControl: React.FC = () => {
     const dispatch = useDispatch();
     const { isPlaying } = useSelector((state: RootState) => state.audioEngine);
+    const syncMode = useSelector((state: RootState) => state.midi.syncMode);
+    const isFollowerMode = syncMode === 'follower';
     const readyStates = useSelector((state: RootState) => state.videoModuleReadiness.modules);
     const readyModuleIds = Object.entries(readyStates)
         .filter(([_, state]) => state.isPlayerReady)
@@ -30,20 +32,24 @@ const PlayPauseControl: React.FC = () => {
     };
 
     return (
-        <div className='p-3 d-flex justify-content-center align-items-center'>
-            <button
-                className="btn btn-outline-danger"
-                onClick={handlePlayPause}
-                style={{ 
-                    minWidth: '120px',
-                    padding: '10px 20px',
-                    fontSize: '1.2rem' 
-                }}
-            >
-                <i className={`bi ${isPlaying ? 'bi-pause-fill' : 'bi-play-fill'}`}></i>
-                {isPlaying ? ' Pause' : ' Play'}
-            </button>
-        </div>
+        <button
+            onClick={handlePlayPause}
+            disabled={isFollowerMode}
+            style={{
+                background: isFollowerMode
+                    ? 'var(--bg-tertiary)'
+                    : isPlaying ? 'var(--danger)' : 'var(--success)',
+                border: isFollowerMode ? '1px solid var(--border-color)' : 'none',
+                color: isFollowerMode ? 'var(--text-muted)' : '#000',
+                padding: '6px 16px',
+                fontSize: '11px',
+                fontWeight: 600,
+                cursor: isFollowerMode ? 'not-allowed' : 'pointer',
+                minWidth: '72px',
+            }}
+        >
+            {isFollowerMode ? 'EXT' : isPlaying ? '■ STOP' : '▶ PLAY'}
+        </button>
     );
 };
 

@@ -4,7 +4,8 @@ interface PersistentAudioSettingsState {
     bpm: number;
     volumes: Record<string, number>;
     mutedModules: Record<string, boolean>;
-    playbackSpeeds: { [key: string]: number }; 
+    playbackSpeeds: { [key: string]: number };
+    speedControlTarget: string | null;
 }
 
 const initialState: PersistentAudioSettingsState = {
@@ -26,7 +27,8 @@ const initialState: PersistentAudioSettingsState = {
         'seq2': 1,
         'seq3': 1,
         'seq4': 1
-    }
+    },
+    speedControlTarget: null
 };
 
 export const persistentAudioSettingsSlice = createSlice({
@@ -53,10 +55,13 @@ export const persistentAudioSettingsSlice = createSlice({
                 state.mutedModules = {};
             }
             state.mutedModules[action.payload.sequencerId] = action.payload.isMuted;
+        },
+        setSpeedControlTarget: (state, action: PayloadAction<string | null>) => {
+            state.speedControlTarget = action.payload;
         }
     }
 });
 
-export const { setBpm, setVolume, setModuleMute, setPlaybackSpeed } = persistentAudioSettingsSlice.actions;
+export const { setBpm, setVolume, setModuleMute, setPlaybackSpeed, setSpeedControlTarget } = persistentAudioSettingsSlice.actions;
 export default persistentAudioSettingsSlice.reducer;
 

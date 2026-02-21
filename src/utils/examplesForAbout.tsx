@@ -2,26 +2,23 @@ export const ExamplePad = () => (
     <div
         className="d-inline-block mx-2"
         style={{
-            width: '30px',
+            width: '24px',
             aspectRatio: '1',
-            backgroundColor: '#e9ecef',
-            borderBottomLeftRadius: '0px',
-            borderBottomRightRadius: '0px',
+            backgroundColor: 'var(--bg-tertiary)',
+            border: '1px solid var(--border-color)',
             cursor: 'pointer',
             display: 'inline-flex',
             justifyContent: 'center',
             alignItems: 'center',
             position: 'relative',
-            border: 'none',
-            transition: 'background-color 0.3s ease',
         }}
     >
-        <span className="text-dark" style={{
+        <span style={{
             position: 'absolute',
-            bottom: '6px',
-            right: '4px',
-            fontSize: '0.7rem',
-            opacity: 0.7,
+            bottom: '2px',
+            right: '3px',
+            fontSize: '8px',
+            color: 'var(--text-muted)',
             userSelect: 'none'
         }}>
             1
@@ -31,38 +28,51 @@ export const ExamplePad = () => (
             bottom: 0,
             left: 0,
             width: '100%',
-            height: '5px',
-            backgroundColor: 'lightgrey',
+            height: '2px',
+            backgroundColor: 'var(--accent)',
         }} />
     </div>
 );
 
 export const ExampleNudgeControls = () => {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '8px', maxWidth: '400px' }}>
-            <div className="d-flex flex-wrap align-items-center gap-2">
-                <label htmlFor="nudgeSlider" style={{ fontWeight: 500 }}>Nudge:</label>
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            padding: '12px',
+            maxWidth: '350px',
+            backgroundColor: 'var(--bg-secondary)',
+            border: '1px solid var(--border-color)'
+        }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <label style={{
+                    fontSize: '10px',
+                    fontWeight: 500,
+                    color: 'var(--text-secondary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
+                }}>
+                    NUDGE
+                </label>
                 <div style={{ position: 'relative', flex: '1', minWidth: '50px' }}>
-                    {/* Background track */}
                     <div style={{
                         position: 'absolute',
-                        bottom: 13,
+                        bottom: 8,
                         left: 0,
                         width: '100%',
-                        height: '5px',
-                        backgroundColor: 'lightgrey',
+                        height: '4px',
+                        backgroundColor: 'var(--bg-tertiary)',
                     }} />
-                    {/* Nudge value bar */}
                     <div style={{
                         position: 'absolute',
-                        bottom: 13,
+                        bottom: 8,
                         left: '50%',
                         width: '13%',
-                        height: '5px',
-                        backgroundColor: '#007bff',
+                        height: '4px',
+                        backgroundColor: 'var(--accent)',
                     }} />
                     <input
-                        id="nudgeSlider"
                         type="range"
                         value="640"
                         min="0"
@@ -75,20 +85,36 @@ export const ExampleNudgeControls = () => {
                             WebkitAppearance: 'none',
                             background: 'transparent',
                             pointerEvents: 'none',
-                            marginTop: '6px'
                         }}
                     />
                 </div>
-                <span style={{ minWidth: '60px', textAlign: 'right', fontFamily: 'monospace', fontSize: '14px' }}>
+                <span style={{
+                    minWidth: '50px',
+                    textAlign: 'right',
+                    fontFamily: 'monospace',
+                    fontSize: '11px',
+                    color: 'var(--accent)'
+                }}>
                     0.030s
                 </span>
             </div>
-            <div className="d-flex flex-wrap justify-content-center gap-1">
-                <button className="btn btn-outline-light btn-sm">-0.001s</button>
-                <button className="btn btn-outline-light btn-sm">-0.01s</button>
-                <button className="btn btn-outline-light btn-sm" style={{ width: '70px' }}>Zero</button>
-                <button className="btn btn-outline-light btn-sm">+0.01s</button>
-                <button className="btn btn-outline-light btn-sm">+0.001s</button>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '4px' }}>
+                {['-0.01', '-0.001', '0', '+0.001', '+0.01'].map(val => (
+                    <button
+                        key={val}
+                        style={{
+                            padding: '4px 8px',
+                            backgroundColor: val === '0' ? 'var(--accent)' : 'transparent',
+                            border: '1px solid var(--border-color)',
+                            color: val === '0' ? '#000' : 'var(--text-secondary)',
+                            fontSize: '9px',
+                            fontWeight: 500,
+                            cursor: 'pointer'
+                        }}
+                    >
+                        {val}
+                    </button>
+                ))}
             </div>
         </div>
     );
