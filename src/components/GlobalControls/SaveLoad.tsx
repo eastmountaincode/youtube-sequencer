@@ -69,20 +69,26 @@ const SaveLoad: React.FC = () => {
         }
     };
 
+    const btnStyle: React.CSSProperties = {
+        background: 'var(--bg-tertiary)',
+        border: '1px solid var(--border-color)',
+        color: 'var(--text-secondary)',
+        padding: '4px 8px',
+        fontSize: '10px',
+        cursor: 'pointer',
+    };
+
     return (
         <>
-            <div className="save-load d-flex gap-2 p-3 justify-content-center flex-column align-items-center">
+            <div className="save-load d-flex gap-1">
                 <button
-                    className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center"
                     onClick={() => dispatch(setSaveModalOpen(true))}
-                    style={{ width: '155px' }}
+                    style={btnStyle}
                 >
-                    <i className="bi bi-download me-2"></i>
-                    Save Pattern
+                    SAVE
                 </button>
-                <label className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center" style={{ width: '155px' }}>
-                    <i className="bi bi-upload me-2"></i>
-                    Load Pattern
+                <label style={{ ...btnStyle, display: 'flex', alignItems: 'center' }}>
+                    LOAD
                     <input
                         type="file"
                         accept=".dance"

@@ -5,6 +5,7 @@ interface VideoModuleReadinessState {
     isPlayerReady: boolean;
     isLoadButtonPressed: boolean;
   }>;
+  focusedModuleId: string | null;
 }
 
 const initialState: VideoModuleReadinessState = {
@@ -13,7 +14,8 @@ const initialState: VideoModuleReadinessState = {
     'seq2': { isPlayerReady: false, isLoadButtonPressed: false },
     'seq3': { isPlayerReady: false, isLoadButtonPressed: false },
     'seq4': { isPlayerReady: false, isLoadButtonPressed: false }
-  }
+  },
+  focusedModuleId: null
 };
 
 export const videoModuleReadinessSlice = createSlice({
@@ -30,10 +32,13 @@ export const videoModuleReadinessSlice = createSlice({
       Object.keys(state.modules).forEach(moduleId => {
         state.modules[moduleId] = { isPlayerReady: false, isLoadButtonPressed: false };
       });
+    },
+    setFocusedModule: (state, action: PayloadAction<string | null>) => {
+      state.focusedModuleId = action.payload;
     }
   }
 });
 
 
-export const { setModulePlayerReady, setModuleLoadButtonPressed, resetAllReadinessStates } = videoModuleReadinessSlice.actions;
+export const { setModulePlayerReady, setModuleLoadButtonPressed, resetAllReadinessStates, setFocusedModule } = videoModuleReadinessSlice.actions;
 export default videoModuleReadinessSlice.reducer;

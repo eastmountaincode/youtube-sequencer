@@ -37,13 +37,12 @@ const SequencerControls: React.FC<SequencerControlsProps> = ({
             className={`d-flex ${isNarrow ? 'flex-column' : 'justify-content-between'} align-items-center mt-4 mb-4 gap-3`}
         >
             <div className="d-flex align-items-center">
-                {selectedPadId !== null && selectedSequencerId === sequencerId && (
-                    <NudgeControls
-                        sequencerId={sequencerId}
-                        selectedPadId={selectedPadId}
-                        padNudgeValues={padNudgeValues}
-                    />
-                )}
+                <NudgeControls
+                    sequencerId={sequencerId}
+                    selectedPadId={selectedPadId}
+                    padNudgeValues={padNudgeValues}
+                    isActive={selectedPadId !== null && selectedSequencerId === sequencerId}
+                />
             </div>
             <ClearAllPadsButton
                 sequencerId={sequencerId}

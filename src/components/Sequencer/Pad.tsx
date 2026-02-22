@@ -12,6 +12,7 @@ interface PadProps {
 }
 
 const Pad: React.FC<PadProps> = ({ id, value, isActive, isSelected, nudgeValue, onClick }) => {
+  const hasCommand = value !== PadCommand.EMPTY;
 
   return (
     <div
@@ -19,59 +20,54 @@ const Pad: React.FC<PadProps> = ({ id, value, isActive, isSelected, nudgeValue, 
       onClick={onClick}
       style={{
         aspectRatio: '1',
-        backgroundColor: isActive ? '#007bff' : '#e9ecef',
-        borderBottomLeftRadius: '0px',
-        borderBottomRightRadius: '0px',
+        background: isActive
+          ? 'linear-gradient(180deg, #33d1f0 0%, var(--accent) 50%, var(--accent-dim) 100%)'
+          : hasCommand
+            ? 'linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.04) 100%)'
+            : 'rgba(255, 255, 255, 0.04)',
         cursor: 'pointer',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        fontSize: '1.5rem',
-        fontWeight: 'bold',
         position: 'relative',
-        border: 'none',
-        outline: isSelected ? '4px solid #ff9800' : 'none',
-        transition: 'background-color 0.3s ease',
-
+        border: isSelected ? '2px solid var(--accent)' : '1px solid var(--border-color)',
+        borderRadius: 'var(--radius-sm)',
+        transition: 'all 0.15s ease',
+        boxShadow: isActive
+          ? 'inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 12px var(--accent-glow)'
+          : 'inset 0 1px 0 rgba(255,255,255,0.06), 0 1px 4px rgba(0,0,0,0.1)',
       }}
     >
       {/* Command icon */}
-      <div className="text-dark" style={{marginBottom: '3px'}}>
-        {value !== PadCommand.EMPTY && getIcon(value)}
+      <div style={{
+        fontSize: '0.75rem',
+        color: isActive ? '#fff' : 'var(--text-primary)',
+        fontWeight: 600
+      }}>
+        {hasCommand && getIcon(value)}
       </div>
       {/* id number */}
-      <span className="text-dark" style={{
+      <span style={{
         position: 'absolute',
-        bottom: '6px',
-        right: '4px',
-        fontSize: '0.7rem',
-        opacity: 0.7,
-        userSelect: 'none'
+        top: '1px',
+        left: '2px',
+        fontSize: '8px',
+        color: isActive ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)',
+        userSelect: 'none',
+        lineHeight: 1
       }}>
         {id + 1}
       </span>
-      {/* Background track */}
-      <div style={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        width: '100%',
-        height: '5px',
-        backgroundColor: 'lightgrey',
-
-      }} />
-
-      {/* Nudge value bar */}
+      {/* Nudge indicator */}
       {nudgeValue !== 0 && (
         <div style={{
           position: 'absolute',
-          bottom: 0,
+          bottom: '1px',
           left: '50%',
           transform: `translateX(${nudgeValue < 0 ? '-100%' : '0%'})`,
           width: `${Math.min(Math.abs(nudgeValue * 50), 50)}%`,
-
-          height: '5px',
-          backgroundColor: '#007bff',
+          height: '2px',
+          backgroundColor: 'var(--accent)',
         }} />
       )}
     </div>

@@ -8,6 +8,9 @@ const BpmControl: React.FC = () => {
 
     const dispatch = useDispatch();
     const bpm = useSelector((state: RootState) => state.persistentAudioSettings.bpm);
+    const syncMode = useSelector((state: RootState) => state.midi.syncMode);
+    const detectedBpm = useSelector((state: RootState) => state.midi.detectedBpm);
+    const isFollowerMode = syncMode === 'follower';
     const [tapTimes, setTapTimes] = useState<number[]>([]);
     const [lastTapTime, setLastTapTime] = useState(0);
     const [bpmInput, setBpmInput] = useState(bpm);
@@ -75,57 +78,41 @@ const BpmControl: React.FC = () => {
         }
     }, [tapTimes, lastTapTime]);
 
+    const btnStyle: React.CSSProperties = {
+        background: 'var(--bg-tertiary)',
+        border: '1px solid var(--border-color)',
+        color: 'var(--text-secondary)',
+        padding: '2px 6px',
+        fontSize: '10px',
+        cursor: 'pointer',
+    };
+
+    const displayBpm = isFollowerMode && detectedBpm ? detectedBpm : bpmInput;
+
+    const disabledBtnStyle: React.CSSProperties = {
+        ...btnStyle,
+        opacity: 0.4,
+        cursor: 'not-allowed',
+    };
+
     return (
-        <div className="bpm-control p-3">
-            <div className="d-flex flex-column gap-2 justify-content-center">
-                <div className="d-flex flex-wrap align-items-center gap-2">
-                    <div className='d-flex align-items-center' style={{ minWidth: '70px' }}>
-                        <i className="bi bi-heart-pulse-fill fs-4"><span className='ms-1' style={{userSelect: 'none'}}>BPM</span></i>
-                    </div>
-    
-                    <div className="input-group" style={{ minWidth: '120px', maxWidth: '160px', flex: '1' }}>
-                        <button
-                            className="btn btn-outline-secondary btn-sm"
-                            onClick={() => adjustBpm(-1)}
-                        >
-                            <i className="bi bi-dash-circle"></i>
-                        </button>
-                        <input
-                            type="number"
-                            className="form-control form-control-sm text-center"
-                            value={bpmInput}
-                            onChange={handleInputChange}
-                            onFocus={(e) => e.target.select()}
-                            onClick={(e) => (e.target as HTMLInputElement).select()}
-                            min={30}
-                            max={300}
-                        />
-                        <button
-                            className="btn btn-outline-secondary btn-sm"
-                            onClick={() => adjustBpm(1)}
-                        >
-                            <i className="bi bi-plus-circle"></i>
-                        </button>
-                    </div>
-    
-                    <button
-                        className="btn btn-outline-secondary btn-sm"
-                        onClick={handleTapTempo}
-                        style={{ minWidth: '60px' }}
-                    >
-                        <i className="bi bi-hand-index-thumb"></i> Tap
-                    </button>
-                </div>
-                <input
-                    type="range"
-                    className="form-range"
-                    value={bpm}
-                    onChange={handleSliderChange}
-                    min={30}
-                    max={300}
-                    step={1}
-                />
-            </div>
+        <div className="bpm-control d-flex align-items-center gap-2">
+            <span style={{ color: 'var(--text-muted)', fontSize: '10px' }}>BPM</span>
+            <button style={isFollowerMode ? disabledBtnStyle : btnStyle} onClick={() => adjustBpm(-1)} disabled={isFollowerMode}>-</button>
+            <input
+                type="number"
+                className="form-control form-control-sm text-center"
+                value={displayBpm}
+                onChange={handleInputChange}
+                onFocus={(e) => e.target.select()}
+                onClick={(e) => (e.target as HTMLInputElement).select()}
+                min={30}
+                max={300}
+                disabled={isFollowerMode}
+                style={{ width: '50px', fontSize: '10px', padding: '2px 4px', opacity: isFollowerMode ? 0.6 : 1 }}
+            />
+            <button style={isFollowerMode ? disabledBtnStyle : btnStyle} onClick={() => adjustBpm(1)} disabled={isFollowerMode}>+</button>
+            <button style={isFollowerMode ? disabledBtnStyle : btnStyle} onClick={handleTapTempo} disabled={isFollowerMode}>TAP</button>
         </div>
     );
     

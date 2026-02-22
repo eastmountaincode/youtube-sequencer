@@ -7,12 +7,14 @@ import KeyInputArea from "./KeyInputArea";
 import { PadCommand } from "../types";
 import { updatePadCommand } from "../store/sequencerSlice";
 import { useAudioEngine } from "../hooks/useAudioEngine";
+import { useMidi } from "../hooks/useMidi";
 import './AudioWorkspace.css'
 
 const AudioWorkspace: React.FC = () => {
   const sequencers = useSelector((state: RootState) => state.sequencer.sequencers);
   const sequencerIds = Object.keys(sequencers);
   useAudioEngine({ sequencerIds });
+  useMidi();
 
   const dispatch = useDispatch();
   const selectedSequencerId = useSelector((state: RootState) => state.sequencer.selectedSequencerId);
@@ -31,16 +33,16 @@ const AudioWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="audio-workspace border border-dark border-3 p-4">
-      <GlobalControls />
-      <KeyInputArea onCommandSelect={handleCommandSelect} />
-      <div className="sequencers mt-3 sequencers-grid d-flex flex-wrap justify-content-center gap-3" style={{ maxWidth: '1700px', margin: '0 auto' }}>
-
+    <div className="audio-workspace">
+      <div className="controls-panel">
+        <GlobalControls />
+        <KeyInputArea onCommandSelect={handleCommandSelect} />
+      </div>
+      <div className="sequencers p-2 d-flex flex-wrap justify-content-center gap-2">
         {sequencerIds.map(sequencerId => (
           <Sequencer key={sequencerId} sequencerId={sequencerId} />
         ))}
       </div>
-
     </div>
   );
 }

@@ -1,9 +1,18 @@
+.controls-panel {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 0 !important;
+}
+
 .sequencers-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
-  
+
   @media (max-width: 1175px) {
     .sequencers-grid {
       grid-template-columns: 1fr;
@@ -12,4 +21,16 @@
       margin: 0px 180px;
     }
   }
-  
+
+  @media (max-width: 768px) {
+    .sequencers {
+      margin: 0px 20px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .sequencers {
+      margin: 0px 8px;
+      overflow-x: auto;
+    }
+  }

@@ -32,6 +32,7 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
   // get selected pad id from redux store
   const selectedPadId = useSelector((state: RootState) => state.sequencer.selectedPadId);
   const selectedSequencerId = useSelector((state: RootState) => state.sequencer.selectedSequencerId);
+  const focusedModuleId = useSelector((state: RootState) => state.videoModuleReadiness.focusedModuleId);
 
   const numPads = 32;
 
@@ -41,6 +42,8 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
   const height = 4;
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      // Don't handle arrow keys if a video module is focused (they're used for seeking)
+      if (focusedModuleId) return;
       if (selectedSequencerId !== sequencerId || selectedPadId === null) return;
 
       switch (event.key) {
@@ -73,7 +76,7 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedPadId, selectedSequencerId, sequencerId, onPadSelect]);
+  }, [selectedPadId, selectedSequencerId, sequencerId, onPadSelect, focusedModuleId]);
 
   const pads = Array(numPads).fill(null).map((_, index) => ({
     id: index,
@@ -84,7 +87,7 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
   }));
 
   return (
-    <div className="sequencer-pad-view ms-3 me-3">
+    <div className="sequencer-pad-view">
       {/* COMMAND BANK HERE */}
       <div>
         <CommandBankControl sequencerId={sequencerId} />
@@ -92,7 +95,7 @@ const SequencerPadView: React.FC<SequencerPadViewProps> = ({
       <div className="pad-grid" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(8, 1fr)',
-        gap: '10px'
+        gap: '4px'
       }}>
         {pads.map((pad) => (
           <Pad

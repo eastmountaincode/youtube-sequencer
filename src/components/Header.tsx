@@ -10,95 +10,81 @@ export default function Header() {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <nav className="navbar navbar-expand-md navbar-dark bg-dark border-bottom border-secondary border-3">
-      <div className="container-fluid">
-        {/* Logo/Brand Section */}
-        <NavLink className="navbar-brand d-flex flex-column me-4 p-1 mt-3 mt-md-2 ms-2" to="/">
-          <span className="fs-3 fw-bold lh-1">Youtube</span>
-          <span className="fs-3 fw-bold">Sequencer</span>
+    <nav className="header">
+      <NavLink className="header-brand" to="/">
+        <span className="brand-yt">YouTube</span>
+        <span className="brand-seq">Sequencer</span>
+      </NavLink>
+
+      <button
+        className="header-toggle"
+        type="button"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <span className="toggle-bar"></span>
+        <span className="toggle-bar"></span>
+        <span className="toggle-bar"></span>
+      </button>
+
+      <div className={`header-nav ${isExpanded ? 'expanded' : ''}`}>
+        <NavLink
+          className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+          to="/"
+          onClick={() => setIsExpanded(false)}
+        >
+          Sequencer
+        </NavLink>
+        <NavLink
+          className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+          to="/share"
+          onClick={() => setIsExpanded(false)}
+        >
+          Share
+        </NavLink>
+        <NavLink
+          className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+          to="/about"
+          onClick={() => setIsExpanded(false)}
+        >
+          About
         </NavLink>
 
-        {/* Mobile Hamburger Button */}
-        <button
-          className="navbar-toggler me-2"
-          type="button"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div className={`navbar-collapse ${isExpanded ? 'show' : 'collapse'}`}>
-          {/* Main Navigation */}
-          <ul className="navbar-nav ps-3">
-            <li className="nav-item">
+        <div className="header-auth">
+          {user ? (
+            <>
               <NavLink
-                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-                to="/"
+                to="/account"
+                className="auth-user"
                 onClick={() => setIsExpanded(false)}
               >
-                Sequencer
+                {user.photoURL && (
+                  <img
+                    src={user.photoURL}
+                    alt={user.displayName || 'User'}
+                    className="user-avatar"
+                  />
+                )}
+                <span className="user-name">{user.displayName}</span>
               </NavLink>
-            </li>
-
-            <li className="nav-item">
-              <NavLink
-                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-                to="/share"
-                onClick={() => setIsExpanded(false)}
+              <button
+                className="auth-btn"
+                onClick={() => {
+                  auth.signOut();
+                  setIsExpanded(false);
+                }}
               >
-                Share Patterns
-              </NavLink>
-            </li>
-
-            <li className="nav-item">
-              <NavLink
-                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-                to="/about"
-                onClick={() => setIsExpanded(false)}
-              >
-                How To Use / About
-              </NavLink>
-            </li>
-          </ul>
-
-          {/* Auth Section - Right-aligned on desktop, in menu on mobile */}
-          <div className="d-md-flex ms-md-auto ms-3 me-2 mb-3 mb-md-0 ps-md-4 mt-3 mt-md-0 auth-section">
-            {user ? (
-              <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3 mt-2 mt-md-0">
-                <NavLink
-                  to="/account"
-                  className="d-flex align-items-center text-decoration-none"
-                >
-                  {user.photoURL && (
-                    <img
-                      src={user.photoURL}
-                      alt={user.displayName || 'User'}
-                      className="rounded-circle me-2"
-                      style={{ width: '32px', height: '32px' }}
-                    />
-                  )}
-                  <span className="text-light me-2">{user.displayName}</span>
-                </NavLink>
-                <button
-                  className="btn btn-outline-light"
-                  onClick={() => {
-                    auth.signOut();
-                    setIsExpanded(false);
-                  }}
-                >
-                  Sign Out
-                </button>
-              </div>
-            ) : (
-              <NavLink
-                to="/login"
-                className="btn btn-outline-light mt-2 mt-md-0"
-                onClick={() => setIsExpanded(false)}
-              >
-                Sign In
-              </NavLink>
-            )}
-          </div>
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <NavLink
+              to="/login"
+              className="auth-btn"
+              onClick={() => setIsExpanded(false)}
+            >
+              Sign In
+            </NavLink>
+          )}
         </div>
       </div>
     </nav>

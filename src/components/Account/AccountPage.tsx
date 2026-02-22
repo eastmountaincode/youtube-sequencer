@@ -1,43 +1,13 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Navigate } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-import { GET_LIKED_PATTERNS, GET_USER_PATTERNS } from '../../graphql/queries';
 import { useState } from 'react';
 import PatternGrid from '../SharePatterns/PatternGrid';
 
 
 const AccountPage = () => {
-    const [currentPage, setCurrentPage] = useState(0);
     const [activeTab, setActiveTab] = useState('my-patterns');
     const user = useSelector((state: RootState) => state.auth.user);
-    const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
-
-    const { loading, error, data } = useQuery(GET_USER_PATTERNS, {
-        variables: {
-            userId: user?.uid || '',
-            limit: itemsPerPage,
-            offset: currentPage * itemsPerPage,
-            orderBy: orderBy
-        },
-        skip: !user
-    });
-
-    const totalPages = Math.ceil((data?.userPatterns.totalCount || 0) / itemsPerPage);
-
-    if (loading) return (
-        <div className="container mt-4 text-center">
-            <div className="spinner-border text-light" role="status">
-                <span className="visually-hidden">Loading...</span>
-            </div>
-        </div>
-    );
-
-    if (error) return (
-        <div className="container mt-4 alert alert-danger">
-            Error loading patterns: {error.message}
-        </div>
-    );
 
     if (!user) {
         return <Navigate to="/login" />;
@@ -91,13 +61,13 @@ const AccountPage = () => {
                     <div className="tab-content">
                         <PatternGrid
                             title="My Patterns"
-                            query={GET_USER_PATTERNS}
+                            queryType="user"
                             userId={user.uid}
                             isActive={activeTab === 'my-patterns'}
                         />
                         <PatternGrid
                             title="Liked Patterns"
-                            query={GET_LIKED_PATTERNS}
+                            queryType="liked"
                             userId={user.uid}
                             isActive={activeTab === 'liked-patterns'}
                         />
@@ -110,4 +80,3 @@ const AccountPage = () => {
 };
 
 export default AccountPage;
-

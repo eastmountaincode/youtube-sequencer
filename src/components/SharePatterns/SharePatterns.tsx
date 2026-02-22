@@ -1,43 +1,27 @@
-import { useQuery } from '@apollo/client';
-import { GET_PATTERNS } from '../../graphql/queries';
 import UploadPattern from './UploadPattern';
 import PatternCard from './PatternCard';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Pattern } from '../../types';
 import { useState } from 'react';
 import PaginationControls from './PaginationControls';
 import OrderBySelect from './OrderBySelect';
-
-interface PatternResponse {
-  patternResponse: {
-    patterns: Pattern[];
-    totalCount: number;
-  }
-}
+import { usePatterns } from '../../hooks/usePatterns';
 
 const SharePatterns = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
   const user = useSelector((state: RootState) => state.auth.user);
 
-  const { loading, error, data } = useQuery<PatternResponse>(GET_PATTERNS, {
-    variables: {
-      limit: itemsPerPage,
-      offset: currentPage * itemsPerPage,
-      orderBy: orderBy,
-      userId: user?.uid || null
-    },
-    fetchPolicy: 'network-only',
-    onError: (error) => {
-      console.log('GraphQL Error:', error);
-    },
-    onCompleted: (data) => {
-      console.log('GraphQL Response:', data);
-    }
-  });
+  const { loading, error, data, refetch } = usePatterns(
+    'all',
+    itemsPerPage,
+    currentPage * itemsPerPage,
+    orderBy,
+    user?.uid || null
+  );
 
-  const totalPages = Math.ceil((data?.patternResponse.totalCount || 0) / itemsPerPage);
+  const totalPages = Math.ceil((data?.totalCount || 0) / itemsPerPage);
 
   if (loading) return (
     <div className="container mt-4 text-center">
@@ -49,18 +33,18 @@ const SharePatterns = () => {
 
   if (error) return (
     <div className="container mt-4 alert alert-danger">
-      Error loading patterns: {error.message}
+      Error loading patterns: {error}
     </div>
   );
 
   return (
     <div className="container mt-4">
       <h2 className="text-center mb-4">Share Patterns</h2>
-      <UploadPattern />
+      <UploadPattern onUploadComplete={refetch} />
       <OrderBySelect />
       <div className="row">
-        {data?.patternResponse.patterns.map(pattern => (
-          <PatternCard key={pattern.id} pattern={pattern} />
+        {data?.patterns.map((pattern: Pattern) => (
+          <PatternCard key={pattern.id} pattern={pattern} onMutate={refetch} />
         ))}
       </div>
       {/* Pagination Controls */}
@@ -74,4 +58,3 @@ const SharePatterns = () => {
 };
 
 export default SharePatterns;
-

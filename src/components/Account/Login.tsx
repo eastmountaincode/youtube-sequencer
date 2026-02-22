@@ -4,7 +4,6 @@ import { auth } from '../../firebase/firebase';
 import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { setUser } from '../../store/authSlice';
 import { useNavigate, Link } from 'react-router-dom';
-import { client } from '../../apollo/client';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -29,7 +28,7 @@ const Login = () => {
         displayName: result.user.displayName || email.split('@')[0],
         photoURL: result.user.photoURL
       }));
-      client.refetchQueries({ include: ['GetPatterns'] });
+
       navigate('/share');
     } catch (error) {
       console.error('Error signing in:', error);
@@ -46,7 +45,7 @@ const Login = () => {
         displayName: result.user.displayName,
         photoURL: result.user.photoURL
       }));
-      client.refetchQueries({ include: ['GetPatterns'] });
+
       navigate('/share');
     } catch (error) {
       console.error('Error signing in with Google:', error);

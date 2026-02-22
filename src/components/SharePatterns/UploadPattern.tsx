@@ -1,31 +1,19 @@
-import { useMutation } from '@apollo/client';
 import React, { useState } from 'react';
-import { GET_PRESIGNED_URL, CREATE_PATTERN } from '../../graphql/mutations';
+import * as patternService from '../../services/patternService';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Link } from 'react-router-dom';
-import { getRefetchQueries } from '../../utils/refetchQueries';
-const S3_BUCKET = process.env.REACT_APP_S3_BUCKET;
-const AWS_REGION = process.env.REACT_APP_AWS_REGION;
 
-const UploadPattern = () => {
+interface UploadPatternProps {
+    onUploadComplete?: () => void;
+}
+
+const UploadPattern = ({ onUploadComplete }: UploadPatternProps) => {
     const [file, setFile] = useState<File | null>(null);
     const [description, setDescription] = useState<string>('');
     const [uploadStatus, setUploadStatus] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
-    const [uploadedPatternId, setUploadedPatternId] = useState<string | null>(null);
-    const [getPresignedUrl] = useMutation(GET_PRESIGNED_URL);
     const user = useSelector((state: RootState) => state.auth.user)
-    const { orderBy, itemsPerPage } = useSelector((state: RootState) => state.patternsDisplay);
-
-    const [createPattern] = useMutation(CREATE_PATTERN, {
-        onCompleted: (data) => {
-            setUploadStatus('Upload successful!');
-            setUploadedPatternId(data.createPattern.id);
-        },
-        refetchQueries: getRefetchQueries(itemsPerPage, orderBy, user?.uid)
-    });
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -33,21 +21,17 @@ const UploadPattern = () => {
 
         setIsLoading(true);
         try {
-            // Get pre-signed URL
-            // If we don't use a pre-signed URL< the AWS access key is part of URL, not good
+            // Get pre-signed URL from R2 via edge function
             setUploadStatus('Getting upload URL...');
-            const { data } = await getPresignedUrl({
-                variables: {
-                    filename: file.name,
-                    folder: process.env.NODE_ENV === 'test' ? 'test_patterns' : 'patterns'
-                }
-            });
-            //console.log('Pre-signed URL:', data.getPresignedUrl.url);
-            console.log('key', data.getPresignedUrl.key);
+            const { url, key } = await patternService.getUploadUrl(
+                file.name,
+                process.env.NODE_ENV === 'test' ? 'test_patterns' : 'patterns'
+            );
+            console.log('key', key);
 
-            // Upload to S3 using pre-signed URL (data.getPresignedUrl.url)
+            // Upload to R2 using pre-signed URL
             setUploadStatus('Uploading to server...');
-            const response = await fetch(data.getPresignedUrl.url, {
+            const response = await fetch(url, {
                 method: 'PUT',
                 body: file,
                 headers: {
@@ -56,26 +40,18 @@ const UploadPattern = () => {
             });
 
             if (response.ok) {
-                const s3BaseUrl = `https://${S3_BUCKET}.s3.${AWS_REGION}.amazonaws.com/${data.getPresignedUrl.key}`;
-
-                await createPattern({
-                    variables: {
-                        input: {
-                            name: file.name,
-                            description: description,
-                            s3_url: s3BaseUrl,
-                            creator_id: user?.uid || "anonymous",
-                            creator_display_name: user?.displayName || "Anonymous"
-                        }
-                    },
-                    onError: (error) => {
-                        console.error('Create pattern error:', error);
-                        setUploadStatus('Upload failed: ' + error.message);
-                    }
+                await patternService.createPattern({
+                    name: file.name,
+                    description: description,
+                    storage_key: key,
+                    creator_id: user?.uid || "anonymous",
+                    creator_display_name: user?.displayName || "Anonymous"
                 });
+                setUploadStatus('Upload successful!');
+                onUploadComplete?.();
             }
 
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error:', error);
             setUploadStatus('Upload failed. Please try again.');
         } finally {

@@ -1,18 +1,16 @@
-import { useMutation } from '@apollo/client';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { GET_DOWNLOAD_URL } from '../../graphql/mutations';
+import * as patternService from '../../services/patternService';
 import { validateFile } from '../../utils/validateFile';
 import { audioEngine } from '../../services/audioEngine';
 import { useNavigate } from 'react-router-dom';
 import { migrateFileData } from '../../utils/fileMigration';
 
 interface LoadIntoSequencerProps {
-  s3_url: string;
+  storageKey: string;
 }
 
-const LoadIntoSequencer = ({ s3_url }: LoadIntoSequencerProps) => {
-  const [getDownloadUrl] = useMutation(GET_DOWNLOAD_URL);
+const LoadIntoSequencer = ({ storageKey }: LoadIntoSequencerProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,11 +18,9 @@ const LoadIntoSequencer = ({ s3_url }: LoadIntoSequencerProps) => {
   const handleLoad = async () => {
     setIsLoading(true);
     try {
-      const { data } = await getDownloadUrl({
-        variables: { s3_url }
-      });
-      
-      const response = await fetch(data.getDownloadUrl.url);
+      const { url } = await patternService.getDownloadUrl(storageKey);
+
+      const response = await fetch(url);
       const text = await response.text();
       const loadedState = JSON.parse(text);
 
@@ -44,7 +40,7 @@ const LoadIntoSequencer = ({ s3_url }: LoadIntoSequencerProps) => {
 
       // After successful load, navigate to sequencer
       navigate('/');
-      
+
     } catch (error) {
       console.error('Load error:', error);
     } finally {
@@ -53,14 +49,15 @@ const LoadIntoSequencer = ({ s3_url }: LoadIntoSequencerProps) => {
   };
 
   return (
-    <button 
-      className="btn btn-outline-primary btn-sm rounded-0 w-100 p-2"
+    <button
+      className="btn btn-outline-primary btn-sm w-100 p-2"
       onClick={handleLoad}
       disabled={isLoading}
-      style={{ 
+      style={{
         borderLeft: 'none',
         borderRight: 'none',
-        borderBottom: 'none'
+        borderBottom: 'none',
+        borderRadius: '0',
       }}
     >
       {isLoading ? (
